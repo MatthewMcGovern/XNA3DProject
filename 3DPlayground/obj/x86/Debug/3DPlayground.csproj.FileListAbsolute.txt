@@ -1,0 +1,13 @@
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\SDL.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\3DPlayground.exe
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\3DPlayground.pdb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\Lidgren.Network.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\MonoGame.Framework.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\OpenTK.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\Tao.Sdl.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\obj\x86\Debug\3DPlayground.csprojResolveAssemblyReference.cache
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\obj\x86\Debug\3DPlayground.exe
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\obj\x86\Debug\3DPlayground.pdb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\Content\effects.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\Content\heightmap.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\3DPlayground\bin\WindowsGL\Debug\Content\debugFont.xnb

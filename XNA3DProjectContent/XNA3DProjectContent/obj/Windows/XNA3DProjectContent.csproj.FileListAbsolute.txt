@@ -1,0 +1,7 @@
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\bin\Windows\Content\effects.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\bin\Windows\IgnoreMe.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\obj\Windows\Microsoft.Xna.Framework.RuntimeProfile.txt
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\obj\Windows\IgnoreMe.dll
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\bin\Windows\Content\heightmap.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\obj\Windows\XNA3DProjectContent.csprojResolveAssemblyReference.cache
+E:\Users\Dev\Documents\GitHub\XNA3DProject\XNA3DProjectContent\XNA3DProjectContent\bin\Windows\Content\debugFont.xnb
