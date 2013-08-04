@@ -53,32 +53,32 @@ namespace Isomites3D.Core
         {
             if (InputHelper.IsKeyDown(Keys.J))
             {
-                _yaw += .0002f;
+                _yaw += .02f;
             }
 
             if (InputHelper.IsKeyDown(Keys.L))
             {
-                _yaw -= .0002f;
+                _yaw -= .02f;
             }
 
             if (InputHelper.IsKeyDown(Keys.K))
             {
-                _pitch -= .0002f;
+                _pitch -= .02f;
             }
 
             if (InputHelper.IsKeyDown(Keys.I))
             {
-                _pitch += .0002f;
+                _pitch += .02f;
             }
 
             if (InputHelper.IsKeyDown(Keys.U))
             {
-                _roll -= .0002f;
+                _roll -= .02f;
             }
 
             if (InputHelper.IsKeyDown(Keys.O))
             {
-                _roll += .0002f;
+                _roll += .02f;
             }
 
             if (InputHelper.IsKeyDown(Keys.W))
@@ -145,7 +145,7 @@ namespace Isomites3D.Core
             _pitch = 0.0f;
             _roll = 0.0f;
 
-            _speed = 0.30f;
+            _speed = 3f;
 
             ViewMatrix = Matrix.Identity;
             ProjectionMatrix = Matrix.CreateOrthographic(Device.Viewport.Width, Device.Viewport.Height, -5000f, 5000f);

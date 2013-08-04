@@ -24,6 +24,14 @@ namespace Isomites3D
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        // Effect used to apply the edge detection and pencil sketch postprocessing.
+        Effect postprocessEffect;
+
+        // Custom rendertargets.
+        RenderTarget2D sceneRenderTarget;
+        RenderTarget2D normalDepthRenderTarget;
+            
+
         private Camera3D _camera3D;
         private Vector3 _cameraPosition = new Vector3(0, 80, 0);
         private Vector3 _lookAt = new Vector3(0, 0, 0);
@@ -50,10 +58,10 @@ namespace Isomites3D
             {
                 PreferredBackBufferHeight = 1000,
                 PreferredBackBufferWidth = 1000,
-                SynchronizeWithVerticalRetrace = false
+                //SynchronizeWithVerticalRetrace = false
             };
             Content.RootDirectory = "Content";
-            IsFixedTimeStep = false;
+            //IsFixedTimeStep = false;
         }
 
         /// <summary>
@@ -79,13 +87,14 @@ namespace Isomites3D
             spriteBatch = new SpriteBatch(GraphicsDevice);
             _cube = new Cube();
             _device = graphics.GraphicsDevice;
-            _effect = Content.Load<Effect>("effects");
+            _effect = Content.Load<Effect>("CartoonEffect");
+            //_effect = Content.Load<Effect>("effects");
             _texture = Content.Load<Texture2D>("cubemap");
             _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio,
     1.0f, 300.0f);
             InputHelper.Init();
 
-            _vertexBuffer = new VertexBuffer(_device, VertexPositionTexture.VertexDeclaration, _cube.GetVertices().Count(), BufferUsage.WriteOnly);
+            _vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cube.GetVertices().Count(), BufferUsage.WriteOnly);
             _vertexBuffer.SetData(_cube.GetVertices());
             _indexBuffer = new IndexBuffer(_device, typeof(short), _cube.GetIndices().Count(), BufferUsage.WriteOnly);
             _indexBuffer.SetData(_cube.GetIndices());
@@ -97,6 +106,19 @@ namespace Isomites3D
             _world = new CubeManager(20, 20, 20, _device);
 
             _debugFont = Content.Load<SpriteFont>("debugFont");
+
+            postprocessEffect = Content.Load<Effect>("PostProcessEffect");
+
+            // Create two custom rendertargets.
+            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
+
+            sceneRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                   pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                   pp.BackBufferFormat, pp.DepthStencilFormat);
+
+            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
 
             _frameRateCounter = new FrameRateCounter();
 
@@ -131,51 +153,91 @@ namespace Isomites3D
             _frameRateCounter.Update(gameTime);
         }
 
+        public void DrawWorld(string techniqueName)
+        {
+            _effect.CurrentTechnique = _effect.Techniques[techniqueName];
+             // Set suitable renderstates for drawing a 3D model.
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+            _worldMatrix = Matrix.CreateScale(50f);
+
+            _effect.Parameters["World"].SetValue(_worldMatrix);
+            _effect.Parameters["View"].SetValue(_camera3D.ViewMatrix);
+            _effect.Parameters["Projection"].SetValue(_camera3D.ProjectionMatrix);
+            _effect.Parameters["Texture"].SetValue(_texture);
+            _effect.Parameters["TextureEnabled"].SetValue(true);
+
+            foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+   
+                
+               _world.Draw(_device);
+            }
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkSlateBlue);
+               /* RasterizerState rs = new RasterizerState();
+                rs.CullMode = CullMode.CullCounterClockwiseFace;
+                rs.FillMode = FillMode.Solid;
+                _device.RasterizerState = rs;
 
-            RasterizerState rs = new RasterizerState();
-            rs.CullMode = CullMode.CullCounterClockwiseFace;
-            rs.FillMode = FillMode.Solid;
-            _device.RasterizerState = rs;
-
-            _device.BlendState = BlendState.Opaque;
-            _device.DepthStencilState = DepthStencilState.Default;
-            _device.SamplerStates[0] = SamplerState.LinearWrap;
-
-            Matrix worldMatrix = Matrix.CreateScale(50f);
-            _viewMatrix = Matrix.CreateLookAt(new Vector3(0, 2, 2), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-            _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio, 0.2f, 500.0f);
-            _effect.CurrentTechnique = _effect.Techniques["TexturedNoShading"];
-            _effect.Parameters["xWorld"].SetValue(worldMatrix);
-            //_viewMatrix = Matrix.CreateLookAt(_cameraPosition, _lookAt, new Vector3(0, 1, 0));
-
-            _effect.Parameters["xView"].SetValue(_camera3D.ViewMatrix);
-            _effect.Parameters["xProjection"].SetValue(_camera3D.ProjectionMatrix);
-            _effect.Parameters["xTexture"].SetValue(_texture);
+                _device.BlendState = BlendState.Opaque;
+                _device.DepthStencilState = DepthStencilState.Default;
+                _device.SamplerStates[0] = SamplerState.LinearWrap;*/
 
 
-            foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
+                _device.SetRenderTarget(normalDepthRenderTarget);
 
-                //_device.Indices = _indexBuffer;
-               //_device.SetVertexBuffer(_vertexBuffer);
-                //_device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 8, 0, 4);
+                _device.Clear(Color.Black);
 
-                //_device.DrawUserPrimitives(PrimitiveType.TriangleList, _cube.GetVertices(), 0, 2, VertexPositionTexture.VertexDeclaration);
-               // _device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _cube.GetVertices(), 0, _cube.GetVertices().Count(), _cube.GetIndices(), 0, _cube.GetIndices().Count()/3, VertexPositionTexture.VertexDeclaration);
-                
-               _world.Draw(_device);
-            }
-            _frameRateCounter.Draw(spriteBatch, _debugFont);
-            _world.DrawDebugInfo(spriteBatch, _debugFont);
+                 DrawWorld("NormalDepth");
+
+                _device.SetRenderTarget(sceneRenderTarget);
+
+                _device.Clear(Color.CornflowerBlue);
+
+                DrawWorld("Toon");
+
+                _device.SetRenderTarget(null);
+
+                ApplyPostprocess();
+
+            /*_frameRateCounter.Draw(spriteBatch, _debugFont);
+            _world.DrawDebugInfo(spriteBatch, _debugFont);*/
             base.Draw(gameTime);
+        }
+
+        void ApplyPostprocess()
+        {
+            EffectParameterCollection parameters = postprocessEffect.Parameters;
+            string effectTechniqueName;
+
+          
+            Vector2 resolution = new Vector2(sceneRenderTarget.Width,
+                                                sceneRenderTarget.Height);
+
+            Texture2D normalDepthTexture = normalDepthRenderTarget;
+
+            parameters["EdgeWidth"].SetValue(1f);
+            parameters["EdgeIntensity"].SetValue(1f);
+            parameters["ScreenResolution"].SetValue(resolution);
+            parameters["NormalDepthTexture"].SetValue(normalDepthTexture);
+
+            // Activate the appropriate effect technique.
+            postprocessEffect.CurrentTechnique = postprocessEffect.Techniques["EdgeDetect"];
+
+            // Draw a fullscreen sprite to apply the postprocessing effect.
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, postprocessEffect);
+            spriteBatch.Draw(sceneRenderTarget, Vector2.Zero, Color.White);
+            spriteBatch.End();
         }
     }
 }

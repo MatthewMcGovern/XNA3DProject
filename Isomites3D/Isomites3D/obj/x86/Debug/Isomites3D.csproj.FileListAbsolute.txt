@@ -7,3 +7,5 @@ E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\I
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\effects.xnb
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\debugFont.xnb
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubemap.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\PostProcessEffect.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\CartoonEffect.xnb
