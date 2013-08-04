@@ -151,7 +151,7 @@ namespace Isomites3D
             Matrix worldMatrix = Matrix.CreateScale(50f);
             _viewMatrix = Matrix.CreateLookAt(new Vector3(0, 2, 2), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
             _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio, 0.2f, 500.0f);
-            _effect.CurrentTechnique = _effect.Techniques["Textured"];
+            _effect.CurrentTechnique = _effect.Techniques["TexturedNoShading"];
             _effect.Parameters["xWorld"].SetValue(worldMatrix);
             //_viewMatrix = Matrix.CreateLookAt(_cameraPosition, _lookAt, new Vector3(0, 1, 0));
 
@@ -164,9 +164,9 @@ namespace Isomites3D
             {
                 pass.Apply();
 
-                _device.Indices = _indexBuffer;
-               _device.SetVertexBuffer(_vertexBuffer);
-                _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 8, 0, 4);
+                //_device.Indices = _indexBuffer;
+               //_device.SetVertexBuffer(_vertexBuffer);
+                //_device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 8, 0, 4);
 
                 //_device.DrawUserPrimitives(PrimitiveType.TriangleList, _cube.GetVertices(), 0, 2, VertexPositionTexture.VertexDeclaration);
                // _device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _cube.GetVertices(), 0, _cube.GetVertices().Count(), _cube.GetIndices(), 0, _cube.GetIndices().Count()/3, VertexPositionTexture.VertexDeclaration);
