@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Core;
 using Isomites3D.Core;
@@ -26,6 +27,7 @@ namespace Isomites3D
 
         // Effect used to apply the edge detection and pencil sketch postprocessing.
         Effect postprocessEffect;
+        private Effect effectPostOutline;
 
         // Custom rendertargets.
         RenderTarget2D sceneRenderTarget;
@@ -44,6 +46,7 @@ namespace Isomites3D
         private Texture2D _texture;
         private Cube _cube;
         private CubeManager _world;
+        private int frame = 1;
 
         private FrameRateCounter _frameRateCounter;
 
@@ -61,6 +64,7 @@ namespace Isomites3D
                 //SynchronizeWithVerticalRetrace = false
             };
             Content.RootDirectory = "Content";
+            
             //IsFixedTimeStep = false;
         }
 
@@ -87,7 +91,7 @@ namespace Isomites3D
             spriteBatch = new SpriteBatch(GraphicsDevice);
             _cube = new Cube();
             _device = graphics.GraphicsDevice;
-            _effect = Content.Load<Effect>("CartoonEffect");
+            _effect = Content.Load<Effect>("effects");
             //_effect = Content.Load<Effect>("effects");
             _texture = Content.Load<Texture2D>("cubemap");
             _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio,
@@ -103,7 +107,7 @@ namespace Isomites3D
             _device.SetVertexBuffer(_vertexBuffer);
 
             _camera3D = new Camera3D(_device);
-            _world = new CubeManager(20, 20, 20, _device);
+            _world = new CubeManager(1, 1, 1, _device);
 
             _debugFont = Content.Load<SpriteFont>("debugFont");
 
@@ -119,7 +123,7 @@ namespace Isomites3D
             normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
-
+            effectPostOutline = Content.Load<Effect>("OutlineShader");
             _frameRateCounter = new FrameRateCounter();
 
             // TODO: use this.Content to load your game content here
@@ -150,6 +154,8 @@ namespace Isomites3D
             _world.Update();
             base.Update(gameTime);
 
+            if (InputHelper.IsNewKeyPress(Keys.F1))
+                frame = 0;
             _frameRateCounter.Update(gameTime);
         }
 
@@ -162,19 +168,27 @@ namespace Isomites3D
 
             _worldMatrix = Matrix.CreateScale(50f);
 
-            _effect.Parameters["World"].SetValue(_worldMatrix);
-            _effect.Parameters["View"].SetValue(_camera3D.ViewMatrix);
-            _effect.Parameters["Projection"].SetValue(_camera3D.ProjectionMatrix);
-            _effect.Parameters["Texture"].SetValue(_texture);
-            _effect.Parameters["TextureEnabled"].SetValue(true);
+            _effect.Parameters["xWorld"].SetValue(_worldMatrix);
+            _effect.Parameters["xView"].SetValue(_camera3D.ViewMatrix);
+            _effect.Parameters["xProjection"].SetValue(_camera3D.ProjectionMatrix);
+            _effect.Parameters["xTexture"].SetValue(_texture);
 
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-
-   
-                
                _world.Draw(_device);
+            }
+
+            _effect.CurrentTechnique = _effect.Techniques["ColoredNoShading"];
+            _effect.Parameters["xWorld"].SetValue(_worldMatrix);
+            _effect.Parameters["xView"].SetValue(_camera3D.ViewMatrix);
+            _effect.Parameters["xProjection"].SetValue(_camera3D.ProjectionMatrix);
+            _effect.Parameters["xTexture"].SetValue(_texture);
+
+            foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                _world.DrawOutline(_device);
             }
         }
 
@@ -184,39 +198,61 @@ namespace Isomites3D
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-               /* RasterizerState rs = new RasterizerState();
-                rs.CullMode = CullMode.CullCounterClockwiseFace;
+                RasterizerState rs = new RasterizerState();
+                rs.CullMode = CullMode.None;
                 rs.FillMode = FillMode.Solid;
                 _device.RasterizerState = rs;
 
-                _device.BlendState = BlendState.Opaque;
+                /*_device.BlendState = BlendState.Opaque;
                 _device.DepthStencilState = DepthStencilState.Default;
                 _device.SamplerStates[0] = SamplerState.LinearWrap;*/
 
 
-                _device.SetRenderTarget(normalDepthRenderTarget);
+              //  _device.SetRenderTarget(normalDepthRenderTarget);
 
                 _device.Clear(Color.Black);
 
-                 DrawWorld("NormalDepth");
+                // DrawWorld("NormalDepth");
 
-                _device.SetRenderTarget(sceneRenderTarget);
+              //  _device.SetRenderTarget(sceneRenderTarget);
 
-                _device.Clear(Color.CornflowerBlue);
+               _device.Clear(Color.CornflowerBlue);
 
-                DrawWorld("Toon");
+                DrawWorld("Textured");
 
-                _device.SetRenderTarget(null);
+               // _device.SetRenderTarget(null);
 
-                ApplyPostprocess();
+                //ApplyPostprocess();
 
-            /*_frameRateCounter.Draw(spriteBatch, _debugFont);
-            _world.DrawDebugInfo(spriteBatch, _debugFont);*/
+
+
+            if (frame == 0)
+                normalDepthRenderTarget.SaveAsJpeg(File.OpenWrite("renderTarget2.jpg"), normalDepthRenderTarget.Width, normalDepthRenderTarget.Height);
+
+            frame = 1;
+
+
+            _frameRateCounter.Draw(spriteBatch, _debugFont);
+           // _world.DrawDebugInfo(spriteBatch, _debugFont);
             base.Draw(gameTime);
         }
 
         void ApplyPostprocess()
-        {
+        {/*
+            // Render the scene with Edge Detection, using the render target from last frame.
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            EffectParameterCollection parameters = effectPostOutline.Parameters;
+
+            parameters["Thickness"].SetValue(1.0f);
+            parameters["Threshold"].SetValue(0.4f);
+
+            // Activate the appropriate effect technique.
+            effectPostOutline.CurrentTechnique = effectPostOutline.Techniques["PostOutline"];
+
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effectPostOutline);
+            spriteBatch.Draw(sceneRenderTarget, Vector2.Zero, Color.White);
+            spriteBatch.End();*/
+
             EffectParameterCollection parameters = postprocessEffect.Parameters;
             string effectTechniqueName;
 

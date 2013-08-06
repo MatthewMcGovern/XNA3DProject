@@ -22,7 +22,12 @@ namespace Isomites3D.CubeWorld
     /// </summary>
     public class CubeType
     {
-        public static List<CubeType> _cubeTypes;
+        private static List<CubeType> _cubeTypes;
+        private static List<Vector3> _outlinePoints;
+        private static VertexPositionNormalTexture[] _outlineVertices;
+        private static VertexPositionColor[] _smallCubeVertices;
+        private static short[] _smallCubeIndices;
+        private static short[] _outlineIndices;
 
         private VertexPositionNormalTexture[]  _vertices;
         private VertexPositionNormalTexture[] _upVertices;
@@ -41,25 +46,131 @@ namespace Isomites3D.CubeWorld
 
         static CubeType()
         {
-            _cubeTypes = new List<CubeType>();
+
+            _outlinePoints = new List<Vector3>();
+            _outlinePoints.Add(LinePoints.UpTopLeft);
+            _outlinePoints.Add(LinePoints.UpTopRight);
+            _outlinePoints.Add(LinePoints.UpBottomLeft);
+            _outlinePoints.Add(LinePoints.UpBottomRight);
+            _outlinePoints.Add(LinePoints.DownTopLeft);
+            _outlinePoints.Add(LinePoints.DownTopRight);
+            _outlinePoints.Add(LinePoints.DownBottomLeft);
+            _outlinePoints.Add(LinePoints.DownBottomRight);
+
+            _smallCubeVertices = new VertexPositionColor[8];
+            _smallCubeVertices[0] = new VertexPositionColor(SmallCubeVertices.UpTopLeft, Color.Black);
+            _smallCubeVertices[1] = new VertexPositionColor(SmallCubeVertices.UpTopRight, Color.Black);
+            _smallCubeVertices[2] = new VertexPositionColor(SmallCubeVertices.UpBottomLeft, Color.Black);
+            _smallCubeVertices[3] = new VertexPositionColor(SmallCubeVertices.UpBottomRight, Color.Black);
+            _smallCubeVertices[4] = new VertexPositionColor(SmallCubeVertices.DownTopLeft, Color.Black);
+            _smallCubeVertices[5] = new VertexPositionColor(SmallCubeVertices.DownTopRight, Color.Black);
+            _smallCubeVertices[6] = new VertexPositionColor(SmallCubeVertices.DownBottomLeft, Color.Black);
+            _smallCubeVertices[7] = new VertexPositionColor(SmallCubeVertices.DownBottomRight, Color.Black);
+
+            _smallCubeIndices = new short[]
+            {
+                0,
+                1,
+                2,
+                1,
+                2,
+                3,
+                1,
+                3,
+                7,
+                7,
+                3,
+                5,
+                0,
+                1,
+                4,
+                4,
+                5,
+                1,
+                2,
+                6,
+                4,
+                4,
+                0,
+                2,
+                4,
+                5,
+                6,
+                6,
+                7,
+                5,
+                2,
+                6,
+                7,
+                2,
+                3,
+                7
+            };
+
+            _outlineVertices = new VertexPositionNormalTexture[8];
+            _outlineVertices[0] = new VertexPositionNormalTexture(LinePointVertices.UpTopLeft, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[1] = new VertexPositionNormalTexture(LinePointVertices.UpTopRight, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[2] = new VertexPositionNormalTexture(LinePointVertices.UpBottomLeft, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[3] = new VertexPositionNormalTexture(LinePointVertices.UpBottomRight, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[4] = new VertexPositionNormalTexture(LinePointVertices.DownTopLeft, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[5] = new VertexPositionNormalTexture(LinePointVertices.DownTopRight, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[6] = new VertexPositionNormalTexture(LinePointVertices.DownBottomLeft, Vector3.Zero, new Vector2(1f, 1f));
+            _outlineVertices[7] = new VertexPositionNormalTexture(LinePointVertices.DownBottomRight, Vector3.Zero, new Vector2(1f, 1f));
+
+            _outlineIndices = new short[]
+            {
+                0,
+                1,
+                2,
+                2,
+                1,
+                3,
+                4,
+                5,
+                6,
+                6,
+                4,
+                7,
+                1,
+                7,
+                3,
+                7,
+                5,
+                1,
+                0,
+                6,
+                4,
+                6,
+                4,
+                2,
+                1,
+                0,
+                4,
+                4,
+                5,
+                1,
+                2,
+                7,
+                6,
+                3,
+                7,
+                6
+            };
+
+        _cubeTypes = new List<CubeType>();
             CubeType air = new CubeType();
             air._indices = new short[0];
             air._vertices = new VertexPositionNormalTexture[0];
             _cubeTypes.Add(air);
             
             CubeType soil = new CubeType();
-            soil._vertices = new VertexPositionNormalTexture[24];
+           
             // UpFace
-            soil._vertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.125f, 0));
-            soil._vertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0f, 0));
-            soil._vertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.125f, 0.5f));
-            soil._vertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0f, 0.5f));
-
             soil._upVertices = new VertexPositionNormalTexture[4];
-            soil._upVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.12f, 0));
-            soil._upVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0f, 0));
-            soil._upVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.12f, 0.4f));
-            soil._upVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0f, 0.4f));
+            soil._upVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopLeft, Vector3.Zero, new Vector2(0.124f, 0.01f));
+            soil._upVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpTopRight, Vector3.Zero, new Vector2(0.01f, 0.01f));
+            soil._upVertices[2] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.124f, 0.49f));
+            soil._upVertices[3] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0.01f, 0.49f));
 
             soil._upIndices = new short[]
             {
@@ -72,16 +183,11 @@ namespace Isomites3D.CubeWorld
             };
 
             // DownFace
-            soil._vertices[12] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.24f, 0));
-            soil._vertices[13] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.125f, 0));
-            soil._vertices[14] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.24f, 0.49f));
-            soil._vertices[15] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.125f, 0.49f));
-
             soil._downVertices = new VertexPositionNormalTexture[4];
-            soil._downVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.24f, 0));
-            soil._downVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.125f, 0));
-            soil._downVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.24f, 0.49f));
-            soil._downVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.125f, 0.49f));
+            soil._downVertices[0] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.24f, 0));
+            soil._downVertices[1] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.125f, 0));
+            soil._downVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.24f, 0.49f));
+            soil._downVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.125f, 0.49f));
 
             soil._downIndices = new short[]
             {
@@ -95,16 +201,11 @@ namespace Isomites3D.CubeWorld
 
 
             // SouthFace
-            soil._vertices[4] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.5f, 0));
-            soil._vertices[5] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.624f, 0));
-            soil._vertices[6] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.5f, 0.49f));
-            soil._vertices[7] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.624f, 0.49f));
-
             soil._southVertices = new VertexPositionNormalTexture[4];
-            soil._southVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.5f, 0));
-            soil._southVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.624f, 0));
-            soil._southVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.5f, 0.49f));
-            soil._southVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.624f, 0.49f));
+            soil._southVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopLeft, Vector3.Zero, new Vector2(0.5f, 0));
+            soil._southVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpTopRight, Vector3.Zero, new Vector2(0.624f, 0));
+            soil._southVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.5f, 0.49f));
+            soil._southVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.624f, 0.49f));
 
             soil._southIndices = new short[]
             {
@@ -118,10 +219,10 @@ namespace Isomites3D.CubeWorld
 
             // NorthFace
             soil._northVertices = new VertexPositionNormalTexture[4];
-            soil._northVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.374f, 0));
-            soil._northVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.25f, 0));
-            soil._northVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.374f, 0.49f));
-            soil._northVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.25f, 0.49f));
+            soil._northVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.374f, 0));
+            soil._northVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0.25f, 0));
+            soil._northVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.374f, 0.49f));
+            soil._northVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.25f, 0.49f));
 
             soil._northIndices= new short[]
             {
@@ -132,19 +233,13 @@ namespace Isomites3D.CubeWorld
                 3,
                 1
             };
-                 
-
-            soil._vertices[8] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.374f, 0));
-            soil._vertices[9] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.25f, 0));
-            soil._vertices[10] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.374f, 0.49f));
-            soil._vertices[11] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.25f, 0.49f));
-
+                
             // EastFace
             soil._eastVertices = new VertexPositionNormalTexture[4];
-            soil._eastVertices[0] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.375f, 0));
-            soil._eastVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.49f, 0));
-            soil._eastVertices[2] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.49f, 0.49f));
-            soil._eastVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.375f, 0.49f));
+            soil._eastVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopRight, Vector3.Zero, new Vector2(0.375f, 0));
+            soil._eastVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0.49f, 0));
+            soil._eastVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.49f, 0.49f));
+            soil._eastVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.375f, 0.49f));
 
             soil._eastIndices = new short[]
             {
@@ -156,22 +251,12 @@ namespace Isomites3D.CubeWorld
                 0  
             };
            
-            soil._vertices[16] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.375f, 0));
-            soil._vertices[17] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.49f, 0));
-            soil._vertices[18] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.5f, 0.49f));
-            soil._vertices[19] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.375f, 0.49f));
-
             // WestFace
-            soil._vertices[20] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.625f, 0));
-            soil._vertices[21] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.74f, 0));
-            soil._vertices[22] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.74f, 0.49f));
-            soil._vertices[23] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.625f, 0.49f));
-
             soil._westVertices = new VertexPositionNormalTexture[4];
-            soil._westVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.625f, 0));
-            soil._westVertices[1] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.74f, 0));
-            soil._westVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.74f, 0.49f));
-            soil._westVertices[3] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.625f, 0.49f));
+            soil._westVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopLeft, Vector3.Zero, new Vector2(0.625f, 0));
+            soil._westVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.74f, 0));
+            soil._westVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.74f, 0.49f));
+            soil._westVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.625f, 0.49f));
 
             soil._westIndices = new short[]
             {
@@ -184,13 +269,12 @@ namespace Isomites3D.CubeWorld
             };
 
             CubeType stone = new CubeType();
-            stone._vertices = new VertexPositionNormalTexture[24];
           
             stone._upVertices = new VertexPositionNormalTexture[4];
-            stone._upVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.124f, 0.5f));
-            stone._upVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0f, 0.5f));
-            stone._upVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.124f, 0.99f));
-            stone._upVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0f, 0.99f));
+            stone._upVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopLeft, Vector3.Zero, new Vector2(0.124f, 0.5f));
+            stone._upVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpTopRight, Vector3.Zero, new Vector2(0f, 0.5f));
+            stone._upVertices[2] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.124f, 0.99f));
+            stone._upVertices[3] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0f, 0.99f));
 
             stone._upIndices = new short[]
             {
@@ -203,10 +287,10 @@ namespace Isomites3D.CubeWorld
             };
 
             stone._downVertices = new VertexPositionNormalTexture[4];
-            stone._downVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.24f, 0.5f));
-            stone._downVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.125f, 0.5f));
-            stone._downVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.24f, 0.99f));
-            stone._downVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.125f, 0.99f));
+            stone._downVertices[0] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.24f, 0.5f));
+            stone._downVertices[1] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.125f, 0.5f));
+            stone._downVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.24f, 0.99f));
+            stone._downVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.125f, 0.99f));
 
             stone._downIndices = new short[]
             {
@@ -219,10 +303,10 @@ namespace Isomites3D.CubeWorld
             };
 
             stone._southVertices = new VertexPositionNormalTexture[4];
-            stone._southVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.5f, 0.5f));
-            stone._southVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.624f, 0.5f));
-            stone._southVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.5f, 0.99f));
-            stone._southVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.624f, 0.99f));
+            stone._southVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopLeft, Vector3.Zero, new Vector2(0.5f, 0.5f));
+            stone._southVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpTopRight, Vector3.Zero, new Vector2(0.624f, 0.5f));
+            stone._southVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.5f, 0.99f));
+            stone._southVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.624f, 0.99f));
 
             stone._southIndices = new short[]
             {
@@ -235,10 +319,10 @@ namespace Isomites3D.CubeWorld
             };
 
             stone._northVertices = new VertexPositionNormalTexture[4];
-            stone._northVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.374f, 0.5f));
-            stone._northVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.25f, 0.5f));
-            stone._northVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.374f, 0.99f));
-            stone._northVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.25f, 0.99f));
+            stone._northVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.374f, 0.5f));
+            stone._northVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0.25f, 0.5f));
+            stone._northVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.374f, 0.99f));
+            stone._northVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.25f, 0.99f));
 
             stone._northIndices = new short[]
             {
@@ -253,10 +337,10 @@ namespace Isomites3D.CubeWorld
 
 
             stone._eastVertices = new VertexPositionNormalTexture[4];
-            stone._eastVertices[0] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.375f, 0.5f));
-            stone._eastVertices[1] = new VertexPositionNormalTexture(new Vector3(0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.49f, 0.5f));
-            stone._eastVertices[2] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.49f, 0.99f));
-            stone._eastVertices[3] = new VertexPositionNormalTexture(new Vector3(0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.375f, 0.99f));
+            stone._eastVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopRight, Vector3.Zero, new Vector2(0.375f, 0.5f));
+            stone._eastVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0.49f, 0.5f));
+            stone._eastVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.49f, 0.99f));
+            stone._eastVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.375f, 0.99f));
 
             stone._eastIndices = new short[]
             {
@@ -270,10 +354,10 @@ namespace Isomites3D.CubeWorld
        
 
             stone._westVertices = new VertexPositionNormalTexture[4];
-            stone._westVertices[0] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, 0.25f), Vector3.Zero, new Vector2(0.625f, 0.5f));
-            stone._westVertices[1] = new VertexPositionNormalTexture(new Vector3(-0.25f, 0.25f, -0.25f), Vector3.Zero, new Vector2(0.74f, 0.5f));
-            stone._westVertices[2] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, -0.25f), Vector3.Zero, new Vector2(0.74f, 0.99f));
-            stone._westVertices[3] = new VertexPositionNormalTexture(new Vector3(-0.25f, -0.25f, 0.25f), Vector3.Zero, new Vector2(0.625f, 0.99f));
+            stone._westVertices[0] = new VertexPositionNormalTexture(CubeVertices.UpTopLeft, Vector3.Zero, new Vector2(0.625f, 0.5f));
+            stone._westVertices[1] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.74f, 0.5f));
+            stone._westVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.74f, 0.99f));
+            stone._westVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.625f, 0.99f));
 
             stone._westIndices = new short[]
             {
@@ -335,25 +419,75 @@ namespace Isomites3D.CubeWorld
             return _cubeTypes[id];
         }
 
-   
+        
 
-        public CubeDrawData GetDrawData(int offset, Vector3 worldPosition, Connections neighbours)
+        public CubeDrawData GetDrawData(int offset, int outlineOffset, Vector3 worldPosition, Connections neighbours)
         {
-            CubeDrawData drawData = new CubeDrawData(offset);
-            //neighbours = Connections.Up;
-            if (!neighbours.HasFlag(Connections.Up))
-                drawData.AddData(_upVertices, _upIndices, worldPosition);
-            if (!neighbours.HasFlag(Connections.Down))
-                drawData.AddData(_downVertices, _downIndices, worldPosition);
-            if (!neighbours.HasFlag(Connections.North))
-                drawData.AddData(_northVertices, _northIndices, worldPosition);
-            if (!neighbours.HasFlag(Connections.East))
-                drawData.AddData(_eastVertices, _eastIndices, worldPosition);
-            if (!neighbours.HasFlag(Connections.South))
-                drawData.AddData(_southVertices, _southIndices, worldPosition);
-            if (!neighbours.HasFlag(Connections.West))
-                drawData.AddData(_westVertices, _westIndices, worldPosition);
+            List<Vector3> cubeOutlinePoints = _outlinePoints.ToList();
+            
+            List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
+            List<short> indices = new List<short>();
 
+            CubeDrawData drawData = new CubeDrawData(offset, outlineOffset);
+
+            if (!neighbours.HasFlag(Connections.Up))
+                drawData.AddWorldCubeVertices(_upVertices, _upIndices, worldPosition);
+            else
+            {
+                cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
+                cubeOutlinePoints.Remove(LinePoints.UpTopRight);
+                cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
+                cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
+            }
+
+            if (!neighbours.HasFlag(Connections.Down))
+                drawData.AddWorldCubeVertices(_downVertices, _downIndices, worldPosition);
+            else
+            {
+                cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
+                cubeOutlinePoints.Remove(LinePoints.DownTopRight);
+                cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
+                cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+            }
+            if (!neighbours.HasFlag(Connections.North))
+                drawData.AddWorldCubeVertices(_northVertices, _northIndices, worldPosition);
+            else
+            {
+                cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
+                cubeOutlinePoints.Remove(LinePoints.UpTopRight);
+                cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
+                cubeOutlinePoints.Remove(LinePoints.DownTopRight);
+            }
+            if (!neighbours.HasFlag(Connections.East))
+                drawData.AddWorldCubeVertices(_eastVertices, _eastIndices, worldPosition);
+            else
+            {
+                cubeOutlinePoints.Remove(LinePoints.UpTopRight);
+                cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
+                cubeOutlinePoints.Remove(LinePoints.DownTopRight);
+                cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+            }
+            if (!neighbours.HasFlag(Connections.South))
+                drawData.AddWorldCubeVertices(_southVertices, _southIndices, worldPosition);
+            else
+            {
+                cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
+                cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
+                cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
+                cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+            }
+            if (!neighbours.HasFlag(Connections.West))
+                drawData.AddWorldCubeVertices(_westVertices, _westIndices, worldPosition);
+            else
+            {
+                cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
+                cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
+                cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
+                cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
+            }
+
+
+            drawData.AddSmallCubeAt(_smallCubeVertices, _smallCubeIndices, worldPosition, CubeVertices.UpBottomLeft);
             return drawData;
         }
 

@@ -80,6 +80,7 @@
     <Compile Include="CubeWorld\CubeDrawData.cs" />
     <Compile Include="CubeWorld\CubeType.cs" />
     <Compile Include="CubeWorld\CubeManager.cs" />
+    <Compile Include="CubeWorld\CubeVertexHelper.cs" />
     <Compile Include="CubeWorld\NewCube.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

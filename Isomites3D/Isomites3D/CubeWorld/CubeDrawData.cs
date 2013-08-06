@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,16 +22,45 @@ namespace Isomites3D.CubeWorld
     {
         public List<VertexPositionNormalTexture> Vertices;
         public List<short> Indices;
+        public List<VertexPositionColor> OutlineVertices;
+        public List<short> OutlineIndices;
+        public int OutlineOffset;
         public int Offset;
 
-        public CubeDrawData(int offset = 0)
+        public CubeDrawData(int offset = 0, int outlineOffset = 0)
         {
+            OutlineOffset = outlineOffset;
             Offset = offset;
             Vertices = new List<VertexPositionNormalTexture>();
+            OutlineVertices = new List<VertexPositionColor>();
+            OutlineIndices = new List<short>();
             Indices = new List<short>();
         }
 
-        public void AddData(VertexPositionNormalTexture[] vertices, short[] indices, Vector3 worldPosition)
+        public void AddSmallCubeAt(VertexPositionColor[] vertices, short[] indices, Vector3 worldPosition, Vector3 cubePosition)
+        {
+            for (int currentVertex = 0; currentVertex < vertices.Count(); currentVertex++)
+            {
+                OutlineVertices.Add(
+                    new VertexPositionColor(
+                        new Vector3(
+                            vertices[currentVertex].Position.X + ((CubeVertices.CubeSize.X)*worldPosition.X) +
+                            cubePosition.X,
+                            vertices[currentVertex].Position.Y + ((CubeVertices.CubeSize.Y)*worldPosition.Y) +
+                            cubePosition.Y,
+                            vertices[currentVertex].Position.Z + ((CubeVertices.CubeSize.Z)*worldPosition.Z) +
+                            cubePosition.Z), vertices[currentVertex].Color));
+            }
+
+            foreach (short index in indices)
+            {
+                OutlineIndices.Add((short)(index + OutlineOffset));
+            }
+
+            OutlineOffset += vertices.Count();
+        }
+
+        public void AddWorldCubeVertices(VertexPositionNormalTexture[] vertices, short[] indices, Vector3 worldPosition)
         {
             for (int i = 0; i < indices.Length / 3; i++)
             {
@@ -53,7 +83,7 @@ namespace Isomites3D.CubeWorld
             {
                 
                 Vertices.Add(new VertexPositionNormalTexture(
-                        new Vector3( vertices[currentVertex].Position.X + (0.5f * worldPosition.X),  vertices[currentVertex].Position.Y + (0.5f * worldPosition.Y),  vertices[currentVertex].Position.Z + (0.5f * worldPosition.Z)),
+                        new Vector3( vertices[currentVertex].Position.X + ((CubeVertices.CubeSize.X) * worldPosition.X),  vertices[currentVertex].Position.Y + ((CubeVertices.CubeSize.Y) * worldPosition.Y),  vertices[currentVertex].Position.Z + ((CubeVertices.CubeSize.Z) * worldPosition.Z)),
                          vertices[currentVertex].Normal, vertices[currentVertex].TextureCoordinate));
             }
 

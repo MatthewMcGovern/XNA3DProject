@@ -24,20 +24,27 @@ namespace Isomites3D.CubeWorld
 
         private GraphicsDevice _device;
         private VertexBuffer _vertexBuffer;
+        private VertexBuffer _outlineVertexBuffer;
         private IndexBuffer _indexBuffer;
-        private List<VertexPositionNormalTexture[]> _cachedVerts;
+        private IndexBuffer _outlineIndexBuffer;
         private List<VertexPositionNormalTexture> _cachedVerts2;
+        private List<VertexPositionColor> _cachedOutlineVerts; 
+  
         private List<short> _cachedIndices2;
-        private List<short[]> _cachedIndices;
+        private List<short> _cachedOutlineIndices; 
 
         public CubeManager(int width, int column, int depth, GraphicsDevice device)
         {
             _device = device;
             _cubeIDs = new byte[width, column, depth];
             _cubes = new NewCube[width, column, depth];
-            _cachedVerts = new List<VertexPositionNormalTexture[]>();
+           
             _cachedVerts2 = new List<VertexPositionNormalTexture>();
-            _cachedIndices = new List<short[]>();
+            _cachedOutlineVerts = new List<VertexPositionColor>();
+            _cachedIndices2 = new List<short>();
+            _cachedOutlineIndices = new List<short>();
+
+
             _cachedIndices2 = new List<short>();
 
             for (int x = 0; x < _cubeIDs.GetLength(0); x++)
@@ -54,7 +61,7 @@ namespace Isomites3D.CubeWorld
 
             for (int x = 0; x < _cubeIDs.GetLength(0); x++)
             {
-                for (int y = 0; y < _cubeIDs.GetLength(1)/2; y++)
+                for (int y = 0; y < _cubeIDs.GetLength(1); y++)
                 {
                     for (int z = 0; z < _cubeIDs.GetLength(2); z++)
                     {
@@ -63,17 +70,19 @@ namespace Isomites3D.CubeWorld
                 }
             }
 
-           AddCubeAt(10, 10, 10, 2);
-           AddCubeAt(10, 11, 10, 2);
-           AddCubeAt(10, 12, 10, 2);
+          /* AddCubeAt(11, 10, 11, 2);
+           AddCubeAt(11, 11, 11, 2);
+           AddCubeAt(11, 12, 11, 2);
 
-           AddCubeAt(11, 12, 10, 2);
+           //AddCubeAt(11, 12, 10, 1);
+
+           AddCubeAt(15,10,15,2);
 
            AddCubeAt(12, 12, 10, 2);
            AddCubeAt(12, 11, 10, 2);
            AddCubeAt(12, 10, 10, 2);
-
-           AddCubeAt(10, 10, 12, 2);
+            */
+          /* AddCubeAt(10, 10, 12, 2);
            AddCubeAt(10, 11, 12, 2);
            AddCubeAt(10, 12, 12, 2);
 
@@ -84,7 +93,7 @@ namespace Isomites3D.CubeWorld
            AddCubeAt(10, 12, 11, 2);
            AddCubeAt(12, 12, 11, 2);
 
-           AddCubeAt(11, 12, 12, 2);
+           AddCubeAt(11, 12, 12, 2);*/
         }
 
         public void AddCubeAt(int x, int y, int z, ushort cubeType)
@@ -141,6 +150,7 @@ namespace Isomites3D.CubeWorld
             if (_cachedVerts2.Count == 0)
             {
                 int offset = 0;
+                int outlineOffset = 0;
                 for (int x = 0; x < _cubeIDs.GetLength(0); x++)
                 {
                     for (int y = 0; y < _cubeIDs.GetLength(1); y++)
@@ -152,10 +162,13 @@ namespace Isomites3D.CubeWorld
                             {
                                 if (!cube.Neighbours.HasFlag(ConnectionUtils.All))
                                 {
-                                    CubeDrawData data = CubeType.GetById(cube.Type).GetDrawData(offset, new Vector3(x, y, z),  cube.Neighbours);
+                                    CubeDrawData data = CubeType.GetById(cube.Type).GetDrawData(offset, outlineOffset, new Vector3(x, y, z),  cube.Neighbours);
                                     _cachedVerts2.AddRange(data.Vertices);
                                     _cachedIndices2.AddRange(data.Indices);
+                                    _cachedOutlineVerts.AddRange(data.OutlineVertices);
+                                    _cachedOutlineIndices.AddRange(data.OutlineIndices);
                                     offset = data.Offset;
+                                    outlineOffset = data.OutlineOffset;
                                 }
                             }
                         }
@@ -164,8 +177,15 @@ namespace Isomites3D.CubeWorld
                 _vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cachedVerts2.Count, BufferUsage.None);
                 _indexBuffer = new IndexBuffer(_device, typeof(short), _cachedIndices2.Count, BufferUsage.WriteOnly);
 
+                _outlineIndexBuffer = new IndexBuffer(_device, typeof(short), _cachedOutlineIndices.Count, BufferUsage.WriteOnly);
+                _outlineVertexBuffer = new VertexBuffer(_device, VertexPositionColor.VertexDeclaration, _cachedOutlineVerts.Count, BufferUsage.None);
+
                 _vertexBuffer.SetData(_cachedVerts2.ToArray());
                 _indexBuffer.SetData(_cachedIndices2.ToArray());
+
+                _outlineIndexBuffer.SetData(_cachedOutlineIndices.ToArray());
+                _outlineVertexBuffer.SetData(_cachedOutlineVerts.ToArray());
+
             }
         }
 
@@ -175,6 +195,14 @@ namespace Isomites3D.CubeWorld
             _device.Indices = _indexBuffer;
 
             _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertexBuffer.VertexCount, 0, _indexBuffer.IndexCount/3);
+        }
+
+        public void DrawOutline(GraphicsDevice device)
+        {
+            _device.SetVertexBuffer(_outlineVertexBuffer);
+            _device.Indices = _outlineIndexBuffer;
+
+            _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,0,_outlineVertexBuffer.VertexCount, 0, _outlineIndexBuffer.IndexCount/3);
         }
 
         public void DrawDebugInfo(SpriteBatch spriteBatch, SpriteFont font)

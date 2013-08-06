@@ -26,7 +26,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubemap.xnb</Output>
-      <Time>2013-08-04T11:08:06.2401606+01:00</Time>
+      <Time>2013-08-05T22:56:35.5909518+01:00</Time>
     </Item>
     <Item>
       <Source>PostProcessEffect.fx</Source>
@@ -45,6 +45,15 @@
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\CartoonEffect.xnb</Output>
       <Time>2013-08-04T11:24:37.736871+01:00</Time>
+    </Item>
+    <Item>
+      <Source>OutlineShader.fx</Source>
+      <Name>OutlineShader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\OutlineShader.xnb</Output>
+      <Time>2013-08-04T12:17:21.5658317+01:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

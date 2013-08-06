@@ -148,9 +148,9 @@ namespace Isomites3D.Core
             _speed = 3f;
 
             ViewMatrix = Matrix.Identity;
-            ProjectionMatrix = Matrix.CreateOrthographic(Device.Viewport.Width, Device.Viewport.Height, -5000f, 5000f);
-            //ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-              //          Device.Viewport.AspectRatio, .2f, 5000f);
+            //ProjectionMatrix = Matrix.CreateOrthographic(Device.Viewport.Width, Device.Viewport.Height, -5000f, 5000f);
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                        Device.Viewport.AspectRatio, .2f, 5000f);
         }
     }
 }
