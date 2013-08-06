@@ -61,7 +61,7 @@ namespace Isomites3D.CubeWorld
 
             for (int x = 0; x < _cubeIDs.GetLength(0); x++)
             {
-                for (int y = 0; y < _cubeIDs.GetLength(1); y++)
+                for (int y = 0; y < _cubeIDs.GetLength(1)/2; y++)
                 {
                     for (int z = 0; z < _cubeIDs.GetLength(2); z++)
                     {
@@ -70,30 +70,23 @@ namespace Isomites3D.CubeWorld
                 }
             }
 
-          /* AddCubeAt(11, 10, 11, 2);
-           AddCubeAt(11, 11, 11, 2);
-           AddCubeAt(11, 12, 11, 2);
 
-           //AddCubeAt(11, 12, 10, 1);
+           AddCubeAt(12, 12, 10, 1);
+           AddCubeAt(12, 11, 10, 1);
+           AddCubeAt(12, 10, 10, 1);
+            
+          AddCubeAt(10, 10, 12, 1);
+           AddCubeAt(10, 11, 12, 1);
+           AddCubeAt(10, 12, 12, 1);
 
-           AddCubeAt(15,10,15,2);
+           AddCubeAt(12, 12, 12, 1);
+           AddCubeAt(12, 11, 12, 1);
+           AddCubeAt(12, 10, 12, 1);
 
-           AddCubeAt(12, 12, 10, 2);
-           AddCubeAt(12, 11, 10, 2);
-           AddCubeAt(12, 10, 10, 2);
-            */
-          /* AddCubeAt(10, 10, 12, 2);
-           AddCubeAt(10, 11, 12, 2);
-           AddCubeAt(10, 12, 12, 2);
+           AddCubeAt(10, 12, 11, 1);
+           AddCubeAt(12, 12, 11, 1);
 
-           AddCubeAt(12, 12, 12, 2);
-           AddCubeAt(12, 11, 12, 2);
-           AddCubeAt(12, 10, 12, 2);
-
-           AddCubeAt(10, 12, 11, 2);
-           AddCubeAt(12, 12, 11, 2);
-
-           AddCubeAt(11, 12, 12, 2);*/
+           AddCubeAt(11, 12, 12, 1);
         }
 
         public void AddCubeAt(int x, int y, int z, ushort cubeType)
@@ -199,10 +192,10 @@ namespace Isomites3D.CubeWorld
 
         public void DrawOutline(GraphicsDevice device)
         {
-            _device.SetVertexBuffer(_outlineVertexBuffer);
-            _device.Indices = _outlineIndexBuffer;
+          //  _device.SetVertexBuffer(_outlineVertexBuffer);
+            //_device.Indices = _outlineIndexBuffer;
 
-            _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,0,_outlineVertexBuffer.VertexCount, 0, _outlineIndexBuffer.IndexCount/3);
+            //_device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,0,_outlineVertexBuffer.VertexCount, 0, _outlineIndexBuffer.IndexCount/3);
         }
 
         public void DrawDebugInfo(SpriteBatch spriteBatch, SpriteFont font)

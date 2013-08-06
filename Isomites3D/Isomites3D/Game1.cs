@@ -107,7 +107,7 @@ namespace Isomites3D
             _device.SetVertexBuffer(_vertexBuffer);
 
             _camera3D = new Camera3D(_device);
-            _world = new CubeManager(1, 1, 1, _device);
+            _world = new CubeManager(20, 20, 20, _device);
 
             _debugFont = Content.Load<SpriteFont>("debugFont");
 
@@ -199,7 +199,7 @@ namespace Isomites3D
         protected override void Draw(GameTime gameTime)
         {
                 RasterizerState rs = new RasterizerState();
-                rs.CullMode = CullMode.None;
+                rs.CullMode = CullMode.CullCounterClockwiseFace;
                 rs.FillMode = FillMode.Solid;
                 _device.RasterizerState = rs;
 

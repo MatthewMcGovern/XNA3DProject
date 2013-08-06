@@ -78,6 +78,7 @@
     <Compile Include="CubeWorld\Connections.cs" />
     <Compile Include="CubeWorld\Cube.cs" />
     <Compile Include="CubeWorld\CubeDrawData.cs" />
+    <Compile Include="CubeWorld\CubeOutline.cs" />
     <Compile Include="CubeWorld\CubeType.cs" />
     <Compile Include="CubeWorld\CubeManager.cs" />
     <Compile Include="CubeWorld\CubeVertexHelper.cs" />

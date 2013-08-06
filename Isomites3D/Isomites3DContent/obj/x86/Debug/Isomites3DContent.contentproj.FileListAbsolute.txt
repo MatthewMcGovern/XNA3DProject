@@ -1,1 +1,2 @@
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3DContent\obj\x86\Debug\Isomites3DContent.contentprojResolveAssemblyReference.cache
+C:\Users\Emily\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3DContent\obj\x86\Debug\ResolveAssemblyReference.cache

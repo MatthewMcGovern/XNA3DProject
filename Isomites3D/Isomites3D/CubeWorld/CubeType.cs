@@ -69,42 +69,42 @@ namespace Isomites3D.CubeWorld
 
             _smallCubeIndices = new short[]
             {
+                2,
+                1,
                 0,
                 1,
                 2,
-                1,
-                2,
                 3,
                 1,
                 3,
                 7,
                 7,
-                3,
                 5,
+                1,
                 0,
                 1,
                 4,
-                4,
-                5,
                 1,
-                2,
+                5,
+                4,
+                4,
                 6,
-                4,
-                4,
+                2,
+                2,
                 0,
-                2,
+                4,
                 4,
                 5,
                 6,
-                6,
-                7,
                 5,
+                7,
+                6,
                 2,
                 6,
                 7,
-                2,
+                7,
                 3,
-                7
+                2
             };
 
             _outlineVertices = new VertexPositionNormalTexture[8];
@@ -428,12 +428,32 @@ namespace Isomites3D.CubeWorld
             List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
             List<short> indices = new List<short>();
 
+            List<CubeOutline> _cubeOutlines = new List<CubeOutline>();
+            _cubeOutlines.Add(Outlines.X.UBLtoUBR);
+            _cubeOutlines.Add(Outlines.X.DBLtoDBR);
+            _cubeOutlines.Add(Outlines.X.UTLtoUTR);
+            _cubeOutlines.Add(Outlines.X.DTLtoDTR);
+
+            _cubeOutlines.Add(Outlines.Y.UTLtoDTL);
+            _cubeOutlines.Add(Outlines.Y.UTRtoDTR);
+            _cubeOutlines.Add(Outlines.Y.UBLtoDBL);
+            _cubeOutlines.Add(Outlines.Y.UBRtoDBR);
+
+            _cubeOutlines.Add(Outlines.Z.UTLtoUBL);
+            _cubeOutlines.Add(Outlines.Z.UTRtoUBR);
+            _cubeOutlines.Add(Outlines.Z.DTLtoDBL);
+            _cubeOutlines.Add(Outlines.Z.DTRtoDBR);
+
             CubeDrawData drawData = new CubeDrawData(offset, outlineOffset);
 
             if (!neighbours.HasFlag(Connections.Up))
                 drawData.AddWorldCubeVertices(_upVertices, _upIndices, worldPosition);
             else
             {
+                _cubeOutlines.Remove(Outlines.Z.UTLtoUBL);
+                _cubeOutlines.Remove(Outlines.Z.UTRtoUBR);
+                _cubeOutlines.Remove(Outlines.X.UBLtoUBR);
+                _cubeOutlines.Remove(Outlines.X.UTLtoUTR);
                 cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
                 cubeOutlinePoints.Remove(LinePoints.UpTopRight);
                 cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
@@ -448,6 +468,10 @@ namespace Isomites3D.CubeWorld
                 cubeOutlinePoints.Remove(LinePoints.DownTopRight);
                 cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
                 cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+                _cubeOutlines.Remove(Outlines.Z.DTLtoDBL);
+                _cubeOutlines.Remove(Outlines.Z.DTRtoDBR);
+                _cubeOutlines.Remove(Outlines.X.DBLtoDBR);
+                _cubeOutlines.Remove(Outlines.X.DTLtoDTR);
             }
             if (!neighbours.HasFlag(Connections.North))
                 drawData.AddWorldCubeVertices(_northVertices, _northIndices, worldPosition);
@@ -457,6 +481,11 @@ namespace Isomites3D.CubeWorld
                 cubeOutlinePoints.Remove(LinePoints.UpTopRight);
                 cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
                 cubeOutlinePoints.Remove(LinePoints.DownTopRight);
+                
+                _cubeOutlines.Remove(Outlines.Y.UBLtoDBL);
+                _cubeOutlines.Remove(Outlines.Y.UBRtoDBR);
+                _cubeOutlines.Remove(Outlines.X.UBLtoUBR);
+                _cubeOutlines.Remove(Outlines.X.DBLtoDBR);
             }
             if (!neighbours.HasFlag(Connections.East))
                 drawData.AddWorldCubeVertices(_eastVertices, _eastIndices, worldPosition);
@@ -466,6 +495,10 @@ namespace Isomites3D.CubeWorld
                 cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
                 cubeOutlinePoints.Remove(LinePoints.DownTopRight);
                 cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+                _cubeOutlines.Remove(Outlines.Y.UTRtoDTR);
+                _cubeOutlines.Remove(Outlines.Y.UBRtoDBR);
+                _cubeOutlines.Remove(Outlines.Z.UTRtoUBR);
+                _cubeOutlines.Remove(Outlines.Z.DTRtoDBR);
             }
             if (!neighbours.HasFlag(Connections.South))
                 drawData.AddWorldCubeVertices(_southVertices, _southIndices, worldPosition);
@@ -475,6 +508,10 @@ namespace Isomites3D.CubeWorld
                 cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
                 cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
                 cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+                _cubeOutlines.Remove(Outlines.Y.UTLtoDTL);
+                _cubeOutlines.Remove(Outlines.Y.UTRtoDTR);
+                _cubeOutlines.Remove(Outlines.X.UTLtoUTR);
+                _cubeOutlines.Remove(Outlines.X.DTLtoDTR);
             }
             if (!neighbours.HasFlag(Connections.West))
                 drawData.AddWorldCubeVertices(_westVertices, _westIndices, worldPosition);
@@ -484,10 +521,18 @@ namespace Isomites3D.CubeWorld
                 cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
                 cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
                 cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
+                _cubeOutlines.Remove(Outlines.Y.UTLtoDTL);
+                _cubeOutlines.Remove(Outlines.Y.UBLtoDBL);
+                _cubeOutlines.Remove(Outlines.Z.UTLtoUBL);
+                _cubeOutlines.Remove(Outlines.Z.DTLtoDBL);
             }
 
 
-            drawData.AddSmallCubeAt(_smallCubeVertices, _smallCubeIndices, worldPosition, CubeVertices.UpBottomLeft);
+            foreach (CubeOutline outline in _cubeOutlines)
+            {
+                drawData.AddSmallCubeAt(worldPosition, outline);
+            }
+            
             return drawData;
         }
 
