@@ -32,7 +32,7 @@ public class FrameRateCounter
 
         string fps = string.Format("fps: {0}", frameRate);
 
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
         spriteBatch.DrawString(font, fps, new Vector2(32, 32), Color.Yellow);
         spriteBatch.End();
     }

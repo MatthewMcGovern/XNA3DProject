@@ -23,13 +23,7 @@ namespace Isomites3D.CubeWorld
     public class CubeType
     {
         private static List<CubeType> _cubeTypes;
-        private static List<Vector3> _outlinePoints;
-        private static VertexPositionNormalTexture[] _outlineVertices;
-        private static VertexPositionColor[] _smallCubeVertices;
-        private static short[] _smallCubeIndices;
-        private static short[] _outlineIndices;
 
-        private VertexPositionNormalTexture[]  _vertices;
         private VertexPositionNormalTexture[] _upVertices;
         private short[] _upIndices;
         private VertexPositionNormalTexture[] _downVertices;
@@ -42,125 +36,20 @@ namespace Isomites3D.CubeWorld
         private short[] _southIndices;
         private VertexPositionNormalTexture[] _westVertices;
         private short[] _westIndices;
-        private short[] _indices;
 
         static CubeType()
         {
+            // VERY MESSY incoming
+            // Defining like 36 vertices and indices for each cube is the ONLY way to haev multiple cubes that have different
+            // Textures per face... Minecraft cheats and only has like 1 texture per cube but that sucks and is ugly.
 
-            _outlinePoints = new List<Vector3>();
-            _outlinePoints.Add(LinePoints.UpTopLeft);
-            _outlinePoints.Add(LinePoints.UpTopRight);
-            _outlinePoints.Add(LinePoints.UpBottomLeft);
-            _outlinePoints.Add(LinePoints.UpBottomRight);
-            _outlinePoints.Add(LinePoints.DownTopLeft);
-            _outlinePoints.Add(LinePoints.DownTopRight);
-            _outlinePoints.Add(LinePoints.DownBottomLeft);
-            _outlinePoints.Add(LinePoints.DownBottomRight);
+            // In short: every cube type has 6 faces of 4 vertices and 6 indices each.
+            // This is where their shape and texture is set.
+            // Textures are very lame to set as they use a 0-1 float value that represents their location in a texture file...
+            // Yes its crazy. so e.g. 0.125f of a 512 file is 64px.
 
-            _smallCubeVertices = new VertexPositionColor[8];
-            _smallCubeVertices[0] = new VertexPositionColor(SmallCubeVertices.UpTopLeft, Color.Black);
-            _smallCubeVertices[1] = new VertexPositionColor(SmallCubeVertices.UpTopRight, Color.Black);
-            _smallCubeVertices[2] = new VertexPositionColor(SmallCubeVertices.UpBottomLeft, Color.Black);
-            _smallCubeVertices[3] = new VertexPositionColor(SmallCubeVertices.UpBottomRight, Color.Black);
-            _smallCubeVertices[4] = new VertexPositionColor(SmallCubeVertices.DownTopLeft, Color.Black);
-            _smallCubeVertices[5] = new VertexPositionColor(SmallCubeVertices.DownTopRight, Color.Black);
-            _smallCubeVertices[6] = new VertexPositionColor(SmallCubeVertices.DownBottomLeft, Color.Black);
-            _smallCubeVertices[7] = new VertexPositionColor(SmallCubeVertices.DownBottomRight, Color.Black);
-
-            _smallCubeIndices = new short[]
-            {
-                2,
-                1,
-                0,
-                1,
-                2,
-                3,
-                1,
-                3,
-                7,
-                7,
-                5,
-                1,
-                0,
-                1,
-                4,
-                1,
-                5,
-                4,
-                4,
-                6,
-                2,
-                2,
-                0,
-                4,
-                4,
-                5,
-                6,
-                5,
-                7,
-                6,
-                2,
-                6,
-                7,
-                7,
-                3,
-                2
-            };
-
-            _outlineVertices = new VertexPositionNormalTexture[8];
-            _outlineVertices[0] = new VertexPositionNormalTexture(LinePointVertices.UpTopLeft, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[1] = new VertexPositionNormalTexture(LinePointVertices.UpTopRight, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[2] = new VertexPositionNormalTexture(LinePointVertices.UpBottomLeft, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[3] = new VertexPositionNormalTexture(LinePointVertices.UpBottomRight, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[4] = new VertexPositionNormalTexture(LinePointVertices.DownTopLeft, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[5] = new VertexPositionNormalTexture(LinePointVertices.DownTopRight, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[6] = new VertexPositionNormalTexture(LinePointVertices.DownBottomLeft, Vector3.Zero, new Vector2(1f, 1f));
-            _outlineVertices[7] = new VertexPositionNormalTexture(LinePointVertices.DownBottomRight, Vector3.Zero, new Vector2(1f, 1f));
-
-            _outlineIndices = new short[]
-            {
-                0,
-                1,
-                2,
-                2,
-                1,
-                3,
-                4,
-                5,
-                6,
-                6,
-                4,
-                7,
-                1,
-                7,
-                3,
-                7,
-                5,
-                1,
-                0,
-                6,
-                4,
-                6,
-                4,
-                2,
-                1,
-                0,
-                4,
-                4,
-                5,
-                1,
-                2,
-                7,
-                6,
-                3,
-                7,
-                6
-            };
-
-        _cubeTypes = new List<CubeType>();
+            _cubeTypes = new List<CubeType>();
             CubeType air = new CubeType();
-            air._indices = new short[0];
-            air._vertices = new VertexPositionNormalTexture[0];
             _cubeTypes.Add(air);
             
             CubeType soil = new CubeType();
@@ -368,47 +257,6 @@ namespace Isomites3D.CubeWorld
                 0,
                 3
             };
-                
-
-            soil._indices = new short[]
-            {
-                0,
-                2,
-                1,
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                6,
-                5,
-                7,
-                8,
-                10,
-                9,
-                10,
-                11,
-                9,
-                12,
-                13,
-                14,
-                14,
-                13,
-                15,
-                16,
-                17,
-                18,
-                18,
-                19,
-                16,
-                21,
-                20,
-                22,
-                22,
-                20,
-                23
-            };
 
             _cubeTypes.Add(soil);
             _cubeTypes.Add(stone);
@@ -423,11 +271,7 @@ namespace Isomites3D.CubeWorld
 
         public CubeDrawData GetDrawData(int offset, int outlineOffset, Vector3 worldPosition, Connections neighbours)
         {
-            List<Vector3> cubeOutlinePoints = _outlinePoints.ToList();
-            
-            List<VertexPositionNormalTexture> vertices = new List<VertexPositionNormalTexture>();
-            List<short> indices = new List<short>();
-
+            // Add all possible lines to list... Should probably store this somewhere else?
             List<CubeOutline> _cubeOutlines = new List<CubeOutline>();
             _cubeOutlines.Add(Outlines.X.UBLtoUBR);
             _cubeOutlines.Add(Outlines.X.DBLtoDBR);
@@ -444,7 +288,12 @@ namespace Isomites3D.CubeWorld
             _cubeOutlines.Add(Outlines.Z.DTLtoDBL);
             _cubeOutlines.Add(Outlines.Z.DTRtoDBR);
 
+            // Get a drawData object for this cube.
             CubeDrawData drawData = new CubeDrawData(offset, outlineOffset);
+
+            // the following 6 neighour checks is to remove faces and add lines
+            // e.g. if a neighbour is NOT above it, add the top face vertices/idncies
+            // if a neighbough IS above it, remove the lines that the up face obscures.
 
             if (!neighbours.HasFlag(Connections.Up))
                 drawData.AddWorldCubeVertices(_upVertices, _upIndices, worldPosition);
@@ -454,20 +303,14 @@ namespace Isomites3D.CubeWorld
                 _cubeOutlines.Remove(Outlines.Z.UTRtoUBR);
                 _cubeOutlines.Remove(Outlines.X.UBLtoUBR);
                 _cubeOutlines.Remove(Outlines.X.UTLtoUTR);
-                cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
-                cubeOutlinePoints.Remove(LinePoints.UpTopRight);
-                cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
-                cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
+
             }
 
             if (!neighbours.HasFlag(Connections.Down))
                 drawData.AddWorldCubeVertices(_downVertices, _downIndices, worldPosition);
             else
             {
-                cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
-                cubeOutlinePoints.Remove(LinePoints.DownTopRight);
-                cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
-                cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+
                 _cubeOutlines.Remove(Outlines.Z.DTLtoDBL);
                 _cubeOutlines.Remove(Outlines.Z.DTRtoDBR);
                 _cubeOutlines.Remove(Outlines.X.DBLtoDBR);
@@ -477,10 +320,7 @@ namespace Isomites3D.CubeWorld
                 drawData.AddWorldCubeVertices(_northVertices, _northIndices, worldPosition);
             else
             {
-                cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
-                cubeOutlinePoints.Remove(LinePoints.UpTopRight);
-                cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
-                cubeOutlinePoints.Remove(LinePoints.DownTopRight);
+
                 
                 _cubeOutlines.Remove(Outlines.Y.UBLtoDBL);
                 _cubeOutlines.Remove(Outlines.Y.UBRtoDBR);
@@ -491,10 +331,7 @@ namespace Isomites3D.CubeWorld
                 drawData.AddWorldCubeVertices(_eastVertices, _eastIndices, worldPosition);
             else
             {
-                cubeOutlinePoints.Remove(LinePoints.UpTopRight);
-                cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
-                cubeOutlinePoints.Remove(LinePoints.DownTopRight);
-                cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
+
                 _cubeOutlines.Remove(Outlines.Y.UTRtoDTR);
                 _cubeOutlines.Remove(Outlines.Y.UBRtoDBR);
                 _cubeOutlines.Remove(Outlines.Z.UTRtoUBR);
@@ -504,10 +341,6 @@ namespace Isomites3D.CubeWorld
                 drawData.AddWorldCubeVertices(_southVertices, _southIndices, worldPosition);
             else
             {
-                cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
-                cubeOutlinePoints.Remove(LinePoints.UpBottomRight);
-                cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
-                cubeOutlinePoints.Remove(LinePoints.DownBottomRight);
                 _cubeOutlines.Remove(Outlines.Y.UTLtoDTL);
                 _cubeOutlines.Remove(Outlines.Y.UTRtoDTR);
                 _cubeOutlines.Remove(Outlines.X.UTLtoUTR);
@@ -517,98 +350,21 @@ namespace Isomites3D.CubeWorld
                 drawData.AddWorldCubeVertices(_westVertices, _westIndices, worldPosition);
             else
             {
-                cubeOutlinePoints.Remove(LinePoints.UpTopLeft);
-                cubeOutlinePoints.Remove(LinePoints.UpBottomLeft);
-                cubeOutlinePoints.Remove(LinePoints.DownTopLeft);
-                cubeOutlinePoints.Remove(LinePoints.DownBottomLeft);
+
                 _cubeOutlines.Remove(Outlines.Y.UTLtoDTL);
                 _cubeOutlines.Remove(Outlines.Y.UBLtoDBL);
                 _cubeOutlines.Remove(Outlines.Z.UTLtoUBL);
                 _cubeOutlines.Remove(Outlines.Z.DTLtoDBL);
             }
 
-
+            // Only lines that made it get added
             foreach (CubeOutline outline in _cubeOutlines)
             {
-                drawData.AddSmallCubeAt(worldPosition, outline);
+                drawData.AddLineAt(worldPosition, outline);
             }
             
+            // Return the data so the main buffer can add all the vertices/indices.
             return drawData;
-        }
-
-        public short[] GetIndices()
-        {
-            return _indices;
-        }
-
-        public short[] GetIndices(Connections neighbours)
-        {
-            List<short> visibleIndices = new List<short>();
-            byte facesProcessed = 0;
-            if (!neighbours.HasFlag(Connections.Up))
-            {
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(3 + (facesProcessed * 4)));
-                facesProcessed++;
-            }
-            if (!neighbours.HasFlag(Connections.South))
-            {
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(3 + (facesProcessed * 4)));
-                facesProcessed++;
-            }
-            if (!neighbours.HasFlag(Connections.North))
-            {
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(3 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                facesProcessed++;
-            }
-            if (!neighbours.HasFlag(Connections.Down))
-            {
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(3 + (facesProcessed * 4)));
-                facesProcessed++;
-            }
-
-            if (!neighbours.HasFlag(Connections.East))
-            {
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(3 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                facesProcessed++;
-            }
-
-            if (!neighbours.HasFlag(Connections.West))
-            {
-                visibleIndices.Add((short)(1 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(2 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(0 + (facesProcessed * 4)));
-                visibleIndices.Add((short)(3 + (facesProcessed * 4)));
-                facesProcessed++;
-            }
-
-            return visibleIndices.ToArray();
         }
     }
 }

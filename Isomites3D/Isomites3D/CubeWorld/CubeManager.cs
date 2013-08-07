@@ -4,8 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Isomites3D.CubeWorld
 {
@@ -20,50 +22,51 @@ namespace Isomites3D.CubeWorld
     public class CubeManager
     {
         private byte[,,] _cubeIDs;
-        private NewCube[,,] _cubes;
+        private Cube[,,] _cubes;
 
         private GraphicsDevice _device;
         private VertexBuffer _vertexBuffer;
         private VertexBuffer _outlineVertexBuffer;
         private IndexBuffer _indexBuffer;
         private IndexBuffer _outlineIndexBuffer;
-        private List<VertexPositionNormalTexture> _cachedVerts2;
+        private List<VertexPositionNormalTexture> _cachedCubeVerts;
         private List<VertexPositionColor> _cachedOutlineVerts; 
   
-        private List<short> _cachedIndices2;
+        private List<short> _cachedCubeIndices;
         private List<short> _cachedOutlineIndices; 
 
         public CubeManager(int width, int column, int depth, GraphicsDevice device)
         {
             _device = device;
-            _cubeIDs = new byte[width, column, depth];
-            _cubes = new NewCube[width, column, depth];
+
+            _cubes = new Cube[width, column, depth];
            
-            _cachedVerts2 = new List<VertexPositionNormalTexture>();
+            _cachedCubeVerts = new List<VertexPositionNormalTexture>();
             _cachedOutlineVerts = new List<VertexPositionColor>();
-            _cachedIndices2 = new List<short>();
+            _cachedCubeIndices = new List<short>();
             _cachedOutlineIndices = new List<short>();
 
 
-            _cachedIndices2 = new List<short>();
+            _cachedCubeIndices = new List<short>();
 
-            for (int x = 0; x < _cubeIDs.GetLength(0); x++)
+            for (int x = 0; x < _cubes.GetLength(0); x++)
             {
-                for (int y = 0; y < _cubeIDs.GetLength(1); y++)
+                for (int y = 0; y < _cubes.GetLength(1); y++)
                 {
-                    for (int z = 0; z < _cubeIDs.GetLength(2); z++)
+                    for (int z = 0; z < _cubes.GetLength(2); z++)
                     {
-                        _cubeIDs[x, y, z] = 1;
-                        _cubes[x, y, z] = new NewCube(0);
+                        // Loop through full world and create 'air' cubes.
+                        _cubes[x, y, z] = new Cube(0);
                     }
                 }
             }
 
-            for (int x = 0; x < _cubeIDs.GetLength(0); x++)
+            // Loop through world but only up to half the height and add soil.
+            for (int x = 0; x < _cubes.GetLength(0); x++)
             {
-                for (int y = 0; y < _cubeIDs.GetLength(1)/2; y++)
+                for (int y = 0; y < _cubes.GetLength(1) / 2; y++)
                 {
-                    for (int z = 0; z < _cubeIDs.GetLength(2); z++)
+                    for (int z = 0; z < _cubes.GetLength(2); z++)
                     {
                         AddCubeAt(x,y,z, 1);
                     }
@@ -71,6 +74,7 @@ namespace Isomites3D.CubeWorld
             }
 
 
+            // A load of testing cubes for fun.
            AddCubeAt(12, 12, 10, 1);
            AddCubeAt(12, 11, 10, 1);
            AddCubeAt(12, 10, 10, 1);
@@ -87,11 +91,27 @@ namespace Isomites3D.CubeWorld
            AddCubeAt(12, 12, 11, 1);
 
            AddCubeAt(11, 12, 12, 1);
+
+           AddCubeAt(5, 10, 5, 1);
+           AddCubeAt(5, 11, 5, 1);
+           AddCubeAt(5, 12, 5, 1);
+           AddCubeAt(6, 12, 5, 1);
+           AddCubeAt(7, 12, 5, 1);
+           AddCubeAt(7, 11, 5, 1);
+
+           AddCubeAt(17, 10, 17, 1);
+           AddCubeAt(18, 10, 18, 1);
+           AddCubeAt(0, 10, 0, 2);
+           AddCubeAt(1, 10, 0, 2);
+           
+
         }
 
         public void AddCubeAt(int x, int y, int z, ushort cubeType)
         {
-            NewCube newBlock = new NewCube(cubeType);
+            // when adding a cube, check if it has any neighbours and resolve the connection if it does
+            // Oh and checks the boundaries too so it doesn't try to access a cube outside the range of world array.
+            Cube newBlock = new Cube(cubeType);
 
             if (z + 1 < _cubes.GetLength(2))
             {
@@ -128,8 +148,9 @@ namespace Isomites3D.CubeWorld
             _cubes[x, y, z] = newBlock;
         }
 
-        public void ResolveCubeConnection(NewCube cubeA, NewCube cubeB, Connections direction)
+        public void ResolveCubeConnection(Cube cubeA, Cube cubeB, Connections direction)
         {
+            // Literally just removes the connecting edges on the two cubes.
             if (cubeB.Type != 0 && cubeA.Type != 0)
             {
                 Connections opposite = ConnectionUtils.GetOppositeBlockMask(direction);
@@ -140,26 +161,36 @@ namespace Isomites3D.CubeWorld
 
         public void Update()
         {
-            if (_cachedVerts2.Count == 0)
+            // this is where the magic happens...
+            // If we don't have any verts, let's get some.
+            if (_cachedCubeVerts.Count == 0)
             {
                 int offset = 0;
                 int outlineOffset = 0;
-                for (int x = 0; x < _cubeIDs.GetLength(0); x++)
+                for (int x = 0; x < _cubes.GetLength(0); x++)
                 {
-                    for (int y = 0; y < _cubeIDs.GetLength(1); y++)
+                    for (int y = 0; y < _cubes.GetLength(1); y++)
                     {
-                        for (int z = 0; z < _cubeIDs.GetLength(2); z++)
+                        for (int z = 0; z < _cubes.GetLength(2); z++)
                         {
-                            NewCube cube = _cubes[x, y, z];
+                            // Loops though every single cube and gets the cube.
+                            Cube cube = _cubes[x, y, z];
+                            // No point getting vertices if its air.
                             if (cube.Type != 0)
                             {
+                                // No point getting vertices if its obscured by blocks all around it.
                                 if (!cube.Neighbours.HasFlag(ConnectionUtils.All))
                                 {
+                                    // Time to get the cubes draw data.
                                     CubeDrawData data = CubeType.GetById(cube.Type).GetDrawData(offset, outlineOffset, new Vector3(x, y, z),  cube.Neighbours);
-                                    _cachedVerts2.AddRange(data.Vertices);
-                                    _cachedIndices2.AddRange(data.Indices);
+
+                                    // got the data, add it to the buffers
+                                    _cachedCubeVerts.AddRange(data.Vertices);
+                                    _cachedCubeIndices.AddRange(data.Indices);
                                     _cachedOutlineVerts.AddRange(data.OutlineVertices);
                                     _cachedOutlineIndices.AddRange(data.OutlineIndices);
+                                    
+                                    // Increase offset so indices don't just use the first few vertices -_-
                                     offset = data.Offset;
                                     outlineOffset = data.OutlineOffset;
                                 }
@@ -167,67 +198,51 @@ namespace Isomites3D.CubeWorld
                         }
                     }
                 }
-                _vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cachedVerts2.Count, BufferUsage.None);
-                _indexBuffer = new IndexBuffer(_device, typeof(short), _cachedIndices2.Count, BufferUsage.WriteOnly);
 
+                // VertexBuffer/IndexBuffer are XNA classes for feeding the graphics card cached data.
+                // they get created to the exact size required based on the kind of vertex and how many vertices there are
+                // Similar for indices except it only accepts 16bit size objects... so shorts... I should probably try ushorts for 2x the indices.
+                // TODO: Split my list buffers into smaller lists of no more than 196600 as vertex buffers can only draw 65535 triangles at once!!!
+                // TODO: in other words this will error if I have too many cubes :(
+                _vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cachedCubeVerts.Count, BufferUsage.None);
+                _indexBuffer = new IndexBuffer(_device, typeof(short), _cachedCubeIndices.Count, BufferUsage.WriteOnly);
                 _outlineIndexBuffer = new IndexBuffer(_device, typeof(short), _cachedOutlineIndices.Count, BufferUsage.WriteOnly);
                 _outlineVertexBuffer = new VertexBuffer(_device, VertexPositionColor.VertexDeclaration, _cachedOutlineVerts.Count, BufferUsage.None);
 
-                _vertexBuffer.SetData(_cachedVerts2.ToArray());
-                _indexBuffer.SetData(_cachedIndices2.ToArray());
-
+                // Set the actual data to the GPU.
+                _vertexBuffer.SetData(_cachedCubeVerts.ToArray());
+                _indexBuffer.SetData(_cachedCubeIndices.ToArray());
                 _outlineIndexBuffer.SetData(_cachedOutlineIndices.ToArray());
                 _outlineVertexBuffer.SetData(_cachedOutlineVerts.ToArray());
-
             }
         }
 
         public void Draw(GraphicsDevice device)
         {
+            // Need to tell the graphics card which buffer we are using
+            // This is NOT to be confused with SetData
+            // This literally is just a pointer to the buffer already in GPU memory.
+            // Set Data has a much larger overhead than this.
             _device.SetVertexBuffer(_vertexBuffer);
             _device.Indices = _indexBuffer;
 
+            // Draws all the cube Tris
             _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertexBuffer.VertexCount, 0, _indexBuffer.IndexCount/3);
         }
 
         public void DrawOutline(GraphicsDevice device)
         {
-          //  _device.SetVertexBuffer(_outlineVertexBuffer);
-            //_device.Indices = _outlineIndexBuffer;
+            // Made it optional to show the effect off *shrug*
+            // Hold P to disable.
+            if (!InputHelper.IsKeyDown(Keys.P))
+            {
+                // Similar to above, just a different buffer.
+                _device.SetVertexBuffer(_outlineVertexBuffer);
+                _device.Indices = _outlineIndexBuffer;
 
-            //_device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,0,_outlineVertexBuffer.VertexCount, 0, _outlineIndexBuffer.IndexCount/3);
-        }
-
-        public void DrawDebugInfo(SpriteBatch spriteBatch, SpriteFont font)
-        {
-            /*spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
-            int cubeCount = _cubes.GetLength(0)*_cubes.GetLength(1)*_cubes.GetLength(2);
-            int vertTotal = cubeCount*24;
-            int vertDrawn = _vertexBuffer.VertexCount;
-            float vertPercentage = vertDrawn / (float)vertTotal;
-            int indicesTotal = cubeCount*36;
-            int indicesDrawn = _indexBuffer.IndexCount;
-            float indicesPercentage = (indicesDrawn / (float)indicesTotal);
-            int trisTotal = cubeCount*12;
-            float trisDrawn = indicesDrawn / (float)3;
-            float trisPercentage = (trisDrawn/trisTotal);
-
-            string message = "Cubes: " + cubeCount
-                             + "\n" + "Verts Drawn: " + vertDrawn + " of " + vertTotal + " (" + vertPercentage + "%)"
-                             + "\n" + "Indices Used: " + indicesDrawn + " of " + indicesTotal + " (" + indicesPercentage +
-                             "%)"
-                             + "\n" + "Tris Drawn: " + trisDrawn + " of " + trisTotal + " (" + trisPercentage + "%)";
-            // Verts Total:
-            // Indices Used:
-            // Indices Total:
-            // Tris Used:
-            // Tris Total:
-
-
-            spriteBatch.DrawString(font, message, new Vector2(32, 100), Color.Yellow);
-            spriteBatch.End();
-             */
+                _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _outlineVertexBuffer.VertexCount, 0,
+                    _outlineIndexBuffer.IndexCount/3);
+            }
         }
     }
 }

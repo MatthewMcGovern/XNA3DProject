@@ -25,33 +25,24 @@ namespace Isomites3D
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        // Effect used to apply the edge detection and pencil sketch postprocessing.
-        Effect postprocessEffect;
-        private Effect effectPostOutline;
-
         // Custom rendertargets.
         RenderTarget2D sceneRenderTarget;
         RenderTarget2D normalDepthRenderTarget;
             
 
         private Camera3D _camera3D;
-        private Vector3 _cameraPosition = new Vector3(0, 80, 0);
-        private Vector3 _lookAt = new Vector3(0, 0, 0);
 
         private GraphicsDevice _device;
         private Matrix _viewMatrix;
-        private Matrix _projectionMatrix;
         private Matrix _worldMatrix;
         private Effect _effect;
         private Texture2D _texture;
-        private Cube _cube;
         private CubeManager _world;
-        private int frame = 1;
+
+        private FillMode _fillMode;
+        private CullMode _cullMode;
 
         private FrameRateCounter _frameRateCounter;
-
-        private VertexBuffer _vertexBuffer;
-        private IndexBuffer _indexBuffer;
 
         private SpriteFont _debugFont;
 
@@ -61,11 +52,12 @@ namespace Isomites3D
             {
                 PreferredBackBufferHeight = 1000,
                 PreferredBackBufferWidth = 1000,
-                //SynchronizeWithVerticalRetrace = false
+               // SynchronizeWithVerticalRetrace = false
             };
             Content.RootDirectory = "Content";
+            //graphics.PreferMultiSampling = true;
             
-            //IsFixedTimeStep = false;
+           //IsFixedTimeStep = false;
         }
 
         /// <summary>
@@ -89,41 +81,22 @@ namespace Isomites3D
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _cube = new Cube();
             _device = graphics.GraphicsDevice;
             _effect = Content.Load<Effect>("effects");
             //_effect = Content.Load<Effect>("effects");
             _texture = Content.Load<Texture2D>("cubemap");
-            _projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio,
-    1.0f, 300.0f);
+            
             InputHelper.Init();
 
-            _vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cube.GetVertices().Count(), BufferUsage.WriteOnly);
-            _vertexBuffer.SetData(_cube.GetVertices());
-            _indexBuffer = new IndexBuffer(_device, typeof(short), _cube.GetIndices().Count(), BufferUsage.WriteOnly);
-            _indexBuffer.SetData(_cube.GetIndices());
+            _fillMode = FillMode.Solid;
+            _cullMode = CullMode.CullCounterClockwiseFace;
 
-            _device.Indices = _indexBuffer;
-            _device.SetVertexBuffer(_vertexBuffer);
 
             _camera3D = new Camera3D(_device);
             _world = new CubeManager(20, 20, 20, _device);
 
             _debugFont = Content.Load<SpriteFont>("debugFont");
 
-            postprocessEffect = Content.Load<Effect>("PostProcessEffect");
-
-            // Create two custom rendertargets.
-            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
-
-            sceneRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
-                                                   pp.BackBufferWidth, pp.BackBufferHeight, false,
-                                                   pp.BackBufferFormat, pp.DepthStencilFormat);
-
-            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
-                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
-                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
-            effectPostOutline = Content.Load<Effect>("OutlineShader");
             _frameRateCounter = new FrameRateCounter();
 
             // TODO: use this.Content to load your game content here
@@ -145,18 +118,48 @@ namespace Isomites3D
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Get any user input.
             InputHelper.Update(gameTime);
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
 
-            _camera3D.Update();
+            _camera3D.Update(gameTime);
             _world.Update();
+            
+
+            _frameRateCounter.Update(gameTime);
+            
+
             base.Update(gameTime);
 
-            if (InputHelper.IsNewKeyPress(Keys.F1))
-                frame = 0;
-            _frameRateCounter.Update(gameTime);
+
+            if (InputHelper.IsNewKeyPress(Keys.F5))
+            {
+                IsFixedTimeStep = !IsFixedTimeStep;
+                graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
+                graphics.ApplyChanges();
+            }
+            if (InputHelper.IsNewKeyPress(Keys.F6))
+            {
+                _fillMode = FillMode.Solid;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.F7))
+            {
+                _fillMode = FillMode.WireFrame;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.F10))
+            {
+                _cullMode = CullMode.CullCounterClockwiseFace;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.F11))
+            {
+                _cullMode = CullMode.CullClockwiseFace;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.F12))
+            {
+                _cullMode = CullMode.None;
+            }
+            // HACK: camera kept resetting movement as mouse is being forced to centre of screen by Camera3D
+            // Update again because it needs to set CurrentState to LastState again
+            InputHelper.Update(gameTime);
         }
 
         public void DrawWorld(string techniqueName)
@@ -166,7 +169,7 @@ namespace Isomites3D
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            _worldMatrix = Matrix.CreateScale(50f);
+            _worldMatrix = Matrix.Identity;
 
             _effect.Parameters["xWorld"].SetValue(_worldMatrix);
             _effect.Parameters["xView"].SetValue(_camera3D.ViewMatrix);
@@ -199,81 +202,42 @@ namespace Isomites3D
         protected override void Draw(GameTime gameTime)
         {
                 RasterizerState rs = new RasterizerState();
-                rs.CullMode = CullMode.CullCounterClockwiseFace;
-                rs.FillMode = FillMode.Solid;
+           
+                rs.CullMode = _cullMode;
+                rs.FillMode = _fillMode;
                 _device.RasterizerState = rs;
 
-                /*_device.BlendState = BlendState.Opaque;
-                _device.DepthStencilState = DepthStencilState.Default;
-                _device.SamplerStates[0] = SamplerState.LinearWrap;*/
-
-
-              //  _device.SetRenderTarget(normalDepthRenderTarget);
 
                 _device.Clear(Color.Black);
 
-                // DrawWorld("NormalDepth");
 
-              //  _device.SetRenderTarget(sceneRenderTarget);
 
                _device.Clear(Color.CornflowerBlue);
 
                 DrawWorld("Textured");
 
-               // _device.SetRenderTarget(null);
-
-                //ApplyPostprocess();
-
-
-
-            if (frame == 0)
-                normalDepthRenderTarget.SaveAsJpeg(File.OpenWrite("renderTarget2.jpg"), normalDepthRenderTarget.Width, normalDepthRenderTarget.Height);
-
-            frame = 1;
 
 
             _frameRateCounter.Draw(spriteBatch, _debugFont);
-           // _world.DrawDebugInfo(spriteBatch, _debugFont);
+
+            string controls = "Controls:\n" +
+                               "F1: Ghost Cam\n" +
+                               "F2: Orthographic Cam\n" +
+                               "P Hold: Hides outlines\n" +
+                               "WASD: Ghost Cam FPS movement\n" +
+                               "Q/Z: Up/Down Cam movement\n"+
+                               "F5: Toggle FPS Cap (fucks with camera controls)\n" +
+                               "F6: Draw Solid\n" +
+                               "F7: Draw WireFrame\n" +
+                               "F10: CullCounterClockwise (default)\n" +
+                               "F11: Cull Clockwise\n" +
+                               "F12: Cull None\n" +
+                               "Apparently drawing the controls to the screen reduces my FPS from 7000 to 5000?";
+
+            //spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);      
+            //spriteBatch.DrawString(_debugFont, controls, new Vector2(32, 64), Color.Yellow);
+            //spriteBatch.End();
             base.Draw(gameTime);
-        }
-
-        void ApplyPostprocess()
-        {/*
-            // Render the scene with Edge Detection, using the render target from last frame.
-            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
-            EffectParameterCollection parameters = effectPostOutline.Parameters;
-
-            parameters["Thickness"].SetValue(1.0f);
-            parameters["Threshold"].SetValue(0.4f);
-
-            // Activate the appropriate effect technique.
-            effectPostOutline.CurrentTechnique = effectPostOutline.Techniques["PostOutline"];
-
-            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effectPostOutline);
-            spriteBatch.Draw(sceneRenderTarget, Vector2.Zero, Color.White);
-            spriteBatch.End();*/
-
-            EffectParameterCollection parameters = postprocessEffect.Parameters;
-            string effectTechniqueName;
-
-          
-            Vector2 resolution = new Vector2(sceneRenderTarget.Width,
-                                                sceneRenderTarget.Height);
-
-            Texture2D normalDepthTexture = normalDepthRenderTarget;
-
-            parameters["EdgeWidth"].SetValue(1f);
-            parameters["EdgeIntensity"].SetValue(1f);
-            parameters["ScreenResolution"].SetValue(resolution);
-            parameters["NormalDepthTexture"].SetValue(normalDepthTexture);
-
-            // Activate the appropriate effect technique.
-            postprocessEffect.CurrentTechnique = postprocessEffect.Techniques["EdgeDetect"];
-
-            // Draw a fullscreen sprite to apply the postprocessing effect.
-            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, postprocessEffect);
-            spriteBatch.Draw(sceneRenderTarget, Vector2.Zero, Color.White);
-            spriteBatch.End();
         }
     }
 }

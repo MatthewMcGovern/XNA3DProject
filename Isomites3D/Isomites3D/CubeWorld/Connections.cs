@@ -9,13 +9,12 @@ using System.Security.Policy;
 namespace Isomites3D.CubeWorld
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
+    
+    // Bit mask for directions a cube can touch another cube.
     [Flags]
     public enum Connections
     {
@@ -30,6 +29,7 @@ namespace Isomites3D.CubeWorld
 
     public static class ConnectionUtils
     {
+        // Lazy function to get the opposite side, ie opposite of north is south.
         public static Connections GetOppositeBlockMask(Connections direction)
         {
             switch (direction)
@@ -51,6 +51,7 @@ namespace Isomites3D.CubeWorld
             }
         }
 
+        // Lazy static that defines all of the bitmasks at once.
         public static Connections All = Connections.Down | Connections.East | Connections.North | Connections.South |
                                         Connections.Up | Connections.West;
     }

@@ -22,140 +22,171 @@ namespace Isomites3D.Core
     /// </summary>
     public class Camera3D
     {
+        private Vector3 _cameraPosition = new Vector3(0, 30, 0);
+        private float _leftrightRot = MathHelper.PiOver2;
+        private float _updownRot = -MathHelper.Pi / 10.0f;
+        private float _rotationSpeed = 0.15f;
+        private float _moveSpeed = 30.0f;
+        private float _zoomSpeed = 2f;
+        private float _zoom = 10f;
+
+        private bool _isOrthographic;
+
         public GraphicsDevice Device;
-        private Vector3 _position;
-        private Vector3 _target;
-        private float _yaw;
-        private float _pitch;
-        private float _roll;
-        private float _speed;
-        private Matrix _rotation;
         public Matrix ViewMatrix;
         public Matrix ProjectionMatrix;
 
         public Camera3D(GraphicsDevice device)
         {
+            _isOrthographic = false;
             Device = device;
             ResetCamera();
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            HandleInput();
-            UpdateViewMatrix();
+            HandleInput(gameTime);
         }
 
-        private void MoveCamera(Vector3 addedVector)
+        private void HandleInput(GameTime gameTime)
         {
-            _position += _speed * addedVector;
-        }
-        private void HandleInput()
-        {
-            if (InputHelper.IsKeyDown(Keys.J))
+            float timeDifference = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f;
+
+
+            // Get mouse X/Y difference and rotate camera based on it.
+            // Should maybe cap this as you can full flips at the moment... fucks with the movement vector.
+            if (InputHelper.MouseState != InputHelper.PreviousMouseState)
             {
-                _yaw += .02f;
+                float xDifference = InputHelper.MouseState.X - InputHelper.PreviousMouseState.X;
+                float yDifference = InputHelper.MouseState.Y - InputHelper.PreviousMouseState.Y;
+                _leftrightRot -= _rotationSpeed*xDifference*timeDifference;
+                _updownRot -= _rotationSpeed*yDifference*timeDifference;
+                Mouse.SetPosition(Device.Viewport.Width/2, Device.Viewport.Height/2);
+                UpdateViewMatrix();
             }
 
-            if (InputHelper.IsKeyDown(Keys.L))
-            {
-                _yaw -= .02f;
-            }
 
-            if (InputHelper.IsKeyDown(Keys.K))
-            {
-                _pitch -= .02f;
-            }
+            Vector3 moveVector = new Vector3(0, 0, 0);
 
-            if (InputHelper.IsKeyDown(Keys.I))
-            {
-                _pitch += .02f;
-            }
-
-            if (InputHelper.IsKeyDown(Keys.U))
-            {
-                _roll -= .02f;
-            }
-
-            if (InputHelper.IsKeyDown(Keys.O))
-            {
-                _roll += .02f;
-            }
-
+            // Big list of keys that moves camera and stuff.
             if (InputHelper.IsKeyDown(Keys.W))
             {
-                MoveCamera(_rotation.Forward);
+                if (_isOrthographic)
+                {
+                    _zoom -= _zoomSpeed * timeDifference;
+                }
+                else
+                {
+                    moveVector += new Vector3(0, 0, -1);
+                }
             }
 
             if (InputHelper.IsKeyDown(Keys.A))
             {
-                MoveCamera(_rotation.Left);
+                moveVector += new Vector3(-1, 0, 0);
             }
 
             if (InputHelper.IsKeyDown(Keys.S))
             {
-                MoveCamera(_rotation.Backward);
+               // In orthographic mode, moving forwards/backwards does nothign so zoom instead.
+               if (_isOrthographic)
+               {
+                   _zoom += _zoomSpeed * timeDifference;
+               }
+               else
+               {
+                   moveVector += new Vector3(0, 0, 1);
+               }
             }
 
             if (InputHelper.IsKeyDown(Keys.D))
             {
-                MoveCamera(_rotation.Right);
-            }
-
-            if (InputHelper.IsKeyDown(Keys.E))
-            {
-                MoveCamera(_rotation.Up);
+                moveVector += new Vector3(1, 0, 0);
             }
 
             if (InputHelper.IsKeyDown(Keys.Q))
             {
-                MoveCamera(_rotation.Down);
+                moveVector += new Vector3(0, 1, 0);
+            }
+
+            if (InputHelper.IsKeyDown(Keys.Z))
+            {
+                moveVector += new Vector3(0, -1, 0);
             }
 
             if (InputHelper.IsKeyDown(Keys.R))
             {
                 ResetCamera();
             }
+
+            AddToCameraPosition(moveVector * timeDifference);
+
+            if (_isOrthographic)
+            {
+                // Only apply zoom in orthographic
+                UpdateZoom();
+            }
+
+            // Keys to toggle camera mode.
+            if (InputHelper.IsNewKeyPress(Keys.F1))
+            {
+                _isOrthographic = false;
+                ResetCamera();
+            }
+
+            if (InputHelper.IsNewKeyPress(Keys.F2))
+            {
+                _isOrthographic = true;
+                ResetCamera();
+            }
         }
+
+        private void AddToCameraPosition(Vector3 vectorToAdd)
+         {
+             Matrix cameraRotation = Matrix.CreateRotationX(_updownRot) * Matrix.CreateRotationY(_leftrightRot);
+             Vector3 rotatedVector = Vector3.Transform(vectorToAdd, cameraRotation);
+             _cameraPosition += _moveSpeed * rotatedVector;
+             UpdateViewMatrix();
+         }
 
         public void UpdateViewMatrix()
         {
-            _rotation.Forward.Normalize();
-            _rotation.Up.Normalize();
-            _rotation.Right.Normalize();
+            Matrix cameraRotation = Matrix.CreateRotationX(_updownRot) * Matrix.CreateRotationY(_leftrightRot);
 
-            _rotation *= Matrix.CreateFromAxisAngle(_rotation.Right, _pitch);
-            _rotation *= Matrix.CreateFromAxisAngle(_rotation.Up, _yaw);
-            _rotation *= Matrix.CreateFromAxisAngle(_rotation.Forward, _roll);
+            Vector3 cameraOriginalTarget = new Vector3(0, 0, -1);
+            Vector3 cameraOriginalUpVector = new Vector3(0, 1, 0);
 
-            _yaw = 0.0f;
-            _pitch = 0.0f;
-            _roll = 0.0f;
+            Vector3 cameraRotatedTarget = Vector3.Transform(cameraOriginalTarget, cameraRotation);
+            Vector3 cameraFinalTarget = _cameraPosition + cameraRotatedTarget;
 
-            _target = _position + _rotation.Forward;
+            Vector3 cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, cameraRotation);
 
-            Vector3 test = _rotation.Up;
+            ViewMatrix = Matrix.CreateLookAt(_cameraPosition, cameraFinalTarget, cameraRotatedUpVector);
+        }
 
-            ViewMatrix = Matrix.CreateLookAt(_position, _target, new Vector3(0,1,0));
-
-            float t = 1f;
+        public void UpdateZoom()
+        {
+            ProjectionMatrix = Matrix.CreateOrthographic(_zoom, _zoom*Device.Viewport.AspectRatio, -5000f, 5000f);
         }
 
         public void ResetCamera()
         {
-            _position = new Vector3(0, 2, 2);
-            _target = new Vector3(0, 0, 0);
-            _rotation = Matrix.Identity;
-
-            _yaw = 0.0f;
-            _pitch = 0.0f;
-            _roll = 0.0f;
-
-            _speed = 3f;
+            _cameraPosition = new Vector3(10, 10, 10);
+            _leftrightRot = MathHelper.PiOver2;
+            _updownRot = -MathHelper.Pi / 10.0f;
+            _zoom = 10f;
 
             ViewMatrix = Matrix.Identity;
-            ProjectionMatrix = Matrix.CreateOrthographic(Device.Viewport.Width, Device.Viewport.Height, -5000f, 5000f);
-            //ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
-            //            Device.Viewport.AspectRatio, .2f, 5000f);
+            if (_isOrthographic)
+            {
+                ProjectionMatrix = Matrix.CreateOrthographic(1f, 1f*Device.Viewport.AspectRatio, -5000f, 5000f);
+            }
+            else
+            {
+                ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,
+                           Device.Viewport.AspectRatio, .2f, 5000f);   
+            }
+            
         }
     }
 }

@@ -19,6 +19,9 @@ namespace Isomites3D.CubeWorld
     /// </summary>
     /// 
     
+    // this whole file is basically a lazy place to dump all my statics for cubes.
+
+    // this clas holds the 8 points a cube has and its size.
     public static class CubeVertices
     {
         public static Vector3 CubeSize = new Vector3(0.5f, 0.5f, 0.5f);
@@ -35,6 +38,7 @@ namespace Isomites3D.CubeWorld
         public static Vector3 DownBottomRight = new Vector3(VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
     }
 
+    // This class holds the 12 possible outlines a cube has.
     public static class Outlines
     {
         public static class X
@@ -61,9 +65,13 @@ namespace Isomites3D.CubeWorld
             public static CubeOutline DTRtoDBR = new CubeOutline(CubeVertices.DownTopRight, CubeVertices.DownBottomRight);
         }
     }
+
+    // Small cube is basically the definitions for the outline...
+    // Increase the cube size here to change the thickness of the outlines.
+    // the indices/vertices are also stored here as they will never change.
     public static class SmallCubeVertices
     {
-        public static Vector3 CubeSize = new Vector3(0.025f, 0.025f, 0.025f);
+        public static Vector3 CubeSize = new Vector3(0.05f, 0.05f, 0.05f);
 
         public static short[] Indices = new short[]
            {
@@ -117,6 +125,7 @@ namespace Isomites3D.CubeWorld
         public static Vector3 DownBottomLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
         public static Vector3 DownBottomRight = new Vector3(VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
 
+        // Lazy helper function that I'm not sure why its here that positions the outline where it needs to be.
         public static Vector3 TranslateToCorner(Vector3 vertPosition, Vector3 corner, Vector3 worldPosition)
         {
            return new Vector3(
@@ -128,38 +137,5 @@ namespace Isomites3D.CubeWorld
                             corner.Z);
         }
 
-    }
-
-
-
-    public static class LinePoints
-    {
-        public static Vector3 VertexOffset = new Vector3((CubeVertices.CubeSize.X / 2f) + 0.1f, (CubeVertices.CubeSize.Y / 2f) + 0.1f, (CubeVertices.CubeSize.Z / 2f) + 0.1f);
-
-        public static Vector3 UpTopLeft = new Vector3(-VertexOffset.X, VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 UpTopRight = new Vector3(VertexOffset.X, VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 UpBottomLeft = new Vector3(-VertexOffset.X, VertexOffset.Y, -VertexOffset.Z);
-        public static Vector3 UpBottomRight = new Vector3(VertexOffset.X, VertexOffset.Y, -VertexOffset.Z);
-
-        public static Vector3 DownTopLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 DownTopRight = new Vector3(VertexOffset.X, -VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 DownBottomLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
-        public static Vector3 DownBottomRight = new Vector3(VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
-    }
-
-    public static class LinePointVertices
-    {
-        public static Vector3 CubeSize = new Vector3(0.1f, 0.1f, 0.1f);
-        public static Vector3 VertexOffset = new Vector3(CubeSize.X / 2f, CubeSize.Y / 2f, CubeSize.Z / 2f);
-
-        public static Vector3 UpTopLeft = new Vector3(-VertexOffset.X, VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 UpTopRight = new Vector3(VertexOffset.X, VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 UpBottomLeft = new Vector3(-VertexOffset.X, VertexOffset.Y, -VertexOffset.Z);
-        public static Vector3 UpBottomRight = new Vector3(VertexOffset.X, VertexOffset.Y, -VertexOffset.Z);
-
-        public static Vector3 DownTopLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 DownTopRight = new Vector3(VertexOffset.X, -VertexOffset.Y, VertexOffset.Z);
-        public static Vector3 DownBottomLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
-        public static Vector3 DownBottomRight = new Vector3(VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
     }
 }
