@@ -6,6 +6,7 @@
 
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Isomites3D.CubeWorld
 {
@@ -135,6 +136,77 @@ namespace Isomites3D.CubeWorld
                             corner.Y,
                             vertPosition.Z + ((CubeVertices.CubeSize.Z) * worldPosition.Z) +
                             corner.Z);
+        }
+
+    }
+
+    public static class HighlightVertices
+    {
+        public static Vector3 CubeSize = new Vector3(0.075f, 0.075f, 0.075f);
+
+
+        public static short[] Indices = new short[]
+           {
+                2,
+                1,
+                0,
+                1,
+                2,
+                3,
+                1,
+                3,
+                7,
+                7,
+                5,
+                1,
+                0,
+                1,
+                4,
+                1,
+                5,
+                4,
+                4,
+                6,
+                2,
+                2,
+                0,
+                4,
+                4,
+                5,
+                6,
+                5,
+                7,
+                6,
+                2,
+                6,
+                7,
+                7,
+                3,
+                2
+            };
+
+        public static Vector3 VertexOffset = new Vector3(CubeSize.X / 2f, CubeSize.Y / 2f, CubeSize.Z / 2f);
+
+        public static Vector3 UpTopLeft = new Vector3(-VertexOffset.X, VertexOffset.Y, VertexOffset.Z);
+        public static Vector3 UpTopRight = new Vector3(VertexOffset.X, VertexOffset.Y, VertexOffset.Z);
+        public static Vector3 UpBottomLeft = new Vector3(-VertexOffset.X, VertexOffset.Y, -VertexOffset.Z);
+        public static Vector3 UpBottomRight = new Vector3(VertexOffset.X, VertexOffset.Y, -VertexOffset.Z);
+
+        public static Vector3 DownTopLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, VertexOffset.Z);
+        public static Vector3 DownTopRight = new Vector3(VertexOffset.X, -VertexOffset.Y, VertexOffset.Z);
+        public static Vector3 DownBottomLeft = new Vector3(-VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
+        public static Vector3 DownBottomRight = new Vector3(VertexOffset.X, -VertexOffset.Y, -VertexOffset.Z);
+
+        // Lazy helper function that I'm not sure why its here that positions the outline where it needs to be.
+        public static Vector3 TranslateToCorner(Vector3 vertPosition, Vector3 corner, Vector3 worldPosition)
+        {
+            return new Vector3(
+                             vertPosition.X + ((CubeVertices.CubeSize.X) * worldPosition.X) +
+                             corner.X,
+                             vertPosition.Y + ((CubeVertices.CubeSize.Y) * worldPosition.Y) +
+                             corner.Y,
+                             vertPosition.Z + ((CubeVertices.CubeSize.Z) * worldPosition.Z) +
+                             corner.Z);
         }
 
     }

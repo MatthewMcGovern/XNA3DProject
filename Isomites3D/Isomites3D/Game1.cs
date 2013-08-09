@@ -179,7 +179,7 @@ namespace Isomites3D
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-               _world.Draw(_device);
+               _world.Draw();
             }
 
             _effect.CurrentTechnique = _effect.Techniques["ColoredNoShading"];
@@ -191,7 +191,7 @@ namespace Isomites3D
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                _world.DrawOutline(_device);
+                _world.DrawOutline();
             }
         }
 

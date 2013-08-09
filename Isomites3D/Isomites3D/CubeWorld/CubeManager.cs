@@ -21,30 +21,37 @@ namespace Isomites3D.CubeWorld
     /// </summary>
     public class CubeManager
     {
-        private byte[,,] _cubeIDs;
         private Cube[,,] _cubes;
 
+        private Vector3 _selectedCube;
+        
         private GraphicsDevice _device;
         private VertexBuffer _vertexBuffer;
         private VertexBuffer _outlineVertexBuffer;
+        private VertexBuffer _highlightVertexBuffer;
         private IndexBuffer _indexBuffer;
         private IndexBuffer _outlineIndexBuffer;
+        private IndexBuffer _highlightIndexBuffer;
         private List<VertexPositionNormalTexture> _cachedCubeVerts;
-        private List<VertexPositionColor> _cachedOutlineVerts; 
+        private List<VertexPositionColor> _cachedOutlineVerts;
+        private List<VertexPositionColor> _cachedHighlightVerts; 
   
         private List<short> _cachedCubeIndices;
-        private List<short> _cachedOutlineIndices; 
+        private List<short> _cachedOutlineIndices;
+        private List<short> _cachedHighlightIndices; 
 
         public CubeManager(int width, int column, int depth, GraphicsDevice device)
         {
             _device = device;
-
+            _selectedCube = Vector3.Zero;
             _cubes = new Cube[width, column, depth];
            
             _cachedCubeVerts = new List<VertexPositionNormalTexture>();
             _cachedOutlineVerts = new List<VertexPositionColor>();
+            _cachedHighlightVerts = new List<VertexPositionColor>();
             _cachedCubeIndices = new List<short>();
             _cachedOutlineIndices = new List<short>();
+            _cachedHighlightIndices = new List<short>();
 
 
             _cachedCubeIndices = new List<short>();
@@ -150,17 +157,79 @@ namespace Isomites3D.CubeWorld
 
         public void ResolveCubeConnection(Cube cubeA, Cube cubeB, Connections direction)
         {
+            Connections opposite = ConnectionUtils.GetOppositeBlockMask(direction);
             // Literally just removes the connecting edges on the two cubes.
             if (cubeB.Type != 0 && cubeA.Type != 0)
             {
-                Connections opposite = ConnectionUtils.GetOppositeBlockMask(direction);
                 cubeA.Neighbours = cubeA.Neighbours | direction;
                 cubeB.Neighbours = cubeB.Neighbours | opposite;
             }
+            if (cubeA.Type == 0)
+            {
+                cubeB.Neighbours = cubeB.Neighbours & ~opposite;
+            }
+        }
+
+        public void ClearCaches()
+        {
+            _cachedCubeVerts.Clear();
+
+            _cachedCubeIndices.Clear();
+            _cachedOutlineVerts.Clear();
+            _cachedOutlineIndices.Clear();
         }
 
         public void Update()
         {
+            if (InputHelper.IsNewKeyPress(Keys.Delete))
+            {
+                AddCubeAt((int)_selectedCube.X, (int)_selectedCube.Y,(int) _selectedCube.Z, 0);
+                ClearCaches();
+            }
+
+            if (InputHelper.IsNewKeyPress(Keys.NumPad3))
+            {
+                if(_selectedCube.X + 1 < _cubes.GetLength(0))
+                    _selectedCube.X += 1;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.NumPad1))
+            {
+                if (_selectedCube.Z + 1 < _cubes.GetLength(2))
+                    _selectedCube.Z += 1;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.NumPad7))
+            {
+                if (_selectedCube.X - 1 >= 0)
+                _selectedCube.X -= 1;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.NumPad9))
+            {
+                if (_selectedCube.Z - 1 >= 0)
+                _selectedCube.Z -= 1;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.Add))
+            {
+                if (_selectedCube.Y + 1 < _cubes.GetLength(1))
+                 _selectedCube.Y += 1;
+            }
+
+            if (InputHelper.IsNewKeyPress(Keys.Subtract))
+            {
+                if (_selectedCube.Y - 1 >= 0)
+                _selectedCube.Y -= 1;
+            }
+
+            if (InputHelper.IsNewKeyPress(Keys.Insert))
+            {
+                AddCubeAt((int)_selectedCube.X, (int)_selectedCube.Y, (int)_selectedCube.Z, 2);
+                ClearCaches();
+            }
+
+            if (InputHelper.IsNewKeyPress(Keys.Home))
+            {
+                AddCubeAt((int)_selectedCube.X, (int)_selectedCube.Y, (int)_selectedCube.Z, 1);
+                ClearCaches();
+            }
             // this is where the magic happens...
             // If we don't have any verts, let's get some.
             if (_cachedCubeVerts.Count == 0)
@@ -199,6 +268,8 @@ namespace Isomites3D.CubeWorld
                     }
                 }
 
+                
+
                 // VertexBuffer/IndexBuffer are XNA classes for feeding the graphics card cached data.
                 // they get created to the exact size required based on the kind of vertex and how many vertices there are
                 // Similar for indices except it only accepts 16bit size objects... so shorts... I should probably try ushorts for 2x the indices.
@@ -215,9 +286,36 @@ namespace Isomites3D.CubeWorld
                 _outlineIndexBuffer.SetData(_cachedOutlineIndices.ToArray());
                 _outlineVertexBuffer.SetData(_cachedOutlineVerts.ToArray());
             }
+
+            CubeDrawData highlightData = new CubeDrawData();
+            List<CubeOutline> _cubeOutlines = new List<CubeOutline>();
+            _cubeOutlines.Add(Outlines.X.UBLtoUBR);
+            _cubeOutlines.Add(Outlines.X.DBLtoDBR);
+            _cubeOutlines.Add(Outlines.X.UTLtoUTR);
+            _cubeOutlines.Add(Outlines.X.DTLtoDTR);
+
+            _cubeOutlines.Add(Outlines.Y.UTLtoDTL);
+            _cubeOutlines.Add(Outlines.Y.UTRtoDTR);
+            _cubeOutlines.Add(Outlines.Y.UBLtoDBL);
+            _cubeOutlines.Add(Outlines.Y.UBRtoDBR);
+
+            _cubeOutlines.Add(Outlines.Z.UTLtoUBL);
+            _cubeOutlines.Add(Outlines.Z.UTRtoUBR);
+            _cubeOutlines.Add(Outlines.Z.DTLtoDBL);
+            _cubeOutlines.Add(Outlines.Z.DTRtoDBR);
+
+            foreach (CubeOutline outline in _cubeOutlines)
+            {
+                highlightData.AddHighlightAt(_selectedCube, outline);
+            }
+
+            _highlightVertexBuffer = new VertexBuffer(_device, VertexPositionColor.VertexDeclaration, highlightData.OutlineVertices.Count, BufferUsage.WriteOnly);
+            _highlightIndexBuffer = new IndexBuffer(_device, typeof(short), highlightData.OutlineIndices.Count, BufferUsage.WriteOnly);
+            _highlightVertexBuffer.SetData(highlightData.OutlineVertices.ToArray());
+            _highlightIndexBuffer.SetData(highlightData.OutlineIndices.ToArray());
         }
 
-        public void Draw(GraphicsDevice device)
+        public void Draw()
         {
             // Need to tell the graphics card which buffer we are using
             // This is NOT to be confused with SetData
@@ -230,7 +328,7 @@ namespace Isomites3D.CubeWorld
             _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertexBuffer.VertexCount, 0, _indexBuffer.IndexCount/3);
         }
 
-        public void DrawOutline(GraphicsDevice device)
+        public void DrawOutline()
         {
             // Made it optional to show the effect off *shrug*
             // Hold P to disable.
@@ -243,6 +341,12 @@ namespace Isomites3D.CubeWorld
                 _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _outlineVertexBuffer.VertexCount, 0,
                     _outlineIndexBuffer.IndexCount/3);
             }
+
+            _device.SetVertexBuffer(_highlightVertexBuffer);
+            _device.Indices = _highlightIndexBuffer;
+            _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _highlightVertexBuffer.VertexCount, 0,
+                    _highlightIndexBuffer.IndexCount / 3);
+
         }
     }
 }

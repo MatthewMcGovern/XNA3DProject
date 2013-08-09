@@ -42,6 +42,68 @@ namespace Isomites3D.CubeWorld
             Indices = new List<short>();
         }
 
+        public void AddHighlightAt(Vector3 worldPosition, CubeOutline outline)
+        {
+            Vector3 direction = outline.StartPosition - outline.EndPosition;
+            if (direction.X == CubeVertices.CubeSize.X)
+            {
+                // right to left
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomRight, outline.StartPosition, worldPosition), Color.Yellow));
+            }
+            else if (direction.X == -CubeVertices.CubeSize.X)
+            {
+                // left to right
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopRight, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomRight, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopRight, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomRight, outline.EndPosition, worldPosition), Color.Yellow));
+            }
+            else if (direction.Y == CubeVertices.CubeSize.Y)
+            {
+                // top to bottom
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopRight, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomRight, outline.EndPosition, worldPosition), Color.Yellow));
+            }
+            else if (direction.Z == CubeVertices.CubeSize.Z)
+            {
+                // North to south
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpTopRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.UpBottomRight, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopLeft, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownTopRight, outline.StartPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomLeft, outline.EndPosition, worldPosition), Color.Yellow));
+                OutlineVertices.Add(new VertexPositionColor(HighlightVertices.TranslateToCorner(HighlightVertices.DownBottomRight, outline.EndPosition, worldPosition), Color.Yellow));
+            }
+
+
+            foreach (short index in HighlightVertices.Indices)
+            {
+                OutlineIndices.Add((short)(index + OutlineOffset));
+            }
+
+            // Offset always goes up by 8, should probably change this so it isn't a magic number.
+            OutlineOffset += 8;
+        }
+
         public void AddLineAt(Vector3 worldPosition, CubeOutline outline)
         {
             // this add the outlines to the Outline buffers
