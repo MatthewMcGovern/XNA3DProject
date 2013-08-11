@@ -8,7 +8,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\effects.xnb</Output>
-      <Time>2013-08-11T11:53:30.0044714+01:00</Time>
+      <Time>2013-08-11T16:18:15.2009541+01:00</Time>
     </Item>
     <Item>
       <Source>debugFont.spritefont</Source>
@@ -26,7 +26,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubemap.xnb</Output>
-      <Time>2013-08-05T22:56:35.5909518+01:00</Time>
+      <Time>2013-08-11T15:46:06.8126566+01:00</Time>
     </Item>
     <Item>
       <Source>PostProcessEffect.fx</Source>

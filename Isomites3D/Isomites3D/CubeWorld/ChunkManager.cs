@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Net.Sockets;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -112,8 +113,9 @@ namespace Isomites3D.CubeWorld
               for (int cubeZ = z * IsomiteGlobals.ChunkSize.Z; cubeZ < (z + 1) * IsomiteGlobals.ChunkSize.Z; cubeZ++)
               {
 
-                        
-                        for (int cubeY = 0; cubeY < (int)(IsomiteGlobals.ChunkSize.Y*test.NextDouble()); cubeY++)
+                  //int upperY = (int) (IsomiteGlobals.ChunkSize.Y*test.NextDouble());
+                  int upperY = IsomiteGlobals.ChunkSize.Y / 4; 
+                  for (int cubeY = 0; cubeY < upperY; cubeY++)
                         {
                          AddCubeAt(cubeX, cubeY, cubeZ, 1);
                     }

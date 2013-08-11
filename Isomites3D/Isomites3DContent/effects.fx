@@ -112,7 +112,7 @@ VertexToPixel ColoredNoShadingVS( float4 inPos : POSITION, float4 inColor: COLOR
 	VertexToPixel Output = (VertexToPixel)0;
 	float4x4 preViewProjection = mul (xView, xProjection);
 	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    Output.Test =  (((inPos.y * 3.5)+ 30)/ 64);
+    Output.Test =  (inPos.y * 1.5)/64;
 	Output.Position = mul(inPos, preWorldViewProjection);
 	Output.Color = inColor;
     
@@ -124,7 +124,7 @@ PixelToFrame ColoredNoShadingPS(VertexToPixel PSIn)
 	PixelToFrame Output = (PixelToFrame)0;		
     
 	Output.Color = PSIn.Color;
-	Output.Color.rgb *= PSIn.Test;
+	Output.Color.rgb *= saturate(PSIn.Test) + 0.6;
 	return Output;
 }
 
@@ -148,7 +148,7 @@ VertexToPixel TexturedVS( float4 inPos : POSITION, float3 inNormal: NORMAL, floa
     
 	Output.Position = mul(inPos, preWorldViewProjection);	
 	Output.TextureCoords = inTexCoords;
-	Output.Test =  (((inPos.y * 3.5)+ 30)/ 64);
+	Output.Test =  (inPos.y * 1.5)/64;
 	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
 	Output.LightingFactor = 1;
 	if (xEnableLighting)
@@ -162,8 +162,8 @@ PixelToFrame TexturedPS(VertexToPixel PSIn)
 	PixelToFrame Output = (PixelToFrame)0;		
 	
 	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
-	Output.Color.rgb *= saturate(PSIn.LightingFactor) + xAmbient;
-	Output.Color.rgb *= PSIn.Test;
+	//Output.Color.rgb *= saturate(PSIn.LightingFactor) + xAmbient;
+	Output.Color.rgb *= saturate(PSIn.Test) + 0.6;
 
 	return Output;
 }

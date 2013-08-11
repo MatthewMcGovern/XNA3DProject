@@ -159,6 +159,27 @@ namespace Isomites3D.Core
                 _leftrightRot = 0.785398163f;
                 _updownRot = -0.523598776f;
             }
+
+            if (InputHelper.IsNewKeyPress(Keys.D1))
+            {
+                _leftrightRot = 0.785398163f;
+                _updownRot = -0.523598776f;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.D2))
+            {
+                _leftrightRot = -0.785398163f;
+                _updownRot = -0.523598776f;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.D3))
+            {
+                _leftrightRot = 2.35619449f;
+                _updownRot = -0.523598776f;
+            }
+            if (InputHelper.IsNewKeyPress(Keys.D4))
+            {
+                _leftrightRot = -2.35619449f;
+                _updownRot = -0.523598776f;
+            }
         }
 
         private void AddToCameraPosition(Vector3 vectorToAdd)
