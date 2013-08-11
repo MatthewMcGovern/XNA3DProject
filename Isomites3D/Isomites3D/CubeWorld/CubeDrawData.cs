@@ -116,50 +116,50 @@ namespace Isomites3D.CubeWorld
             if (direction.X == CubeVertices.CubeSize.X)
             {
                 // right to left
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.StartPosition, worldPosition), Color.Black));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
             }
             else if(direction.X == -CubeVertices.CubeSize.X)
             {
                 // left to right
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.EndPosition, worldPosition), Color.Black));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
             }
             else if (direction.Y == CubeVertices.CubeSize.Y)
             {
                 // top to bottom
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.EndPosition, worldPosition), Color.Black));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
             }
             else if (direction.Z == CubeVertices.CubeSize.Z)
             {
                 // North to south
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.StartPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.EndPosition, worldPosition), Color.Black));
-                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.EndPosition, worldPosition), Color.Black));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpTopRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.UpBottomRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopLeft, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownTopRight, outline.StartPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomLeft, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
+                OutlineVertices.Add(new VertexPositionColor(SmallCubeVertices.TranslateToCorner(SmallCubeVertices.DownBottomRight, outline.EndPosition, worldPosition), new Color(100, 100, 100)));
             }
 
 

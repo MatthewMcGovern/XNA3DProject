@@ -112,7 +112,7 @@ VertexToPixel ColoredNoShadingVS( float4 inPos : POSITION, float4 inColor: COLOR
 	VertexToPixel Output = (VertexToPixel)0;
 	float4x4 preViewProjection = mul (xView, xProjection);
 	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    
+    Output.Test =  (((inPos.y * 3.5)+ 30)/ 64);
 	Output.Position = mul(inPos, preWorldViewProjection);
 	Output.Color = inColor;
     
@@ -124,7 +124,7 @@ PixelToFrame ColoredNoShadingPS(VertexToPixel PSIn)
 	PixelToFrame Output = (PixelToFrame)0;		
     
 	Output.Color = PSIn.Color;
-
+	Output.Color.rgb *= PSIn.Test;
 	return Output;
 }
 

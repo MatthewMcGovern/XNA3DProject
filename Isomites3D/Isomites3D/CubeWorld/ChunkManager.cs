@@ -115,7 +115,7 @@ namespace Isomites3D.CubeWorld
                         
                         for (int cubeY = 0; cubeY < (int)(IsomiteGlobals.ChunkSize.Y*test.NextDouble()); cubeY++)
                         {
-                         AddCubeAt(cubeX, cubeY, cubeZ, 2);
+                         AddCubeAt(cubeX, cubeY, cubeZ, 1);
                     }
                 }
             }

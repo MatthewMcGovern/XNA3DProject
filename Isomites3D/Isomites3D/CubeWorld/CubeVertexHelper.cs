@@ -72,7 +72,7 @@ namespace Isomites3D.CubeWorld
     // the indices/vertices are also stored here as they will never change.
     public static class SmallCubeVertices
     {
-        public static Vector3 CubeSize = new Vector3(0.05f, 0.05f, 0.05f);
+        public static Vector3 CubeSize = new Vector3(0.015f, 0.015f, 0.015f);
 
         public static short[] Indices = new short[]
            {

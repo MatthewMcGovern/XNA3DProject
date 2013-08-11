@@ -52,7 +52,9 @@ namespace Isomites3D
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferHeight = 1000,
-                PreferredBackBufferWidth = 1000
+                PreferredBackBufferWidth = 1000,
+                IsFullScreen = false
+                
                // SynchronizeWithVerticalRetrace = false
             };
             Content.RootDirectory = "Content";
