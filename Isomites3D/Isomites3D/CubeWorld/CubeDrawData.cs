@@ -23,9 +23,9 @@ namespace Isomites3D.CubeWorld
     public class CubeDrawData
     {
         public List<VertexPositionNormalTexture> Vertices;
-        public List<short> Indices;
+        public List<ushort> Indices;
         public List<VertexPositionColor> OutlineVertices;
-        public List<short> OutlineIndices;
+        public List<ushort> OutlineIndices;
         public int OutlineOffset;
         public int Offset;
 
@@ -38,8 +38,8 @@ namespace Isomites3D.CubeWorld
             Offset = offset;
             Vertices = new List<VertexPositionNormalTexture>();
             OutlineVertices = new List<VertexPositionColor>();
-            OutlineIndices = new List<short>();
-            Indices = new List<short>();
+            OutlineIndices = new List<ushort>();
+            Indices = new List<ushort>();
         }
 
         public void AddHighlightAt(Vector3 worldPosition, CubeOutline outline)
@@ -95,9 +95,9 @@ namespace Isomites3D.CubeWorld
             }
 
 
-            foreach (short index in HighlightVertices.Indices)
+            foreach (ushort index in HighlightVertices.Indices)
             {
-                OutlineIndices.Add((short)(index + OutlineOffset));
+                OutlineIndices.Add((ushort)(index + OutlineOffset));
             }
 
             // Offset always goes up by 8, should probably change this so it isn't a magic number.
@@ -163,9 +163,9 @@ namespace Isomites3D.CubeWorld
             }
 
 
-            foreach (short index in SmallCubeVertices.Indices)
+            foreach (ushort index in SmallCubeVertices.Indices)
             {
-                OutlineIndices.Add((short)(index + OutlineOffset));
+                OutlineIndices.Add((ushort)(index + OutlineOffset));
             }
             
             // Offset always goes up by 8, should probably change this so it isn't a magic number.
@@ -173,7 +173,7 @@ namespace Isomites3D.CubeWorld
             ;
         }
 
-        public void AddWorldCubeVertices(VertexPositionNormalTexture[] vertices, short[] indices, Vector3 worldPosition)
+        public void AddWorldCubeVertices(VertexPositionNormalTexture[] vertices, ushort[] indices, Vector3 worldPosition)
         {
             // Takes the vertices of a cubes face and adds them to the buffer
             // Worldposition used to translate vertices to right location
@@ -191,9 +191,9 @@ namespace Isomites3D.CubeWorld
                 vertices[indices[i * 3 + 2]].Normal += normal;
             }
 
-            foreach (short index in indices)
+            foreach (ushort index in indices)
             {
-                Indices.Add((short)(index + Offset));
+                Indices.Add((ushort)(index + Offset));
             }
 
             

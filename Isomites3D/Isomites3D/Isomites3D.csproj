@@ -75,6 +75,7 @@
     <Compile Include="Core\Camera3D.cs" />
     <Compile Include="Core\FrameRateCounter.cs" />
     <Compile Include="Core\InputHelper.cs" />
+    <Compile Include="CubeWorld\ChunkManager.cs" />
     <Compile Include="CubeWorld\Connections.cs" />
     <Compile Include="CubeWorld\CubeDrawData.cs" />
     <Compile Include="CubeWorld\CubeOutline.cs" />
@@ -82,9 +83,14 @@
     <Compile Include="CubeWorld\CubeManager.cs" />
     <Compile Include="CubeWorld\CubeVertexHelper.cs" />
     <Compile Include="CubeWorld\Cube.cs" />
+    <Compile Include="CubeWorld\IsomiteGlobals.cs" />
+    <Compile Include="CubeWorld\SmallChunk.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Render\BatchedDrawModule.cs" />
+    <Compile Include="Render\DrawModule.cs" />
+    <Compile Include="Render\RenderChunk.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

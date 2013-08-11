@@ -38,6 +38,7 @@ namespace Isomites3D
         private Effect _effect;
         private Texture2D _texture;
         private CubeManager _world;
+        private ChunkManager _chunkManager;
 
         private FillMode _fillMode;
         private CullMode _cullMode;
@@ -51,7 +52,7 @@ namespace Isomites3D
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferHeight = 1000,
-                PreferredBackBufferWidth = 1000,
+                PreferredBackBufferWidth = 1000
                // SynchronizeWithVerticalRetrace = false
             };
             Content.RootDirectory = "Content";
@@ -93,7 +94,8 @@ namespace Isomites3D
 
 
             _camera3D = new Camera3D(_device);
-            _world = new CubeManager(20, 20, 20, _device);
+            _world = new CubeManager(32, 64, 32, _device);
+            _chunkManager = new ChunkManager(_device);
 
             _debugFont = Content.Load<SpriteFont>("debugFont");
 
@@ -123,6 +125,7 @@ namespace Isomites3D
 
             _camera3D.Update(gameTime);
             _world.Update();
+            _chunkManager.Update();
             
 
             _frameRateCounter.Update(gameTime);
@@ -179,7 +182,8 @@ namespace Isomites3D
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-               _world.Draw();
+              // _world.Draw();
+               _chunkManager.Draw();
             }
 
             _effect.CurrentTechnique = _effect.Techniques["ColoredNoShading"];
@@ -192,6 +196,7 @@ namespace Isomites3D
             {
                 pass.Apply();
                 _world.DrawOutline();
+                _chunkManager.DrawOutline();
             }
         }
 

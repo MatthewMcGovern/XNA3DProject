@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Net.Configuration;
 using Core;
+using Isomites3D.Render;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -24,7 +26,9 @@ namespace Isomites3D.CubeWorld
         private Cube[,,] _cubes;
 
         private Vector3 _selectedCube;
-        
+
+        private BatchedDrawModule<VertexPositionNormalTexture> _batchedDrawModule;
+        private BatchedDrawModule<VertexPositionColor> _batchedOutlineDrawModule;
         private GraphicsDevice _device;
         private VertexBuffer _vertexBuffer;
         private VertexBuffer _outlineVertexBuffer;
@@ -34,10 +38,13 @@ namespace Isomites3D.CubeWorld
         private IndexBuffer _highlightIndexBuffer;
         private List<VertexPositionNormalTexture> _cachedCubeVerts;
         private List<VertexPositionColor> _cachedOutlineVerts;
-        private List<VertexPositionColor> _cachedHighlightVerts; 
-  
+        private List<VertexPositionColor> _cachedHighlightVerts;
+
+
+        private bool _recalcDrawModule = true;
+
         private List<short> _cachedCubeIndices;
-        private List<short> _cachedOutlineIndices;
+        private List<ushort> _cachedOutlineIndices;
         private List<short> _cachedHighlightIndices; 
 
         public CubeManager(int width, int column, int depth, GraphicsDevice device)
@@ -45,12 +52,15 @@ namespace Isomites3D.CubeWorld
             _device = device;
             _selectedCube = Vector3.Zero;
             _cubes = new Cube[width, column, depth];
-           
+
+            _batchedDrawModule = new BatchedDrawModule<VertexPositionNormalTexture>(_device, VertexPositionNormalTexture.VertexDeclaration);
+            _batchedOutlineDrawModule = new BatchedDrawModule<VertexPositionColor>(_device, VertexPositionColor.VertexDeclaration);
+
             _cachedCubeVerts = new List<VertexPositionNormalTexture>();
             _cachedOutlineVerts = new List<VertexPositionColor>();
             _cachedHighlightVerts = new List<VertexPositionColor>();
             _cachedCubeIndices = new List<short>();
-            _cachedOutlineIndices = new List<short>();
+            _cachedOutlineIndices = new List<ushort>();
             _cachedHighlightIndices = new List<short>();
 
 
@@ -67,22 +77,23 @@ namespace Isomites3D.CubeWorld
                     }
                 }
             }
-
+            Random rand = new Random();
+          
             // Loop through world but only up to half the height and add soil.
             for (int x = 0; x < _cubes.GetLength(0); x++)
             {
-                for (int y = 0; y < _cubes.GetLength(1) / 2; y++)
-                {
                     for (int z = 0; z < _cubes.GetLength(2); z++)
                     {
-                        AddCubeAt(x,y,z, 1);
+                        for (int y = 0; y < _cubes.GetLength(1); y++)
+                        {
+                             AddCubeAt(x,y,z, 1);
+                        }
                     }
-                }
             }
 
 
             // A load of testing cubes for fun.
-           AddCubeAt(12, 12, 10, 1);
+           /*AddCubeAt(12, 12, 10, 1);
            AddCubeAt(12, 11, 10, 1);
            AddCubeAt(12, 10, 10, 1);
             
@@ -109,7 +120,7 @@ namespace Isomites3D.CubeWorld
            AddCubeAt(17, 10, 17, 1);
            AddCubeAt(18, 10, 18, 1);
            AddCubeAt(0, 10, 0, 2);
-           AddCubeAt(1, 10, 0, 2);
+           AddCubeAt(1, 10, 0, 2);*/
            
 
         }
@@ -172,6 +183,7 @@ namespace Isomites3D.CubeWorld
 
         public void ClearCaches()
         {
+            _recalcDrawModule = true;
             _cachedCubeVerts.Clear();
 
             _cachedCubeIndices.Clear();
@@ -232,8 +244,10 @@ namespace Isomites3D.CubeWorld
             }
             // this is where the magic happens...
             // If we don't have any verts, let's get some.
-            if (_cachedCubeVerts.Count == 0)
+            if (_recalcDrawModule)
             {
+                _batchedDrawModule.Reset();
+                _batchedOutlineDrawModule.Reset();
                 int offset = 0;
                 int outlineOffset = 0;
                 for (int x = 0; x < _cubes.GetLength(0); x++)
@@ -251,17 +265,18 @@ namespace Isomites3D.CubeWorld
                                 if (!cube.Neighbours.HasFlag(ConnectionUtils.All))
                                 {
                                     // Time to get the cubes draw data.
-                                    CubeDrawData data = CubeType.GetById(cube.Type).GetDrawData(offset, outlineOffset, new Vector3(x, y, z),  cube.Neighbours);
-
+                                    CubeDrawData data = CubeType.GetById(cube.Type).GetDrawData(new Vector3(x, y, z),  cube.Neighbours);
+                                    _batchedDrawModule.AddData(data.Vertices, data.Indices);
+                                    _batchedOutlineDrawModule.AddData(data.OutlineVertices, data.OutlineIndices);
                                     // got the data, add it to the buffers
-                                    _cachedCubeVerts.AddRange(data.Vertices);
-                                    _cachedCubeIndices.AddRange(data.Indices);
-                                    _cachedOutlineVerts.AddRange(data.OutlineVertices);
-                                    _cachedOutlineIndices.AddRange(data.OutlineIndices);
-                                    
+                                    //_cachedCubeVerts.AddRange(data.Vertices);
+                                    //_cachedCubeIndices.AddRange(data.Indices);
+                                    //_cachedOutlineVerts.AddRange(data.OutlineVertices);
+                                    //_cachedOutlineIndices.AddRange(data.OutlineIndices);
+                                    //
                                     // Increase offset so indices don't just use the first few vertices -_-
-                                    offset = data.Offset;
-                                    outlineOffset = data.OutlineOffset;
+                                    //offset = data.Offset;
+                                    //outlineOffset = data.OutlineOffset;
                                 }
                             }
                         }
@@ -275,16 +290,19 @@ namespace Isomites3D.CubeWorld
                 // Similar for indices except it only accepts 16bit size objects... so shorts... I should probably try ushorts for 2x the indices.
                 // TODO: Split my list buffers into smaller lists of no more than 196600 as vertex buffers can only draw 65535 triangles at once!!!
                 // TODO: in other words this will error if I have too many cubes :(
-                _vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cachedCubeVerts.Count, BufferUsage.None);
-                _indexBuffer = new IndexBuffer(_device, typeof(short), _cachedCubeIndices.Count, BufferUsage.WriteOnly);
-                _outlineIndexBuffer = new IndexBuffer(_device, typeof(short), _cachedOutlineIndices.Count, BufferUsage.WriteOnly);
-                _outlineVertexBuffer = new VertexBuffer(_device, VertexPositionColor.VertexDeclaration, _cachedOutlineVerts.Count, BufferUsage.None);
-
+                //_vertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, _cachedCubeVerts.Count, BufferUsage.None);
+                //_indexBuffer = new IndexBuffer(_device, typeof(short), _cachedCubeIndices.Count, BufferUsage.WriteOnly);
+                //_outlineIndexBuffer = new IndexBuffer(_device, typeof(short), _cachedOutlineIndices.Count, BufferUsage.WriteOnly);
+                //_outlineVertexBuffer = new VertexBuffer(_device, VertexPositionColor.VertexDeclaration, _cachedOutlineVerts.Count, BufferUsage.None);
+                _batchedDrawModule.PrepareToDraw();
+                _batchedOutlineDrawModule.PrepareToDraw();
                 // Set the actual data to the GPU.
-                _vertexBuffer.SetData(_cachedCubeVerts.ToArray());
-                _indexBuffer.SetData(_cachedCubeIndices.ToArray());
-                _outlineIndexBuffer.SetData(_cachedOutlineIndices.ToArray());
-                _outlineVertexBuffer.SetData(_cachedOutlineVerts.ToArray());
+                //_vertexBuffer.SetData(_cachedCubeVerts.ToArray());
+                //_indexBuffer.SetData(_cachedCubeIndices.ToArray());
+                //_outlineIndexBuffer.SetData(_cachedOutlineIndices.ToArray());
+                //_outlineVertexBuffer.SetData(_cachedOutlineVerts.ToArray());
+
+                _recalcDrawModule = false;
             }
 
             CubeDrawData highlightData = new CubeDrawData();
@@ -321,11 +339,11 @@ namespace Isomites3D.CubeWorld
             // This is NOT to be confused with SetData
             // This literally is just a pointer to the buffer already in GPU memory.
             // Set Data has a much larger overhead than this.
-            _device.SetVertexBuffer(_vertexBuffer);
-            _device.Indices = _indexBuffer;
-
+            //_device.SetVertexBuffer(_vertexBuffer);
+            //_device.Indices = _indexBuffer;
+            _batchedDrawModule.Draw();
             // Draws all the cube Tris
-            _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertexBuffer.VertexCount, 0, _indexBuffer.IndexCount/3);
+            //_device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertexBuffer.VertexCount, 0, _indexBuffer.IndexCount/3);
         }
 
         public void DrawOutline()
@@ -335,17 +353,13 @@ namespace Isomites3D.CubeWorld
             if (!InputHelper.IsKeyDown(Keys.P))
             {
                 // Similar to above, just a different buffer.
-                _device.SetVertexBuffer(_outlineVertexBuffer);
-                _device.Indices = _outlineIndexBuffer;
-
-                _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _outlineVertexBuffer.VertexCount, 0,
-                    _outlineIndexBuffer.IndexCount/3);
+               // _batchedOutlineDrawModule.Draw();
             }
-
-            _device.SetVertexBuffer(_highlightVertexBuffer);
+            
+            /*_device.SetVertexBuffer(_highlightVertexBuffer);
             _device.Indices = _highlightIndexBuffer;
             _device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _highlightVertexBuffer.VertexCount, 0,
-                    _highlightIndexBuffer.IndexCount / 3);
+                    _highlightIndexBuffer.IndexCount / 3);*/
 
         }
     }

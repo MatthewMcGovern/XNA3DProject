@@ -73,7 +73,14 @@ namespace Isomites3D.Core
             {
                 if (_isOrthographic)
                 {
-                    _zoom -= _zoomSpeed * timeDifference;
+                    if (InputHelper.IsKeyDown(Keys.LeftShift))
+                    {
+                        _zoom -= (_zoomSpeed * 5) * timeDifference;
+                    }
+                    else
+                    {
+                        _zoom -= _zoomSpeed * timeDifference;
+                    }
                 }
                 else
                 {
@@ -91,7 +98,14 @@ namespace Isomites3D.Core
                // In orthographic mode, moving forwards/backwards does nothign so zoom instead.
                if (_isOrthographic)
                {
-                   _zoom += _zoomSpeed * timeDifference;
+                   if (InputHelper.IsKeyDown(Keys.LeftShift))
+                   {
+                       _zoom += (_zoomSpeed * 5)*timeDifference;
+                   }
+                   else
+                   {
+                       _zoom += _zoomSpeed * timeDifference;
+                   }
                }
                else
                {
@@ -138,6 +152,12 @@ namespace Isomites3D.Core
             {
                 _isOrthographic = true;
                 ResetCamera();
+            }
+
+            if (InputHelper.IsNewKeyPress(Keys.F3))
+            {
+                _leftrightRot = 0.785398163f;
+                _updownRot = -0.523598776f;
             }
         }
 

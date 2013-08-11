@@ -25,17 +25,17 @@ namespace Isomites3D.CubeWorld
         private static List<CubeType> _cubeTypes;
 
         private VertexPositionNormalTexture[] _upVertices;
-        private short[] _upIndices;
+        private ushort[] _upIndices;
         private VertexPositionNormalTexture[] _downVertices;
-        private short[] _downIndices;
+        private ushort[] _downIndices;
         private VertexPositionNormalTexture[] _northVertices;
-        private short[] _northIndices;
+        private ushort[] _northIndices;
         private VertexPositionNormalTexture[] _eastVertices;
-        private short[] _eastIndices;
+        private ushort[] _eastIndices;
         private VertexPositionNormalTexture[] _southVertices;
-        private short[] _southIndices;
+        private ushort[] _southIndices;
         private VertexPositionNormalTexture[] _westVertices;
-        private short[] _westIndices;
+        private ushort[] _westIndices;
 
         static CubeType()
         {
@@ -43,7 +43,7 @@ namespace Isomites3D.CubeWorld
             // Defining like 36 vertices and indices for each cube is the ONLY way to haev multiple cubes that have different
             // Textures per face... Minecraft cheats and only has like 1 texture per cube but that sucks and is ugly.
 
-            // In short: every cube type has 6 faces of 4 vertices and 6 indices each.
+            // In ushort: every cube type has 6 faces of 4 vertices and 6 indices each.
             // This is where their shape and texture is set.
             // Textures are very lame to set as they use a 0-1 float value that represents their location in a texture file...
             // Yes its crazy. so e.g. 0.125f of a 512 file is 64px.
@@ -61,7 +61,7 @@ namespace Isomites3D.CubeWorld
             soil._upVertices[2] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.124f, 0.49f));
             soil._upVertices[3] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0.01f, 0.49f));
 
-            soil._upIndices = new short[]
+            soil._upIndices = new ushort[]
             {
                 0,
                 2,
@@ -78,7 +78,7 @@ namespace Isomites3D.CubeWorld
             soil._downVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.24f, 0.49f));
             soil._downVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.125f, 0.49f));
 
-            soil._downIndices = new short[]
+            soil._downIndices = new ushort[]
             {
                 0,
                 1,
@@ -96,7 +96,7 @@ namespace Isomites3D.CubeWorld
             soil._southVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.5f, 0.49f));
             soil._southVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.624f, 0.49f));
 
-            soil._southIndices = new short[]
+            soil._southIndices = new ushort[]
             {
                 0,
                 1,
@@ -113,7 +113,7 @@ namespace Isomites3D.CubeWorld
             soil._northVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.374f, 0.49f));
             soil._northVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.25f, 0.49f));
 
-            soil._northIndices= new short[]
+            soil._northIndices= new ushort[]
             {
                 0,
                 2,
@@ -130,7 +130,7 @@ namespace Isomites3D.CubeWorld
             soil._eastVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.49f, 0.49f));
             soil._eastVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.375f, 0.49f));
 
-            soil._eastIndices = new short[]
+            soil._eastIndices = new ushort[]
             {
                 0,
                 1,
@@ -147,7 +147,7 @@ namespace Isomites3D.CubeWorld
             soil._westVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.74f, 0.49f));
             soil._westVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.625f, 0.49f));
 
-            soil._westIndices = new short[]
+            soil._westIndices = new ushort[]
             {
                 1,
                 0,
@@ -165,7 +165,7 @@ namespace Isomites3D.CubeWorld
             stone._upVertices[2] = new VertexPositionNormalTexture(CubeVertices.UpBottomLeft, Vector3.Zero, new Vector2(0.124f, 0.99f));
             stone._upVertices[3] = new VertexPositionNormalTexture(CubeVertices.UpBottomRight, Vector3.Zero, new Vector2(0f, 0.99f));
 
-            stone._upIndices = new short[]
+            stone._upIndices = new ushort[]
             {
                 0,
                 2,
@@ -181,7 +181,7 @@ namespace Isomites3D.CubeWorld
             stone._downVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.24f, 0.99f));
             stone._downVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.125f, 0.99f));
 
-            stone._downIndices = new short[]
+            stone._downIndices = new ushort[]
             {
                 0,
                 1,
@@ -197,7 +197,7 @@ namespace Isomites3D.CubeWorld
             stone._southVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.5f, 0.99f));
             stone._southVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.624f, 0.99f));
 
-            stone._southIndices = new short[]
+            stone._southIndices = new ushort[]
             {
                 0,
                 1,
@@ -213,7 +213,7 @@ namespace Isomites3D.CubeWorld
             stone._northVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.374f, 0.99f));
             stone._northVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.25f, 0.99f));
 
-            stone._northIndices = new short[]
+            stone._northIndices = new ushort[]
             {
                 0,
                 2,
@@ -231,7 +231,7 @@ namespace Isomites3D.CubeWorld
             stone._eastVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomRight, Vector3.Zero, new Vector2(0.49f, 0.99f));
             stone._eastVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopRight, Vector3.Zero, new Vector2(0.375f, 0.99f));
 
-            stone._eastIndices = new short[]
+            stone._eastIndices = new ushort[]
             {
                 0,
                 1,
@@ -248,7 +248,7 @@ namespace Isomites3D.CubeWorld
             stone._westVertices[2] = new VertexPositionNormalTexture(CubeVertices.DownBottomLeft, Vector3.Zero, new Vector2(0.74f, 0.99f));
             stone._westVertices[3] = new VertexPositionNormalTexture(CubeVertices.DownTopLeft, Vector3.Zero, new Vector2(0.625f, 0.99f));
 
-            stone._westIndices = new short[]
+            stone._westIndices = new ushort[]
             {
                 1,
                 0,
@@ -269,7 +269,7 @@ namespace Isomites3D.CubeWorld
 
         
 
-        public CubeDrawData GetDrawData(int offset, int outlineOffset, Vector3 worldPosition, Connections neighbours)
+        public CubeDrawData GetDrawData(Vector3 worldPosition, Connections neighbours)
         {
             // Add all possible lines to list... Should probably store this somewhere else?
             List<CubeOutline> _cubeOutlines = new List<CubeOutline>();
@@ -289,7 +289,7 @@ namespace Isomites3D.CubeWorld
             _cubeOutlines.Add(Outlines.Z.DTRtoDBR);
 
             // Get a drawData object for this cube.
-            CubeDrawData drawData = new CubeDrawData(offset, outlineOffset);
+            CubeDrawData drawData = new CubeDrawData(0, 0);
 
             // the following 6 neighour checks is to remove faces and add lines
             // e.g. if a neighbour is NOT above it, add the top face vertices/idncies
