@@ -92,47 +92,35 @@ namespace Isomites.IsoEngine.World
                     {
                         if (ImBlockHelper.IsBlock(Blocks[x, y, z]) && Blocks[x,y,z] != ImBlockHelper.BlockMasks.Air &&  Blocks[x,y,z] != ImBlockHelper.BlockMasks.AirBlocked)
                         {
-                            ImBlockVertexData currentVertextData =
-                                ImBlockVertexData.GetBlockMaskVertexData(Blocks[x, y, z]);
-                            //check up
-                            if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
-                                ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int) _locationOffset.X + x,
-                                    (int) _locationOffset.Y + y + 1, (int) _locationOffset.Z + z), ImDirection.Up))
+                            ImBlockVertexData currentVertextData = ImBlockVertexData.GetBlockMaskVertexData(Blocks[x, y, z]);
+                            
+                            // Following checks all the face blocking cubes around the current location to see if we'll add the vertices to the buffer or not.
+                            if(ParentRenderSegment.ParentSegmentManager.DoesLocationBlockViewFrom(new ImSegmentLocation(_locationOffset + new Vector3(x, y + 1, z)), ImDirection.Up))
                             {
                                 // add up vertices/indices, but don't forget to translate to world location...
                                 _blockDrawModule.AddData(ImBlockVertexData.TranslateVerticesToWorldLocation(currentVertextData.UpVertices, new Vector3(_locationOffset.X + x, _locationOffset.Y + y, _locationOffset.Z + z)).ToList(), currentVertextData.UpIndices.ToList());
                             }
-                            if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
-                                ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int)_locationOffset.X + x,
-                                    (int)_locationOffset.Y + y - 1, (int)_locationOffset.Z + z), ImDirection.Down))
+                            if (ParentRenderSegment.ParentSegmentManager.DoesLocationBlockViewFrom(new ImSegmentLocation(_locationOffset + new Vector3(x, y - 1, z)), ImDirection.Down))
                             {
                                 // add down vertices/indices, but don't forget to translate to world location...
                                 _blockDrawModule.AddData(ImBlockVertexData.TranslateVerticesToWorldLocation(currentVertextData.DownVertices, new Vector3(_locationOffset.X +x, _locationOffset.Y + y, _locationOffset.Z + z)).ToList(), currentVertextData.DownIndices.ToList());
                             }
-                            if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
-                                ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int)_locationOffset.X + x + 1,
-                                    (int)_locationOffset.Y + y, (int)_locationOffset.Z + z), ImDirection.East))
+                            if (ParentRenderSegment.ParentSegmentManager.DoesLocationBlockViewFrom(new ImSegmentLocation(_locationOffset + new Vector3(x + 1, y, z)), ImDirection.East))
                             {
                                 // add east vertices/indices, but don't forget to translate to world location...
                                 _blockDrawModule.AddData(ImBlockVertexData.TranslateVerticesToWorldLocation(currentVertextData.EastVertices, new Vector3(_locationOffset.X +x, _locationOffset.Y + y, _locationOffset.Z + z)).ToList(), currentVertextData.EastIndices.ToList());
                             }
-                            if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
-                                ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int)_locationOffset.X + x - 1,
-                                    (int)_locationOffset.Y + y, (int)_locationOffset.Z + z), ImDirection.West))
+                            if (ParentRenderSegment.ParentSegmentManager.DoesLocationBlockViewFrom(new ImSegmentLocation(_locationOffset + new Vector3(x - 1, y, z)), ImDirection.West))
                             {
                                 // add west vertices/indices, but don't forget to translate to world location...
                                 _blockDrawModule.AddData(ImBlockVertexData.TranslateVerticesToWorldLocation(currentVertextData.WestVertices, new Vector3(_locationOffset.X +x, _locationOffset.Y + y, _locationOffset.Z + z)).ToList(), currentVertextData.WestIndices.ToList());
                             }
-                            if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
-                                ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int)_locationOffset.X + x,
-                                    (int)_locationOffset.Y + y, (int)_locationOffset.Z + z - 1), ImDirection.North))
+                            if (ParentRenderSegment.ParentSegmentManager.DoesLocationBlockViewFrom(new ImSegmentLocation(_locationOffset + new Vector3(x, y, z - 1)), ImDirection.North))
                             {
                                 // add north vertices/indices, but don't forget to translate to world location...
                                 _blockDrawModule.AddData(ImBlockVertexData.TranslateVerticesToWorldLocation(currentVertextData.NorthVertices, new Vector3(_locationOffset.X +x, _locationOffset.Y + y, _locationOffset.Z + z)).ToList(), currentVertextData.NorthIndices.ToList());
                             }
-                            if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
-                                ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int)_locationOffset.X + x,
-                                    (int)_locationOffset.Y + y, (int)_locationOffset.Z + z + 1), ImDirection.South))
+                            if (ParentRenderSegment.ParentSegmentManager.DoesLocationBlockViewFrom(new ImSegmentLocation(_locationOffset + new Vector3(x, y, z + 1)), ImDirection.South))
                             {
                                 // add south vertices/indices, but don't forget to translate to world location...
                                 _blockDrawModule.AddData(ImBlockVertexData.TranslateVerticesToWorldLocation(currentVertextData.SouthVertices, new Vector3(_locationOffset.X +x, _locationOffset.Y + y, _locationOffset.Z + z)).ToList(), currentVertextData.SouthIndices.ToList());
@@ -150,64 +138,6 @@ namespace Isomites.IsoEngine.World
             _blockDrawModule.PrepareToDraw();
 
             Dirty = false;
-        }
-
-
-        public bool IsPositionInRange(int x, int y, int z)
-        {
-            return !(x < 0 || y < 0 || z < 0 || x >= Blocks.GetLength(0) || y >= Blocks.GetLength(1) ||
-                    z > Blocks.GetLength(2));
-        }
-        public void AddBlockMaskAt(ImBlockMask blockMask, int x, int y, int z)
-        {
-            if (IsPositionInRange(x, y, z))
-            {
-                Blocks[x, y, z] = blockMask;
-                Dirty = true;
-            }
-        }
-
-        public void SetBlockMaskAsObstacle(int x, int y, int z)
-        {
-            if (IsPositionInRange(x, y, z))
-            {
-                Blocks[x, y, z] = Blocks[x, y, z] | ImBlockMask.IsObstacle;
-            }
-        }
-
-        public void SetBlockMaskAsVisible(int x, int y, int z)
-        {
-            if (IsPositionInRange(x, y, z))
-            {
-                Blocks[x, y, z] = Blocks[x, y, z] & ~ImBlockMask.IsObstacle;
-            }
-        }
-
-        public ImBlockMask GetInternalBlockMaskAt(int x, int y, int z)
-        {
-            // if y < 0, go to render chunk and get chunk below
-            // if y > length, go to render chunk and get chunk above, using (offet * renderheight) + y
-            // if x < 0, go to render chunk and tell it to go to chunk manager
-            // if x > length, go to render chunk and tell it to go to chunk manager, using its (offset * chunkWidth) + x
-            // same for z.
-            if (!IsPositionInRange(x, y, z))
-            {
-                return ImBlockHelper.BlockMasks.Null;
-            }
-            
-
-            // get it from
-            return Blocks[x, y, z];
-        }
-
-        public bool IsInternalBlockMaskSolid(int x, int y, int z)
-        {
-            return ImBlockHelper.IsBlock(GetInternalBlockMaskAt(x, y, z));
-        }
-
-        public bool IsInternalBlockMaskPassable(int x, int y, int z)
-        {
-            return GetInternalBlockMaskAt(x, y, z).HasFlag(ImBlockMask.IsObstacle);
         }
 
         public void Draw()

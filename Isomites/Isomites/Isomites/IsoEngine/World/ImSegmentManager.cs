@@ -77,34 +77,7 @@ namespace Isomites.IsoEngine.World
             _BlockHighlightBlocked = new ImRenderBasic(content.Load<Model>("Models/HighLight_Blocked"), effect);
         }
 
-        public void Update(GameTime gameTime)
-        {
-            HandleHighlight();
-
-            if (InputHelper.IsNewKeyPress(Keys.Delete))
-            {
-                foreach (ImWorldItem item in _ItemsUnderCursor)
-                {
-                    item.Remove();
-                }
-
-                AddBlockMaskAtWorldPosition(ImBlockHelper.BlockMasks.Air, _highlightPosition);
-            }
-
-            if (InputHelper.IsNewKeyPress(Keys.Home))
-            {
-               AddItemAtWorldPosition(_highlightPosition);
-            }
-
-            for (int x = 0; x < Segments.GetLength(0); x++)
-            {
-                for (int z = 0; z < Segments.GetLength(1); z++)
-                {
-                    Segments[x, z].Update(gameTime);
-                }
-            }
-        }
-
+        // GETS
         public ImSegment GetSegmentAt(ImSegmentLocation segmentLocation)
         {
             return Segments[segmentLocation.SegmentX, segmentLocation.SegmentZ];
@@ -120,6 +93,7 @@ namespace Isomites.IsoEngine.World
             return GetRenderSegmentAt(segmentLocation).Blocks[segmentLocation.BlockX, segmentLocation.RenderSegmentBlockMaskIndex, segmentLocation.BlockZ];
         }
 
+        // SETS
         public void SetBlockMaskAt(ImSegmentLocation segmentLocation, ImBlockMask blockMask)
         {
             GetRenderSegmentAt(segmentLocation).Blocks[
@@ -136,31 +110,73 @@ namespace Isomites.IsoEngine.World
             SetBlockMaskAt(segmentLocation, GetBlockMaskAt(segmentLocation) & ~flag);
         }
 
-        /* it's all shit under here */
+        public void SetLocationDirty(ImSegmentLocation segmentLocation)
+        {
+            GetRenderSegmentAt(segmentLocation).Dirty = true;
+        }
 
+        public void SetLocationObstructed(ImSegmentLocation segmentLocation)
+        {
+            SetFlagAt(segmentLocation, ImBlockMask.IsObstacle);
+        }
+
+        public void SetLocationPassable(ImSegmentLocation segmentLocation)
+        {
+            RemoveFlagAt(segmentLocation, ImBlockMask.IsObstacle);
+        }
+
+        // QUERIES
+        public bool IsLocationObstructed(ImSegmentLocation segmentLocation)
+        {
+            return ImBlockHelper.IsBlockAnObstacle(GetBlockMaskAt(segmentLocation));
+        }
+
+        public bool DoesLocationBlockViewFrom(ImSegmentLocation segmentLocation, Vector3 direction)
+        {
+            return ImBlockHelper.DoesBlockMaskObscureFromDirection(GetBlockMaskAt(segmentLocation), direction);
+        }
+
+        // EXTRA
         public void AddItemAtWorldPosition(Vector3 position)
         {
             foreach (Vector3 occupied in ImItemTypes.Tree.OccupiedSpace)
             {
                 // make sure object fits!
-                if(IsWorldPositionAnObstacle(occupied + position))
+                if (IsLocationObstructed(new ImSegmentLocation(occupied + position)))
                     return;
             }
 
-            int segmentX = (int)Math.Floor((double)position.X / ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)position.Z / ImGlobal.SegmentSize.Z);
+            // ArBlocked means an object is currently present there! Can't block swap it.
+            GetSegmentAt(new ImSegmentLocation(position)).AddItemAt(position);
+        }
 
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
+        // UPDATES
+        public void Update(GameTime gameTime)
+        {
+            HandleHighlight();
+
+            if (InputHelper.IsNewKeyPress(Keys.Delete))
             {
-                return;
+                foreach (ImWorldItem item in _ItemsUnderCursor)
+                {
+                    item.Remove();
+                }
+
+                SetBlockMaskAt(new ImSegmentLocation(_highlightPosition), ImBlockHelper.BlockMasks.Air);
             }
 
-            int blockX = (int)position.X % ImGlobal.SegmentSize.X;
-            int blockZ = (int)position.Z % ImGlobal.SegmentSize.Z;
-            int blockY = (int)position.Y;
+            if (InputHelper.IsNewKeyPress(Keys.Home))
+            {
+                AddItemAtWorldPosition(_highlightPosition);
+            }
 
-            // ArBlocked means an object is currently present there! Can't block swap it.
-            Segments[segmentX, segmentZ].AddItemAt(position);
+            for (int x = 0; x < Segments.GetLength(0); x++)
+            {
+                for (int z = 0; z < Segments.GetLength(1); z++)
+                {
+                    Segments[x, z].Update(gameTime);
+                }
+            }
         }
 
         public void HandleHighlight()
@@ -194,7 +210,7 @@ namespace Isomites.IsoEngine.World
             }
 
             // Following is for valid block ranges only.
-            if (GetBlockMaskAtWorldPosition(newPosition) != ImBlockHelper.BlockMasks.Null)
+            if (GetBlockMaskAt(new ImSegmentLocation(newPosition)) != ImBlockHelper.BlockMasks.Null)
             {
                 if (newPosition != _highlightPosition)
                 {
@@ -208,10 +224,10 @@ namespace Isomites.IsoEngine.World
                 _highlightPosition = newPosition;
                 if (InputHelper.IsNewKeyPress(Keys.Insert))
                 {
-                    AddBlockMaskAtWorldPosition(ImBlockHelper.BlockMasks.Soil, _highlightPosition);
+                    SetBlockMaskAt(new ImSegmentLocation(_highlightPosition), ImBlockHelper.BlockMasks.Soil);
                 }
 
-                if (ImBlockHelper.IsBlockAnObstacle(GetBlockMaskAtWorldPosition(_highlightPosition)))
+                if (IsLocationObstructed(new ImSegmentLocation(_highlightPosition)))
                 {
                     _highlightPositionIsObstacle = true;
                 }
@@ -224,152 +240,7 @@ namespace Isomites.IsoEngine.World
             
         }
 
-
-        public ImBlockMask GetBlockMaskAtWorldPosition(Vector3 position)
-        {
-            return GetBlockMaskAtWorldPosition((int) position.X, (int) position.Y, (int) position.Z);
-        }
-
-        public bool IsWorldPositionAnObstacle(Vector3 position)
-        {
-            return IsWorldPositionAnObstacle((int) position.X, (int) position.Y, (int) position.Z);
-        }
-
-
-        public bool IsWorldPositionAnObstacle(int x, int y, int z)
-        {
-            int segmentX = (int)Math.Floor((double)x / ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)z / ImGlobal.SegmentSize.Z);
-
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
-            {
-                return true;
-            }
-
-            int blockX = x % ImGlobal.SegmentSize.X;
-            int blockZ = z % ImGlobal.SegmentSize.Z;
-            int blockY = y;
-
-            return Segments[segmentX, segmentZ].IsInternalBlockAnObstacle(blockX, blockY, blockZ);
-        }
-
-        public void AddBlockMaskAtWorldPosition(ImBlockMask blockMask, Vector3 position)
-        {
-            int segmentX = (int)Math.Floor((double)position.X / ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)position.Z / ImGlobal.SegmentSize.Z);
-
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
-            {
-                return;
-            }
-
-            int blockX = (int)position.X % ImGlobal.SegmentSize.X;
-            int blockZ = (int)position.Z % ImGlobal.SegmentSize.Z;
-            int blockY = (int)position.Y;
-
-            // ArBlocked means an object is currently present there! Can't block swap it.
-            if (Segments[segmentX, segmentZ].GetInternalBlockMaskAt(blockX, blockY, blockZ) ==
-                ImBlockHelper.BlockMasks.AirBlocked)
-                return;
-            Segments[segmentX, segmentZ].AddBlockMaskAt(blockMask, blockX, blockY, blockZ);
-
-            // Now have to touch all the surrounding areas as dirty too. Probably a better way to do this.
-            MarkWorldPositionAsDirty(position + ImDirection.Up);
-            MarkWorldPositionAsDirty(position + ImDirection.Down);
-            MarkWorldPositionAsDirty(position + ImDirection.East);
-            MarkWorldPositionAsDirty(position + ImDirection.West);
-            MarkWorldPositionAsDirty(position + ImDirection.North);
-            MarkWorldPositionAsDirty(position + ImDirection.South);
-        }
-
-        public void AddBlockMaskAtSegmentLocation(ImBlockMask blockMask, ImSegmentLocation segmentLocation)
-        {
-            // AirBlocked means an object is currently present there! Can't block swap it.
-            if(GetBlockMaskAt(segmentLocation) == ImBlockHelper.BlockMasks.Air)
-                return;
-
-            Segments[segmentX, segmentZ].AddBlockMaskAt(blockMask, blockX, blockY, blockZ);
-
-            // Now have to touch all the surrounding areas as dirty too. Probably a better way to do this.
-            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.Up));
-            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.Down));
-            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.East));
-            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.West));
-            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.North));
-            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.South));
-        }
-
-        public void MarkSegmentLocationAsDirty(ImSegmentLocation segmentLocation)
-        {
-            GetRenderSegmentAt(segmentLocation).Dirty = true;
-        }
-
-        public void MarkWorldPositionAsDirty(Vector3 position)
-        {
-            int segmentX = (int)Math.Floor((double)position.X / ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)position.Z / ImGlobal.SegmentSize.Z);
-
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
-            {
-                return;
-            }
-
-            Segments[segmentX, segmentZ].RenderSegments[ImGlobal.RenderSegmentIndices[(int)position.Y]].Dirty = true;
-
-            // Now have to touch all the surrounding areas as dirty too. Probably a better way to do this.
-        }
-
-        public void MarkWorldPositionAsObstacle(int x, int y, int z)
-        {
-            int segmentX = (int)Math.Floor((double)x / ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)z / ImGlobal.SegmentSize.Z);
-
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
-            {
-                return;
-            }
-
-            int blockX = x % ImGlobal.SegmentSize.X;
-            int blockZ = z % ImGlobal.SegmentSize.Z;
-            int blockY = y;
-
-            Segments[segmentX, segmentZ].SetBlockMaskAsObstacle(blockX, blockY, blockZ);
-        }
-
-        public void MarkWorldPositionAsPassable(int x, int y, int z)
-        {
-            int segmentX = (int)Math.Floor((double)x / ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)z / ImGlobal.SegmentSize.Z);
-
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
-            {
-                return;
-            }
-
-            int blockX = x % ImGlobal.SegmentSize.X;
-            int blockZ = z % ImGlobal.SegmentSize.Z;
-            int blockY = y;
-
-            Segments[segmentX, segmentZ].SetBlockMaskAsPassable(blockX, blockY, blockZ);
-        }
-
-        public ImBlockMask GetBlockMaskAtWorldPosition(int x, int y, int z)
-        {
-            int segmentX = (int)Math.Floor((double)x/ImGlobal.SegmentSize.X);
-            int segmentZ = (int)Math.Floor((double)z / ImGlobal.SegmentSize.Z);
-
-            if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
-            {
-                return ImBlockHelper.BlockMasks.Null;
-            }
-
-            int blockX = x%ImGlobal.SegmentSize.X;
-            int blockZ = z%ImGlobal.SegmentSize.Z;
-            int blockY = y;
-
-            return Segments[segmentX, segmentZ].GetInternalBlockMaskAt(blockX, blockY, blockZ);
-        }
-
+        // DRAWING
         public void Draw(Camera3D camera)
         {
             Matrix worldMatrix = Matrix.Identity;

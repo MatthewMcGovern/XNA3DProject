@@ -44,6 +44,8 @@ namespace Isomites.IsoEngine.World
             AddItemAt((int) position.X, (int) position.Y, (int) position.Z);
         }
 
+
+        // move this to segmentmanager?
         public void AddItemAt(int x2, int y2, int z2)
         {
             Vector3 position2 = new Vector3(Position.X * ImGlobal.SegmentSize.X + x2, y2, Position.Y * ImGlobal.SegmentSize.Z + z2);
@@ -52,22 +54,8 @@ namespace Isomites.IsoEngine.World
 
             foreach (Vector3 filledSpace in item.ItemType.OccupiedSpace)
             {
-                ParentSegmentManager.MarkWorldPositionAsObstacle((int)(position2.X + filledSpace.X), (int)(position2.Y + filledSpace.Y), (int)(position2.Z + filledSpace.Z));
+                ParentSegmentManager.SetLocationObstructed(new ImSegmentLocation(filledSpace + position2));
             }
-            /*for (int x = 0; x < 32; x ++)
-            {
-                for (int z = 0; z < 32; z ++)
-                {
-                    Vector3 position = new Vector3(Position.X * ImGlobal.SegmentSize.X + x, 4, Position.Y * ImGlobal.SegmentSize.Z + z);
-                    ImItemTree test = new ImItemTree(position, this);
-                    Items.SubItems[test.ItemType.SubIndex].Add(test);
-
-                    foreach (Vector3 filledSpace in test.ItemType.OccupiedSpace)
-                    {
-                        ParentSegmentManager.MarkBlockMaskAsObstacle((int)(position.X + filledSpace.X), (int)(position.Y + filledSpace.Y), (int)(position.Z + filledSpace.Z));
-                    }
-                }
-            }*/
         }
 
         public void LoadSegment()
@@ -96,61 +84,6 @@ namespace Isomites.IsoEngine.World
             {
                 RenderSegments[i].UpdateDrawModule();
             }
-        }
-
-        public bool IsPositionInRange(int x, int y, int z)
-        {
-            return !(x < 0 || y < 0 || z < 0 || x >= ImGlobal.SegmentSize.X || y >= ImGlobal.SegmentSize.Y ||
-                     z >= ImGlobal.SegmentSize.Z);
-        }
-
-
-        public void AddBlockMaskAt(ImBlockMask blockMask, int x, int y, int z)
-        {
-            if (IsPositionInRange(x, y, z))
-            {
-                RenderSegments[ImGlobal.RenderSegmentIndices[y]].AddBlockMaskAt(blockMask, x,
-                ImGlobal.RenderBlockMaskIndices[y], z);
-            }
-        }
-
-        public void SetBlockMaskAsObstacle(int x, int y, int z)
-        {
-            if (IsPositionInRange(x, y, z))
-            {
-                RenderSegments[ImGlobal.RenderSegmentIndices[y]].SetBlockMaskAsObstacle(x,ImGlobal.RenderBlockMaskIndices[y],z);
-            } 
-        }
-
-        public void SetBlockMaskAsPassable(int x, int y, int z)
-        {
-            if (IsPositionInRange(x, y, z))
-            {
-                RenderSegments[ImGlobal.RenderSegmentIndices[y]].SetBlockMaskAsVisible(x, ImGlobal.RenderBlockMaskIndices[y], z);
-            }
-        }
-        public ImBlockMask GetInternalBlockMaskAt(int x, int y, int z)
-        {
-
-            if (!IsPositionInRange(x, y, z))
-            {
-                // if x or y is too small, get the prev chunk
-                // if x or z is too big, get the next chunk
-                return ImBlockHelper.BlockMasks.Null;
-            }
-
-            return RenderSegments[ImGlobal.RenderSegmentIndices[y]].GetInternalBlockMaskAt(x,
-                ImGlobal.RenderBlockMaskIndices[y], z);
-        }
-
-        public bool IsInternalBlockSolid(int x, int y, int z)
-        {
-            return ImBlockHelper.IsBlock(GetInternalBlockMaskAt(x, y, z));
-        }
-
-        public bool IsInternalBlockAnObstacle(int x, int y, int z)
-        {
-            return GetInternalBlockMaskAt(x, y, z).HasFlag(ImBlockMask.IsObstacle);
         }
 
         public void Draw()
