@@ -4,12 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Isomites.IsoEngine.Items;
 using Isomites.IsomiteEngine.Items;
 using Isomites.IsomiteEngine.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Isomites.GameWorld
+namespace Isomites.IsoEngine.World
 {
     using System;
     using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace Isomites.GameWorld
                 RenderSegments[i] = new ImRenderSegment(Device, this, i);
             }
 
-            RenderSegments[0].Fill(ImGlobal.BlockMasks.Soil);
+            RenderSegments[0].Fill(ImBlockHelper.BlockMasks.Soil);
             IsLoaded = true;
         }
 
@@ -135,7 +136,7 @@ namespace Isomites.GameWorld
             {
                 // if x or y is too small, get the prev chunk
                 // if x or z is too big, get the next chunk
-                return ImGlobal.BlockMasks.Null;
+                return ImBlockHelper.BlockMasks.Null;
             }
 
             return RenderSegments[ImGlobal.RenderSegmentIndices[y]].GetInternalBlockMaskAt(x,

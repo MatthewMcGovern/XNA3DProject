@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System.Runtime.Remoting.Messaging;
+using Isomites.IsoEngine.Items;
 using Isomites.IsomiteEngine;
 using Isomites.IsomiteEngine.Items;
 using Isomites.IsomiteEngine.Player;
@@ -13,7 +14,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Isomites.GameWorld
+namespace Isomites.IsoEngine.World
 {
     using System;
     using System.Collections.Generic;
@@ -87,7 +88,7 @@ namespace Isomites.GameWorld
                     item.Remove();
                 }
 
-                AddBlockMaskAtWorldPosition(ImGlobal.BlockMasks.Air, _highlightPosition);
+                AddBlockMaskAtWorldPosition(ImBlockHelper.BlockMasks.Air, _highlightPosition);
             }
 
             if (InputHelper.IsNewKeyPress(Keys.Home))
@@ -103,6 +104,39 @@ namespace Isomites.GameWorld
                 }
             }
         }
+
+        public ImSegment GetSegmentAt(ImSegmentLocation segmentLocation)
+        {
+            return Segments[segmentLocation.SegmentX, segmentLocation.SegmentZ];
+        }
+
+        public ImRenderSegment GetRenderSegmentAt(ImSegmentLocation segmentLocation)
+        {
+            return GetSegmentAt(segmentLocation).RenderSegments[segmentLocation.RenderSegmentIndex];
+        }
+
+        public ImBlockMask GetBlockMaskAt(ImSegmentLocation segmentLocation)
+        {
+            return GetRenderSegmentAt(segmentLocation).Blocks[segmentLocation.BlockX, segmentLocation.RenderSegmentBlockMaskIndex, segmentLocation.BlockZ];
+        }
+
+        public void SetBlockMaskAt(ImSegmentLocation segmentLocation, ImBlockMask blockMask)
+        {
+            GetRenderSegmentAt(segmentLocation).Blocks[
+                segmentLocation.BlockX, segmentLocation.RenderSegmentBlockMaskIndex, segmentLocation.BlockZ] = blockMask;
+        }
+
+        public void SetFlagAt(ImSegmentLocation segmentLocation, ImBlockMask flag)
+        {
+            SetBlockMaskAt(segmentLocation, GetBlockMaskAt(segmentLocation) | flag);
+        }
+
+        public void RemoveFlagAt(ImSegmentLocation segmentLocation, ImBlockMask flag)
+        {
+            SetBlockMaskAt(segmentLocation, GetBlockMaskAt(segmentLocation) & ~flag);
+        }
+
+        /* it's all shit under here */
 
         public void AddItemAtWorldPosition(Vector3 position)
         {
@@ -160,7 +194,7 @@ namespace Isomites.GameWorld
             }
 
             // Following is for valid block ranges only.
-            if (GetBlockMaskAtWorldPosition(newPosition) != ImGlobal.BlockMasks.Null)
+            if (GetBlockMaskAtWorldPosition(newPosition) != ImBlockHelper.BlockMasks.Null)
             {
                 if (newPosition != _highlightPosition)
                 {
@@ -174,7 +208,7 @@ namespace Isomites.GameWorld
                 _highlightPosition = newPosition;
                 if (InputHelper.IsNewKeyPress(Keys.Insert))
                 {
-                    AddBlockMaskAtWorldPosition(ImGlobal.BlockMasks.Soil, _highlightPosition);
+                    AddBlockMaskAtWorldPosition(ImBlockHelper.BlockMasks.Soil, _highlightPosition);
                 }
 
                 if (ImBlockHelper.IsBlockAnObstacle(GetBlockMaskAtWorldPosition(_highlightPosition)))
@@ -235,7 +269,7 @@ namespace Isomites.GameWorld
 
             // ArBlocked means an object is currently present there! Can't block swap it.
             if (Segments[segmentX, segmentZ].GetInternalBlockMaskAt(blockX, blockY, blockZ) ==
-                ImGlobal.BlockMasks.AirBlocked)
+                ImBlockHelper.BlockMasks.AirBlocked)
                 return;
             Segments[segmentX, segmentZ].AddBlockMaskAt(blockMask, blockX, blockY, blockZ);
 
@@ -246,6 +280,28 @@ namespace Isomites.GameWorld
             MarkWorldPositionAsDirty(position + ImDirection.West);
             MarkWorldPositionAsDirty(position + ImDirection.North);
             MarkWorldPositionAsDirty(position + ImDirection.South);
+        }
+
+        public void AddBlockMaskAtSegmentLocation(ImBlockMask blockMask, ImSegmentLocation segmentLocation)
+        {
+            // AirBlocked means an object is currently present there! Can't block swap it.
+            if(GetBlockMaskAt(segmentLocation) == ImBlockHelper.BlockMasks.Air)
+                return;
+
+            Segments[segmentX, segmentZ].AddBlockMaskAt(blockMask, blockX, blockY, blockZ);
+
+            // Now have to touch all the surrounding areas as dirty too. Probably a better way to do this.
+            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.Up));
+            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.Down));
+            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.East));
+            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.West));
+            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.North));
+            MarkWorldPositionAsDirty(new ImSegmentLocation(position + ImDirection.South));
+        }
+
+        public void MarkSegmentLocationAsDirty(ImSegmentLocation segmentLocation)
+        {
+            GetRenderSegmentAt(segmentLocation).Dirty = true;
         }
 
         public void MarkWorldPositionAsDirty(Vector3 position)
@@ -304,7 +360,7 @@ namespace Isomites.GameWorld
 
             if (segmentX < 0 || segmentZ < 0 || segmentX >= Segments.GetLength(0) || segmentZ >= Segments.GetLength(1))
             {
-                return ImGlobal.BlockMasks.Null;
+                return ImBlockHelper.BlockMasks.Null;
             }
 
             int blockX = x%ImGlobal.SegmentSize.X;

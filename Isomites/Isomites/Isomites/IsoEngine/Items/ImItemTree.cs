@@ -4,10 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Isomites.GameWorld;
+using Isomites.IsoEngine;
+using Isomites.IsoEngine.World;
+using Isomites.IsomiteEngine.Items;
 using Microsoft.Xna.Framework;
 
-namespace Isomites.IsomiteEngine.Items
+namespace Isomites.IsoEngine.Items
 {
     using System;
     using System.Collections.Generic;

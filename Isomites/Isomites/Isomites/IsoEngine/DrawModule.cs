@@ -6,7 +6,7 @@
 
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Isomites.GameWorld
+namespace Isomites.IsoEngine
 {
     using System;
     using System.Collections.Generic;

@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Isomites.GameWorld
+namespace Isomites.IsoEngine
 {
     using System;
     using System.Collections.Generic;
@@ -16,16 +16,6 @@ namespace Isomites.GameWorld
     /// </summary>
     public static class ImGlobal
     {
-        public static class BlockMasks
-        {
-            public static ImBlockMask Empty = ImBlockMask.Empty;
-            public static ImBlockMask Null = ImBlockMask.IsObstacle;
-            public static ImBlockMask Air =  ImBlockMask.Type1;
-            public static ImBlockMask AirBlocked = ImBlockMask.Type1 | ImBlockMask.IsObstacle;
-            public static ImBlockMask Soil = ImBlockMask.IsObstacle | ImBlockMask.Type1 | ImBlockMask.Data1;
-            public static ImBlockMask Stone = ImBlockMask.IsObstacle | ImBlockMask.Type1 | ImBlockMask.Data2;
-        }
-
         public static class ItemIDs
         {
             public static int Tree = 0;

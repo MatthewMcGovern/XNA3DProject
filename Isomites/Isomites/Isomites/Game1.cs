@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Isomites.GameWorld;
+using Isomites.IsoEngine;
+using Isomites.IsoEngine.World;
 using Isomites.IsomiteEngine.Items;
 using Isomites.IsomiteEngine.Player;
 using Microsoft.Xna.Framework;

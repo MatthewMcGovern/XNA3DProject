@@ -8,7 +8,7 @@ using Isomites.IsomiteEngine.Block;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Isomites.GameWorld
+namespace Isomites.IsoEngine.World
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace Isomites.GameWorld
     public class ImRenderSegment
     {
         public ImSegment ParentRenderSegment;
-        private ImBlockMask[,,] _blocks;
+        public ImBlockMask[,,] Blocks;
         private DrawModule<VertexPositionNormalTexture> _blockDrawModule;
         private GraphicsDevice Device;
         public bool Dirty;
@@ -36,17 +36,17 @@ namespace Isomites.GameWorld
             Dirty = true;
             _IsAllAir = false;
             Device = device;
-            _blocks =
+            Blocks =
                 new ImBlockMask[ImGlobal.RenderSegmentSize.X, ImGlobal.RenderSegmentSize.Y, ImGlobal.RenderSegmentSize.Z
                     ];
 
-            for (int x = 0; x < _blocks.GetLength(0); x++)
+            for (int x = 0; x < Blocks.GetLength(0); x++)
             {
-                for (int y = 0; y < _blocks.GetLength(1); y++)
+                for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    for (int z = 0; z < _blocks.GetLength(2); z++)
+                    for (int z = 0; z < Blocks.GetLength(2); z++)
                     {
-                        _blocks[x, y, z] = ImGlobal.BlockMasks.Air;
+                        Blocks[x, y, z] = ImBlockHelper.BlockMasks.Air;
                     }
                 }
             }
@@ -68,13 +68,13 @@ namespace Isomites.GameWorld
 
         public void Fill(ImBlockMask mask)
         {
-            for (int x = 0; x < _blocks.GetLength(0); x++)
+            for (int x = 0; x < Blocks.GetLength(0); x++)
             {
-                for (int y = 0; y < _blocks.GetLength(1); y++)
+                for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    for (int z = 0; z < _blocks.GetLength(2); z++)
+                    for (int z = 0; z < Blocks.GetLength(2); z++)
                     {
-                        _blocks[x, y, z] = mask;
+                        Blocks[x, y, z] = mask;
                     }
                 }
             }
@@ -84,16 +84,16 @@ namespace Isomites.GameWorld
 
         public void UpdateDrawModule()
         {
-            for (int x = 0; x < _blocks.GetLength(0); x++)
+            for (int x = 0; x < Blocks.GetLength(0); x++)
             {
-                for (int y = 0; y < _blocks.GetLength(1); y++)
+                for (int y = 0; y < Blocks.GetLength(1); y++)
                 {
-                    for (int z = 0; z < _blocks.GetLength(2); z++)
+                    for (int z = 0; z < Blocks.GetLength(2); z++)
                     {
-                        if (ImBlockHelper.IsBlock(_blocks[x, y, z]) && _blocks[x,y,z] != ImGlobal.BlockMasks.Air &&  _blocks[x,y,z] != ImGlobal.BlockMasks.AirBlocked)
+                        if (ImBlockHelper.IsBlock(Blocks[x, y, z]) && Blocks[x,y,z] != ImBlockHelper.BlockMasks.Air &&  Blocks[x,y,z] != ImBlockHelper.BlockMasks.AirBlocked)
                         {
                             ImBlockVertexData currentVertextData =
-                                ImBlockVertexData.GetBlockMaskVertexData(_blocks[x, y, z]);
+                                ImBlockVertexData.GetBlockMaskVertexData(Blocks[x, y, z]);
                             //check up
                             if (!ImBlockHelper.DoesBlockMaskObscureFromDirection(
                                 ParentRenderSegment.ParentSegmentManager.GetBlockMaskAtWorldPosition((int) _locationOffset.X + x,
@@ -155,14 +155,14 @@ namespace Isomites.GameWorld
 
         public bool IsPositionInRange(int x, int y, int z)
         {
-            return !(x < 0 || y < 0 || z < 0 || x >= _blocks.GetLength(0) || y >= _blocks.GetLength(1) ||
-                    z > _blocks.GetLength(2));
+            return !(x < 0 || y < 0 || z < 0 || x >= Blocks.GetLength(0) || y >= Blocks.GetLength(1) ||
+                    z > Blocks.GetLength(2));
         }
         public void AddBlockMaskAt(ImBlockMask blockMask, int x, int y, int z)
         {
             if (IsPositionInRange(x, y, z))
             {
-                _blocks[x, y, z] = blockMask;
+                Blocks[x, y, z] = blockMask;
                 Dirty = true;
             }
         }
@@ -171,7 +171,7 @@ namespace Isomites.GameWorld
         {
             if (IsPositionInRange(x, y, z))
             {
-                _blocks[x, y, z] = _blocks[x, y, z] | ImBlockMask.IsObstacle;
+                Blocks[x, y, z] = Blocks[x, y, z] | ImBlockMask.IsObstacle;
             }
         }
 
@@ -179,7 +179,7 @@ namespace Isomites.GameWorld
         {
             if (IsPositionInRange(x, y, z))
             {
-                _blocks[x, y, z] = _blocks[x, y, z] & ~ImBlockMask.IsObstacle;
+                Blocks[x, y, z] = Blocks[x, y, z] & ~ImBlockMask.IsObstacle;
             }
         }
 
@@ -192,12 +192,12 @@ namespace Isomites.GameWorld
             // same for z.
             if (!IsPositionInRange(x, y, z))
             {
-                return ImGlobal.BlockMasks.Null;
+                return ImBlockHelper.BlockMasks.Null;
             }
             
 
             // get it from
-            return _blocks[x, y, z];
+            return Blocks[x, y, z];
         }
 
         public bool IsInternalBlockMaskSolid(int x, int y, int z)

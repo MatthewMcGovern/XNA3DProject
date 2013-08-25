@@ -8,7 +8,7 @@ using Isomites.IsomiteEngine.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Isomites.IsomiteEngine.Items
+namespace Isomites.IsoEngine.Items
 {
     using System;
     using System.Collections.Generic;
