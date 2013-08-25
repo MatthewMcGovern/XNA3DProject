@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline" xmlns:Framework="Microsoft.Xna.Framework" xmlns:Processors="Microsoft.Xna.Framework.Content.Pipeline.Processors">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
       <Source>effects.fx</Source>
@@ -8,7 +8,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\effects.xnb</Output>
-      <Time>2013-08-11T16:18:15.2009541+01:00</Time>
+      <Time>2013-08-12T19:50:11.4947731+01:00</Time>
     </Item>
     <Item>
       <Source>debugFont.spritefont</Source>
@@ -54,6 +54,328 @@
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\OutlineShader.xnb</Output>
       <Time>2013-08-04T12:17:21.5658317+01:00</Time>
+    </Item>
+    <Item>
+      <Source>cubeman.fbx</Source>
+      <Name>cubeman</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubeman.xnb</Output>
+      <Time>2013-08-12T20:20:54.4501842+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\cubeman_0.xml</Key>
+        <Value>2013-08-12T20:20:55.6052502+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_0.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>cubeman.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\cubeman_0.xml</Output>
+      <Time>2013-08-12T20:20:54.4501842+01:00</Time>
+    </Item>
+    <Item>
+      <Source>E:\Users\Dev\Pictures\cubr.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_0.xnb</Output>
+      <Time>2013-08-12T18:30:12.8403058+01:00</Time>
+    </Item>
+    <Item>
+      <Source>E:\Users\Dev\Pictures\faceface.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_0.xnb</Output>
+      <Time>2013-08-12T18:21:12.4743986+01:00</Time>
+    </Item>
+    <Item>
+      <Source>modelEffect.fx</Source>
+      <Name>modelEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\modelEffect.xnb</Output>
+      <Time>2013-08-15T19:48:47.3406902+01:00</Time>
+    </Item>
+    <Item>
+      <Source>pointycube.fbx</Source>
+      <Name>pointycube</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\pointycube.xnb</Output>
+      <Time>2013-08-13T19:28:38.8160865+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube_0.xml</Key>
+        <Value>2013-08-13T19:28:40.6941939+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_1.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_1.xnb</Request>
+    </Item>
+    <Item>
+      <Source>pointycube.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube_0.xml</Output>
+      <Time>2013-08-13T19:28:38.8160865+01:00</Time>
+    </Item>
+    <Item>
+      <Source>cubr.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_1.xnb</Output>
+      <Time>2013-08-12T18:30:12.8403058+01:00</Time>
+    </Item>
+    <Item>
+      <Source>faceface.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_1.xnb</Output>
+      <Time>2013-08-12T18:21:12.4743986+01:00</Time>
+    </Item>
+    <Item>
+      <Source>pointycube2.fbx</Source>
+      <Name>pointycube2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\pointycube2.xnb</Output>
+      <Time>2013-08-13T19:30:41.8471234+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube2_0.xml</Key>
+        <Value>2013-08-13T19:30:48.6025098+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_1.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_1.xnb</Request>
+    </Item>
+    <Item>
+      <Source>pointycube2.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube2_0.xml</Output>
+      <Time>2013-08-13T19:30:41.8471234+01:00</Time>
+    </Item>
+    <Item>
+      <Source>pointycube3.fbx</Source>
+      <Name>pointycube3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\pointycube3.xnb</Output>
+      <Time>2013-08-13T19:58:48.5045947+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube3_0.xml</Key>
+        <Value>2013-08-13T19:58:53.1208588+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_1.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_1.xnb</Request>
+    </Item>
+    <Item>
+      <Source>pointycube3.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube3_0.xml</Output>
+      <Time>2013-08-13T19:58:48.5045947+01:00</Time>
+    </Item>
+    <Item>
+      <Source>pointycube4.fbx</Source>
+      <Name>pointycube4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\pointycube4.xnb</Output>
+      <Time>2013-08-13T19:59:38.4234499+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube4_0.xml</Key>
+        <Value>2013-08-13T19:59:43.109718+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_1.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\faceface_1.xnb</Request>
+    </Item>
+    <Item>
+      <Source>pointycube4.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\pointycube4_0.xml</Output>
+      <Time>2013-08-13T19:59:38.4234499+01:00</Time>
+    </Item>
+    <Item>
+      <Source>Tree.fbx</Source>
+      <Name>Tree</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\Tree.xnb</Output>
+      <Time>2013-08-15T20:02:19.4731415+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\Tree_0.xml</Key>
+        <Value>2013-08-15T20:03:37.1755858+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Tree.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\Tree_0.xml</Output>
+      <Time>2013-08-15T20:02:19.4731415+01:00</Time>
+    </Item>
+    <Item>
+      <Source>Tree3.fbx</Source>
+      <Name>Tree3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\Tree3.xnb</Output>
+      <Time>2013-08-15T20:07:20.1263379+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\Tree3_0.xml</Key>
+        <Value>2013-08-15T20:07:43.4596724+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Tree3.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\Tree3_0.xml</Output>
+      <Time>2013-08-15T20:07:20.1263379+01:00</Time>
+    </Item>
+    <Item>
+      <Source>tree4.fbx</Source>
+      <Name>tree4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\tree4.xnb</Output>
+      <Time>2013-08-15T20:45:03.7608103+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\tree4_0.xml</Key>
+        <Value>2013-08-15T20:45:08.9221055+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\tree_0.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>tree4.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\tree4_0.xml</Output>
+      <Time>2013-08-15T20:45:03.7608103+01:00</Time>
+    </Item>
+    <Item>
+      <Source>E:\Users\Dev\Pictures\tree.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\tree_0.xnb</Output>
+      <Time>2013-08-15T20:14:26.5547282+01:00</Time>
+    </Item>
+    <Item>
+      <Source>tree5.fbx</Source>
+      <Name>tree5</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\tree5.xnb</Output>
+      <Time>2013-08-15T21:20:32.4385637+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\tree5_0.xml</Key>
+        <Value>2013-08-15T21:20:33.6396324+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\tree_0.xnb</Request>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\cubr_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>tree5.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\tree5_0.xml</Output>
+      <Time>2013-08-15T21:20:32.4385637+01:00</Time>
+    </Item>
+    <Item>
+      <Source>log.fbx</Source>
+      <Name>log</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\log.xnb</Output>
+      <Time>2013-08-17T17:31:07.8624154+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\log_0.xml</Key>
+        <Value>2013-08-17T19:27:00.4800823+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\log_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>log.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\obj\x86\Debug\log_0.xml</Output>
+      <Time>2013-08-17T17:31:07.8624154+01:00</Time>
+    </Item>
+    <Item>
+      <Source>E:\Users\Dev\Pictures\log.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3D\bin\x86\Debug\Content\log_0.xnb</Output>
+      <Time>2013-08-17T17:22:44.9416499+01:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

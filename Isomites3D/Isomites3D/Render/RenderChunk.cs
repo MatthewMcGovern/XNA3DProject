@@ -63,7 +63,7 @@ namespace Isomites3D.Render
                     {
                         Cube cube = _cubes[x, y, z];
                         // No point getting vertices if its air.
-                        if (cube.Type != 0)
+                        if (cube.Type != 0 && cube.Type != 3)
                         {
                             // No point getting vertices if its obscured by blocks all around it.
                             if (!cube.Neighbours.HasFlag(ConnectionUtils.All))

@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Isomites", "Isomites\Isomites\Isomites.csproj", "{E13E7829-0C6B-4958-8034-A70459A83C62}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "IsomitesContent", "Isomites\IsomitesContent\IsomitesContent.contentproj", "{87EADE6C-BE61-42FD-BA8A-9BDDBFB8BC67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E13E7829-0C6B-4958-8034-A70459A83C62}.Debug|x86.ActiveCfg = Debug|x86
+		{E13E7829-0C6B-4958-8034-A70459A83C62}.Debug|x86.Build.0 = Debug|x86
+		{E13E7829-0C6B-4958-8034-A70459A83C62}.Release|x86.ActiveCfg = Release|x86
+		{E13E7829-0C6B-4958-8034-A70459A83C62}.Release|x86.Build.0 = Release|x86
+		{87EADE6C-BE61-42FD-BA8A-9BDDBFB8BC67}.Debug|x86.ActiveCfg = Debug|x86
+		{87EADE6C-BE61-42FD-BA8A-9BDDBFB8BC67}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

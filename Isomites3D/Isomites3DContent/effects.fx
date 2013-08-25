@@ -39,33 +39,6 @@ sampler TextureSampler = sampler_state { texture = <xTexture>; magfilter = LINEA
 
 //------- Technique: Pretransformed --------
 
-VertexToPixel PretransformedVS( float4 inPos : POSITION, float4 inColor: COLOR)
-{	
-	VertexToPixel Output = (VertexToPixel)0;
-	
-	Output.Position = inPos;
-	Output.Color = inColor;
-    
-	return Output;    
-}
-
-PixelToFrame PretransformedPS(VertexToPixel PSIn) 
-{
-	PixelToFrame Output = (PixelToFrame)0;		
-	
-	Output.Color = PSIn.Color;
-
-	return Output;
-}
-
-technique Pretransformed
-{
-	pass Pass0
-	{   
-		VertexShader = compile vs_2_0 PretransformedVS();
-		PixelShader  = compile ps_2_0 PretransformedPS();
-	}
-}
 
 //------- Technique: Colored --------
 

@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,7 +23,7 @@ namespace Isomites3D.CubeWorld
     /// </summary>
     public class ChunkManager
     {
-        private Vector3 _selectedCube;
+        public Vector3 SelectedCubePosition;
         private VertexBuffer _highlightVertexBuffer;
         private IndexBuffer _highlightIndexBuffer;
        
@@ -34,71 +35,30 @@ namespace Isomites3D.CubeWorld
         {
             _chunks = new List<List<SmallChunk>>();
             Device = device;
-            _selectedCube = Vector3.Zero;
+            SelectedCubePosition = Vector3.Zero;
             AddChunk(0, 0);
             AddChunk(0, 1);
             AddChunk(0, 2);
-            AddChunk(0, 3);
-            AddChunk(0, 4);
-            AddChunk(0, 5);
-            AddChunk(0, 6);
-            AddChunk(0, 7);
             AddChunk(1, 0);
             AddChunk(1, 1);
             AddChunk(1, 2);
-            AddChunk(1, 3);
-            AddChunk(1, 4);
-            AddChunk(1, 5);
-            AddChunk(1, 6);
-            AddChunk(1, 7);
             AddChunk(2, 0);
             AddChunk(2, 1);
             AddChunk(2, 2);
-            AddChunk(2, 3);
-            AddChunk(2, 4);
-            AddChunk(2, 5);
-            AddChunk(2, 6);
-            AddChunk(2, 7);
-            AddChunk(3, 0);
-            AddChunk(3, 1);
-            AddChunk(3, 2);
-            AddChunk(3, 3);
-            AddChunk(3, 4);
-            AddChunk(3, 5);
-            AddChunk(3, 6);
-            AddChunk(3, 7);
-            AddChunk(4, 0);
-            AddChunk(4, 1);
-            AddChunk(4, 2);
-            AddChunk(4, 3);
-            AddChunk(4, 4);
-            AddChunk(4, 5);
-            AddChunk(4, 6);
-            AddChunk(4, 7);
-            AddChunk(5, 0);
-            AddChunk(5, 1);
-            AddChunk(5, 2);
-            AddChunk(5, 3);
-            AddChunk(5, 4);
-            AddChunk(5, 5);
-            AddChunk(5, 6);
-            AddChunk(5, 7);
-            AddChunk(6, 0);
-            AddChunk(6, 1);
-            AddChunk(6, 2);
-            AddChunk(6, 3);
-            AddChunk(6, 4);
-            AddChunk(6, 5);
-            AddChunk(6, 6);
-            AddChunk(6, 7);
-            AddChunk(7, 0);
-            AddChunk(7, 1);
-            AddChunk(7, 2);
-            AddChunk(7, 3);
-            AddChunk(7, 4);
-            AddChunk(7, 5);
-            AddChunk(7, 6);
-            AddChunk(7, 7);
+        }
+
+        public bool IsBlockPassable(Vector3 position)
+        {
+            return IsBlockPassable((int)position.X, (int)position.Y, (int)position.Z);
+        }
+        public bool IsBlockPassable(int x, int y, int z)
+        {
+            if (x < 0 || z < 0 || y < 0)
+                return false;
+            Cube cube = GetCubeAt(x, y, z, false);
+            if (cube == null)
+                return false;
+            return (cube.Type == 0);
         }
 
         public void AddChunk(int x, int z)
@@ -127,49 +87,49 @@ namespace Isomites3D.CubeWorld
         {
             if (InputHelper.IsNewKeyPress(Keys.Delete))
             {
-                AddCubeAt((int)_selectedCube.X, (int)_selectedCube.Y, (int)_selectedCube.Z, 0);
+                AddCubeAt((int)SelectedCubePosition.X, (int)SelectedCubePosition.Y, (int)SelectedCubePosition.Z, 0);
             }
 
             if (InputHelper.IsNewKeyPress(Keys.NumPad3))
             {
 
-                    _selectedCube.X += 1;
+                    SelectedCubePosition.X += 1;
             }
             if (InputHelper.IsNewKeyPress(Keys.NumPad1))
             {
                
-                    _selectedCube.Z += 1;
+                    SelectedCubePosition.Z += 1;
             }
             if (InputHelper.IsNewKeyPress(Keys.NumPad7))
             {
-                if (_selectedCube.X - 1 >= 0)
-                    _selectedCube.X -= 1;
+                if (SelectedCubePosition.X - 1 >= 0)
+                    SelectedCubePosition.X -= 1;
             }
             if (InputHelper.IsNewKeyPress(Keys.NumPad9))
             {
-                if (_selectedCube.Z - 1 >= 0)
-                    _selectedCube.Z -= 1;
+                if (SelectedCubePosition.Z - 1 >= 0)
+                    SelectedCubePosition.Z -= 1;
             }
             if (InputHelper.IsNewKeyPress(Keys.Add))
             {
                
-                    _selectedCube.Y += 1;
+                    SelectedCubePosition.Y += 1;
             }
 
             if (InputHelper.IsNewKeyPress(Keys.Subtract))
             {
-                if (_selectedCube.Y - 1 >= 0)
-                    _selectedCube.Y -= 1;
+                if (SelectedCubePosition.Y - 1 >= 0)
+                    SelectedCubePosition.Y -= 1;
             }
 
             if (InputHelper.IsNewKeyPress(Keys.Insert))
             {
-                AddCubeAt((int)_selectedCube.X, (int)_selectedCube.Y, (int)_selectedCube.Z, 2);
+                AddCubeAt((int)SelectedCubePosition.X, (int)SelectedCubePosition.Y, (int)SelectedCubePosition.Z, 2);
             }
 
             if (InputHelper.IsNewKeyPress(Keys.Home))
             {
-                AddCubeAt((int)_selectedCube.X, (int)_selectedCube.Y, (int)_selectedCube.Z, 1);
+                AddCubeAt((int)SelectedCubePosition.X, (int)SelectedCubePosition.Y, (int)SelectedCubePosition.Z, 1);
 
             }
 
@@ -203,7 +163,7 @@ namespace Isomites3D.CubeWorld
 
             foreach (CubeOutline outline in _cubeOutlines)
             {
-                highlightData.AddHighlightAt(_selectedCube, outline);
+                highlightData.AddHighlightAt(SelectedCubePosition, outline);
             }
 
             _highlightVertexBuffer = new VertexBuffer(Device, VertexPositionColor.VertexDeclaration, highlightData.OutlineVertices.Count, BufferUsage.WriteOnly);
@@ -211,14 +171,21 @@ namespace Isomites3D.CubeWorld
             _highlightVertexBuffer.SetData(highlightData.OutlineVertices.ToArray());
             _highlightIndexBuffer.SetData(highlightData.OutlineIndices.ToArray());
         }
+
+        public Cube GetCubeAt(Vector3 position, bool isDirtyTouch)
+        {
+            return GetCubeAt((int)position.X, (int)position.Y, (int)position.Z, isDirtyTouch);
+        }
+
         public Cube GetCubeAt(int x, int y, int z, bool isDirtyTouch)
         {
+            
             int cubeX = x % IsomiteGlobals.ChunkSize.X;
             int cubeZ = z % IsomiteGlobals.ChunkSize.Z;
 
             SmallChunk chunk = GetChunk(x, z);
             if (chunk == null)
-                return null;
+                return new Cube(10);
 
             return chunk.GetCubeAt(cubeX, y, cubeZ, isDirtyTouch);
         }
@@ -248,12 +215,12 @@ namespace Isomites3D.CubeWorld
             {
                 return;
             }
-            else if (cubeB.Type != 0 && cubeA.Type != 0)
+            else if (cubeB.Type != 0 && cubeA.Type != 0 && cubeB.Type != 3 && cubeA.Type != 3)
             {
                 cubeA.Neighbours = cubeA.Neighbours | direction;
                 cubeB.Neighbours = cubeB.Neighbours | opposite;
             }
-            else if (cubeA.Type == 0)
+            else if (cubeA.Type == 0 || cubeA.Type == 3)
             {
                 cubeB.Neighbours = cubeB.Neighbours & ~opposite;
             }

@@ -28,5 +28,10 @@ namespace Isomites3D.CubeWorld
             Type = type;
             Neighbours = Connections.None;
         }
+
+        public bool IsPassable()
+        {
+            return (Type == 0);
+        }
     }
 }

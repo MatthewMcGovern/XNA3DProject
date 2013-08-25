@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Graphics="Microsoft.Xna.Framework.Content.Pipeline.Graphics" xmlns:Framework="Microsoft.Xna.Framework">
+  <Asset Type="Graphics:NodeContent">
+    <Name>RootNode</Name>
+    <Identity>
+      <SourceFilename>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3DContent\cubeman.fbx</SourceFilename>
+      <SourceTool>FbxImporter</SourceTool>
+    </Identity>
+    <Transform>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</Transform>
+    <Children>
+      <Child Type="Graphics:MeshContent">
+        <Name>Cube</Name>
+        <Transform>7.54979E-08 0 -1 0 -1 0 -7.54979E-08 0 0 1 0 0 0 0 0 1</Transform>
+        <Positions>0.5 0.5 -0.5 0.5 -0.5 -0.5 -0.5 -0.5 -0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 0.5 -0.5 0.5 -0.5 -0.5 0.5 -0.5 0.5 0.5 0.5 0.5 0.5 0.5 -0.5 0.5 -0.5 -0.5 0.5 -0.5 0.5 0.5 0.206969 -0.0106 0.934904 0.205933 -0.080029 0.986633 -0.008424 -0.134479 0.981938 0.093317 0.101135 0.870613</Positions>
+        <Geometry>
+          <Batch>
+            <Material>#Resource1</Material>
+            <Indices>2 1 0 0 3 2 6 5 4 4 7 6 4 5 1 1 2 4 8 4 2 2 3 8 3 0 9 9 8 3 10 6 7 7 11 10 7 4 8 8 12 7 12 8 9 9 13 12 11 15 14 14 10 11 11 7 12 12 15 11 15 12 13 13 14 15</Indices>
+            <Vertices>
+              <PositionIndices>0 1 2 3 6 5 9 10 7 4 13 14 11 8 12 15</PositionIndices>
+              <Channels>
+                <VertexChannel Name="Normal0" ElementType="Framework:Vector3">0.5773492 0.5773492 -0.5773492 0.5773492 -0.5773492 -0.5773492 -0.5773492 -0.5773492 -0.5773492 -0.5773492 0.5773492 -0.5773492 -0.707083344 -0.707083344 0 0.707083344 -0.707083344 0 0.482833326 -0.5076144 0.71355325 -0.386211723 -0.342875451 0.8562883 -0.707083344 0.707083344 0 0.707083344 0.707083344 0 0.332987458 -0.131839961 0.933652759 -0.2865688 -0.271523178 0.9187597 -0.382519 0.380809963 0.841792047 0.419080168 0.474806964 0.773857832 0.398205519 0.382549524 0.83370465 -0.217596978 0.496536136 0.8402661</VertexChannel>
+                <VertexChannel Name="TextureCoordinate0" ElementType="Framework:Vector2">0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1</VertexChannel>
+              </Channels>
+            </Vertices>
+          </Batch>
+          <Batch>
+            <Material>#Resource2</Material>
+            <Indices>2 1 0 0 3 2 4 1 2 2 5 4 6 4 5 5 7 6</Indices>
+            <Vertices>
+              <PositionIndices>0 4 5 1 8 9 12 13</PositionIndices>
+              <Channels>
+                <VertexChannel Name="Normal0" ElementType="Framework:Vector3">0.5773492 0.5773492 -0.5773492 0.707083344 0.707083344 0 0.707083344 -0.707083344 0 0.5773492 -0.5773492 -0.5773492 0.419080168 0.474806964 0.773857832 0.482833326 -0.5076144 0.71355325 0.398205519 0.382549524 0.83370465 0.332987458 -0.131839961 0.933652759</VertexChannel>
+                <VertexChannel Name="TextureCoordinate0" ElementType="Framework:Vector2">0.9999 0.9999 0.9999 0.0001 0.0001 0.0001 0.0001 0.9999 0.9999 0.0001 0.0001 0.0001 0.9999 0.0001 0.0001 0.0001</VertexChannel>
+              </Channels>
+            </Vertices>
+          </Batch>
+        </Geometry>
+      </Child>
+    </Children>
+  </Asset>
+  <Resources>
+    <Resource ID="#Resource1" Type="Graphics:BasicMaterialContent">
+      <Name>CubeSide__cubr_png</Name>
+      <Identity>
+        <SourceFilename>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3DContent\cubeman.fbx</SourceFilename>
+        <SourceTool>FbxImporter</SourceTool>
+      </Identity>
+      <OpaqueData>
+        <Data Key="DiffuseColor" Type="Framework:Vector3">0.640000045 0.640000045 0.640000045</Data>
+        <Data Key="EmissiveColor" Type="Framework:Vector3">0 0 0</Data>
+        <Data Key="Alpha" Type="float">1</Data>
+        <Data Key="SpecularColor" Type="Framework:Vector3">0 0 0</Data>
+      </OpaqueData>
+      <Textures>
+        <Texture Key="Texture">
+          <OpaqueData>
+            <Data Key="TextureCoordinate">TextureCoordinate0</Data>
+          </OpaqueData>
+          <Reference>#External1</Reference>
+        </Texture>
+      </Textures>
+    </Resource>
+    <Resource ID="#Resource2" Type="Graphics:BasicMaterialContent">
+      <Name>CubeFace__faceface_png</Name>
+      <Identity>
+        <SourceFilename>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites3D\Isomites3DContent\cubeman.fbx</SourceFilename>
+        <SourceTool>FbxImporter</SourceTool>
+      </Identity>
+      <OpaqueData>
+        <Data Key="DiffuseColor" Type="Framework:Vector3">0.640000045 0.640000045 0.640000045</Data>
+        <Data Key="EmissiveColor" Type="Framework:Vector3">0 0 0</Data>
+        <Data Key="Alpha" Type="float">1</Data>
+        <Data Key="SpecularColor" Type="Framework:Vector3">0 0 0</Data>
+      </OpaqueData>
+      <Textures>
+        <Texture Key="Texture">
+          <OpaqueData>
+            <Data Key="TextureCoordinate">TextureCoordinate0</Data>
+          </OpaqueData>
+          <Reference>#External2</Reference>
+        </Texture>
+      </Textures>
+    </Resource>
+  </Resources>
+  <ExternalReferences>
+    <ExternalReference ID="#External1" TargetType="Graphics:TextureContent">..\..\..\..\..\..\..\..\Pictures\cubr.png</ExternalReference>
+    <ExternalReference ID="#External2" TargetType="Graphics:TextureContent">..\..\..\..\..\..\..\..\Pictures\faceface.png</ExternalReference>
+  </ExternalReferences>
+</XnaContent>

@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using Core;
+using Isomites3D.AI;
 using Isomites3D.Core;
 using Isomites3D.CubeWorld;
+using Isomites3D.Objects;
 using Microsoft.Win32.SafeHandles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -32,16 +35,23 @@ namespace Isomites3D
 
         private Camera3D _camera3D;
 
+        private TreeHolder _treeHolder;
+
         private GraphicsDevice _device;
         private Matrix _viewMatrix;
         private Matrix _worldMatrix;
         private Effect _effect;
+        private Effect _modelEffect;
         private Texture2D _texture;
-        private CubeManager _world;
+
+        private CubeManManager _cubeManManager;
         private ChunkManager _chunkManager;
 
         private FillMode _fillMode;
         private CullMode _cullMode;
+
+        private Model _cubeManModel;
+        private Texture2D[] _cubeManTextures;
 
         private FrameRateCounter _frameRateCounter;
 
@@ -86,6 +96,7 @@ namespace Isomites3D
             spriteBatch = new SpriteBatch(GraphicsDevice);
             _device = graphics.GraphicsDevice;
             _effect = Content.Load<Effect>("effects");
+            _modelEffect = Content.Load<Effect>("modelEffect");
             //_effect = Content.Load<Effect>("effects");
             _texture = Content.Load<Texture2D>("cubemap");
             
@@ -96,12 +107,40 @@ namespace Isomites3D
 
 
             _camera3D = new Camera3D(_device);
-            _world = new CubeManager(32, 64, 32, _device);
             _chunkManager = new ChunkManager(_device);
 
             _debugFont = Content.Load<SpriteFont>("debugFont");
 
             _frameRateCounter = new FrameRateCounter();
+            _cubeManModel = Content.Load<Model>("pointycube4");
+            CubeMan.LoadModel(_cubeManModel, _modelEffect);
+            Tree.LoadModel(Content.Load<Model>("tree5"), _modelEffect);
+ 
+            _cubeManManager = new CubeManManager(_chunkManager);
+
+            CubeMan man = new CubeMan(new Vector3(0,16,0));
+            man.MoveNorth();
+            _cubeManManager.AddCubeMan(man);
+            _cubeManManager.GetPathForCubeMan(man.Position, new Vector3(32, 16, 32), man);
+            Random rand = new Random();
+            for (int i = 0; i < 20; i++)
+            {
+               // _cubeManManager.AddManAt(new Vector3(rand.Next(0, 80), 16, rand.Next(0, 80)));
+            }
+            
+            _treeHolder = new TreeHolder();
+            _treeHolder.Chunks = _chunkManager;
+            _treeHolder.AddTreeAt(new Vector3(0, 16, 0));
+
+
+            for (int i = 0; i < 50; i++)
+            {
+                _treeHolder.AddTreeAt(new Vector3(rand.Next(0, 80), 16, rand.Next(0, 80)));
+            }
+
+
+
+            
 
             // TODO: use this.Content to load your game content here
         }
@@ -126,8 +165,8 @@ namespace Isomites3D
             InputHelper.Update(gameTime);
 
             _camera3D.Update(gameTime);
-            _world.Update();
             _chunkManager.Update();
+            _cubeManManager.Update(gameTime);
             
 
             _frameRateCounter.Update(gameTime);
@@ -174,12 +213,15 @@ namespace Isomites3D
             GraphicsDevice.BlendState = BlendState.Opaque;
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+            _cubeManManager.Draw(_device, _camera3D.ViewMatrix, _camera3D.ProjectionMatrix);
+            _treeHolder.Draw(_device, _camera3D.ViewMatrix, _camera3D.ProjectionMatrix);
             _worldMatrix = Matrix.Identity;
 
             _effect.Parameters["xWorld"].SetValue(_worldMatrix);
             _effect.Parameters["xView"].SetValue(_camera3D.ViewMatrix);
             _effect.Parameters["xProjection"].SetValue(_camera3D.ProjectionMatrix);
             _effect.Parameters["xTexture"].SetValue(_texture);
+            
 
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
@@ -197,7 +239,6 @@ namespace Isomites3D
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                _world.DrawOutline();
                 _chunkManager.DrawOutline();
             }
         }

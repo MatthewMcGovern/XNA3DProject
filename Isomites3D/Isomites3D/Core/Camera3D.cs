@@ -31,6 +31,7 @@ namespace Isomites3D.Core
         private float _zoom = 10f;
 
         private bool _isOrthographic;
+        private bool _fixedMouse;
 
         public GraphicsDevice Device;
         public Matrix ViewMatrix;
@@ -39,6 +40,7 @@ namespace Isomites3D.Core
         public Camera3D(GraphicsDevice device)
         {
             _isOrthographic = false;
+            _fixedMouse = true;
             Device = device;
             ResetCamera();
         }
@@ -61,10 +63,14 @@ namespace Isomites3D.Core
                 float yDifference = InputHelper.MouseState.Y - InputHelper.PreviousMouseState.Y;
                 _leftrightRot -= _rotationSpeed*xDifference*timeDifference;
                 _updownRot -= _rotationSpeed*yDifference*timeDifference;
-                Mouse.SetPosition(Device.Viewport.Width/2, Device.Viewport.Height/2);
+                if(_fixedMouse)
+                    Mouse.SetPosition(Device.Viewport.Width/2, Device.Viewport.Height/2);
                 UpdateViewMatrix();
             }
 
+
+            if (InputHelper.IsNewKeyPress(Keys.Tab))
+                _fixedMouse = !_fixedMouse;
 
             Vector3 moveVector = new Vector3(0, 0, 0);
 

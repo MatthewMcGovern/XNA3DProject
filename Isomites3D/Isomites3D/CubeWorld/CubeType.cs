@@ -260,6 +260,8 @@ namespace Isomites3D.CubeWorld
 
             _cubeTypes.Add(soil);
             _cubeTypes.Add(stone);
+            CubeType obj = new CubeType();
+            _cubeTypes.Add(obj);
         }
 
         public static CubeType GetById(ushort id)
