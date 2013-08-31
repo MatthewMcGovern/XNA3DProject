@@ -121,7 +121,7 @@ VertexToPixel TexturedVS( float4 inPos : POSITION, float3 inNormal: NORMAL, floa
     
 	Output.Position = mul(inPos, preWorldViewProjection);	
 	Output.TextureCoords = inTexCoords;
-	Output.Test =  (inPos.y * 1.5)/64;
+	Output.Test =  (inPos.y)/32;
 	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
 	Output.LightingFactor = 1;
 	if (xEnableLighting)
@@ -136,7 +136,7 @@ PixelToFrame TexturedPS(VertexToPixel PSIn)
 	
 	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
 	//Output.Color.rgb *= saturate(PSIn.LightingFactor) + xAmbient;
-	Output.Color.rgb *= saturate(PSIn.Test) + 0.6;
+	Output.Color.rgb *= saturate(PSIn.Test) + 0.4;
 
 	return Output;
 }

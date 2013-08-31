@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Security.Permissions;
 using Isomites.IsoEngine;
+using Isomites.IsoEngine.Block;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -37,28 +39,146 @@ namespace Isomites.IsomiteEngine.Block
         public VertexPositionNormalTexture[] WestVertices;
         public ushort[] WestIndices;
 
+        public ImBlockVertexData()
+        {
+            UpVertices = new VertexPositionNormalTexture[0];
+            UpIndices = new ushort[0];
+            DownIndices = new ushort[0];
+            DownVertices = new VertexPositionNormalTexture[0];
+            NorthIndices = new ushort[0];
+            NorthVertices = new VertexPositionNormalTexture[0];
+            EastIndices = new ushort[0];
+            EastVertices = new VertexPositionNormalTexture[0];
+            SouthIndices = new ushort[0];
+            SouthVertices = new VertexPositionNormalTexture[0];
+            WestIndices = new ushort[0];
+            WestVertices = new VertexPositionNormalTexture[0];
+        }
+
         static ImBlockVertexData()
         {
             textureOffset = 32f/2048f;
             bleedingFix = 1f/2048f;
             _blockData = new List<ImBlockVertexData>();
 
+            ImBlockVertexData debugBlock = new ImBlockVertexData();
+            debugBlock.UpVertices = CalculateUpVertices(0);
+            debugBlock.UpIndices = ImBlockIndices.UpIndices;
+            debugBlock.DownVertices = CalculateDownVertices(4);
+            debugBlock.DownIndices = ImBlockIndices.DownIndices;
+            debugBlock.NorthVertices = CalculateNorthVertices(5);
+            debugBlock.NorthIndices = ImBlockIndices.NorthIndices;
+            debugBlock.EastVertices = CalculateEastVertices(1);
+            debugBlock.EastIndices = ImBlockIndices.EastIndices;
+            debugBlock.SouthVertices = CalculateSouthVertices(2);
+            debugBlock.SouthIndices = ImBlockIndices.SouthIndices;
+            debugBlock.WestVertices = CalculateWestVertices(3);
+            debugBlock.WestIndices = ImBlockIndices.WestIndices;
+            debugBlock.CalculateNormals();
+
             ImBlockVertexData soil = new ImBlockVertexData();
-            soil.UpVertices = CalculateUpVertices(0);
+            soil.UpVertices = CalculateUpVertices(6);
             soil.UpIndices = ImBlockIndices.UpIndices;
-            soil.DownVertices = CalculateDownVertices(2);
+            soil.DownVertices = CalculateDownVertices(8);
             soil.DownIndices = ImBlockIndices.DownIndices;
-            soil.NorthVertices = CalculateNorthVertices(1);
+            soil.NorthVertices = CalculateNorthVertices(7);
             soil.NorthIndices = ImBlockIndices.NorthIndices;
-            soil.EastVertices = CalculateEastVertices(1);
+            soil.EastVertices = CalculateEastVertices(7);
             soil.EastIndices = ImBlockIndices.EastIndices;
-            soil.SouthVertices = CalculateSouthVertices(1);
+            soil.SouthVertices = CalculateSouthVertices(7);
             soil.SouthIndices = ImBlockIndices.SouthIndices;
-            soil.WestVertices = CalculateWestVertices(1);
+            soil.WestVertices = CalculateWestVertices(7);
             soil.WestIndices = ImBlockIndices.WestIndices;
+            soil.CalculateNormals();
 
             _blockData.Add(new ImBlockVertexData());
+            _blockData.Add(debugBlock);
             _blockData.Add(soil);
+        }
+
+        public ImBlockVertexData Copy()
+        {
+            ImBlockVertexData toCopy = this;
+            ImBlockVertexData toReturn = new ImBlockVertexData();
+            toReturn.UpIndices = toCopy.UpIndices;
+            toReturn.UpVertices = toCopy.UpVertices;
+            toReturn.DownIndices = toCopy.DownIndices;
+            toReturn.DownVertices = toCopy.DownVertices;
+            toReturn.NorthIndices = toCopy.NorthIndices;
+            toReturn.NorthVertices = toCopy.NorthVertices;
+            toReturn.EastIndices = toCopy.EastIndices;
+            toReturn.EastVertices = toCopy.EastVertices;
+            toReturn.SouthIndices = toCopy.SouthIndices;
+            toReturn.SouthVertices = toCopy.SouthVertices;
+            toReturn.WestIndices = toCopy.WestIndices;
+            toReturn.WestVertices = toCopy.WestVertices;
+
+            return toReturn;
+        }
+
+        public void CalculateNormals()
+        {
+            for (int i = 0; i < UpIndices.Length / 3; i++)
+            {
+                Vector3 firstvec = UpVertices[UpIndices[i * 3 + 1]].Position - UpVertices[UpIndices[i * 3]].Position;
+                Vector3 secondvec = UpVertices[UpIndices[i * 3]].Position - UpVertices[UpIndices[i * 3 + 2]].Position;
+                Vector3 normal = Vector3.Cross(firstvec, secondvec);
+                normal.Normalize();
+                UpVertices[UpIndices[i * 3]].Normal += normal;
+                UpVertices[UpIndices[i * 3 + 1]].Normal += normal;
+                UpVertices[UpIndices[i * 3 + 2]].Normal += normal;
+            }
+            for (int i = 0; i < DownIndices.Length / 3; i++)
+            {
+                Vector3 firstvec = DownVertices[DownIndices[i * 3 + 1]].Position - DownVertices[DownIndices[i * 3]].Position;
+                Vector3 secondvec = DownVertices[DownIndices[i * 3]].Position - DownVertices[DownIndices[i * 3 + 2]].Position;
+                Vector3 normal = Vector3.Cross(firstvec, secondvec);
+                normal.Normalize();
+                DownVertices[DownIndices[i * 3]].Normal += normal;
+                DownVertices[DownIndices[i * 3 + 1]].Normal += normal;
+                DownVertices[DownIndices[i * 3 + 2]].Normal += normal;
+            }
+            for (int i = 0; i < NorthIndices.Length / 3; i++)
+            {
+                Vector3 firstvec = NorthVertices[NorthIndices[i * 3 + 1]].Position - NorthVertices[NorthIndices[i * 3]].Position;
+                Vector3 secondvec = NorthVertices[NorthIndices[i * 3]].Position - NorthVertices[NorthIndices[i * 3 + 2]].Position;
+                Vector3 normal = Vector3.Cross(firstvec, secondvec);
+                normal.Normalize();
+                NorthVertices[NorthIndices[i * 3]].Normal += normal;
+                NorthVertices[NorthIndices[i * 3 + 1]].Normal += normal;
+                NorthVertices[NorthIndices[i * 3 + 2]].Normal += normal;
+            }
+            for (int i = 0; i < EastIndices.Length / 3; i++)
+            {
+                Vector3 firstvec = EastVertices[EastIndices[i * 3 + 1]].Position - EastVertices[EastIndices[i * 3]].Position;
+                Vector3 secondvec = EastVertices[EastIndices[i * 3]].Position - EastVertices[EastIndices[i * 3 + 2]].Position;
+                Vector3 normal = Vector3.Cross(firstvec, secondvec);
+                normal.Normalize();
+                EastVertices[EastIndices[i * 3]].Normal += normal;
+                EastVertices[EastIndices[i * 3 + 1]].Normal += normal;
+                EastVertices[EastIndices[i * 3 + 2]].Normal += normal;
+            }
+            for (int i = 0; i < SouthIndices.Length / 3; i++)
+            {
+                Vector3 firstvec = SouthVertices[SouthIndices[i * 3 + 1]].Position - SouthVertices[SouthIndices[i * 3]].Position;
+                Vector3 secondvec = SouthVertices[SouthIndices[i * 3]].Position - SouthVertices[SouthIndices[i * 3 + 2]].Position;
+                Vector3 normal = Vector3.Cross(firstvec, secondvec);
+                normal.Normalize();
+                SouthVertices[SouthIndices[i * 3]].Normal += normal;
+                SouthVertices[SouthIndices[i * 3 + 1]].Normal += normal;
+                SouthVertices[SouthIndices[i * 3 + 2]].Normal += normal;
+            }
+            for (int i = 0; i < WestIndices.Length / 3; i++)
+            {
+                Vector3 firstvec = WestVertices[WestIndices[i * 3 + 1]].Position - WestVertices[WestIndices[i * 3]].Position;
+                Vector3 secondvec = WestVertices[WestIndices[i * 3]].Position - WestVertices[WestIndices[i * 3 + 2]].Position;
+                Vector3 normal = Vector3.Cross(firstvec, secondvec);
+                normal.Normalize();
+                WestVertices[WestIndices[i * 3]].Normal += normal;
+                WestVertices[WestIndices[i * 3 + 1]].Normal += normal;
+                WestVertices[WestIndices[i * 3 + 2]].Normal += normal;
+            }
+
         }
 
         public static ImBlockVertexData GetBlockMaskVertexData(ImBlockMask blockMask)
@@ -69,6 +189,36 @@ namespace Isomites.IsomiteEngine.Block
             }
 
             return new ImBlockVertexData();
+        }
+
+        public static ImBlockVertexData GetCopyOfBlockMasBlockVertexData(ImBlockMask blockMask)
+        {
+            ImBlockVertexData toCopy = GetBlockMaskVertexData(blockMask);
+            ImBlockVertexData toReturn = new ImBlockVertexData();
+            toReturn.UpIndices = toCopy.UpIndices;
+            toReturn.UpVertices = toCopy.UpVertices;
+            toReturn.DownIndices = toCopy.DownIndices;
+            toReturn.DownVertices = toCopy.DownVertices;
+            toReturn.NorthIndices = toCopy.NorthIndices;
+            toReturn.NorthVertices = toCopy.NorthVertices;
+            toReturn.EastIndices = toCopy.EastIndices;
+            toReturn.EastVertices = toCopy.EastVertices;
+            toReturn.SouthIndices = toCopy.SouthIndices;
+            toReturn.SouthVertices = toCopy.SouthVertices;
+            toReturn.WestIndices = toCopy.WestIndices;
+            toReturn.WestVertices = toCopy.WestVertices;
+
+            return toReturn;
+        }
+
+        public void TranslateToWorldLocation(Vector3 worldLocation)
+        {
+            UpVertices = ImVertexHelper.TranslateVerticesToWorldLocation(UpVertices, worldLocation);
+            DownVertices = ImVertexHelper.TranslateVerticesToWorldLocation(DownVertices, worldLocation);
+            NorthVertices = ImVertexHelper.TranslateVerticesToWorldLocation(NorthVertices, worldLocation);
+            EastVertices = ImVertexHelper.TranslateVerticesToWorldLocation(EastVertices, worldLocation);
+            SouthVertices = ImVertexHelper.TranslateVerticesToWorldLocation(SouthVertices, worldLocation);
+            WestVertices = ImVertexHelper.TranslateVerticesToWorldLocation(WestVertices, worldLocation);
         }
 
         static VertexPositionNormalTexture[] CalculateUpVertices(int topFaceIndex)
@@ -83,10 +233,10 @@ namespace Isomites.IsomiteEngine.Block
             float topRowStartY = (topRow*textureOffset) + bleedingFix;
             float topRowEndY = ((topRow+1) * textureOffset) - bleedingFix;
 
-            topVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopLeft, Vector3.Zero, new Vector2(topRowStartX, topRowStartY));
-            topVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpTopRight, Vector3.Zero, new Vector2(topRowEndX, topRowStartY));
-            topVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomLeft, Vector3.Zero, new Vector2(topRowStartX, topRowEndY));
-            topVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomRight, Vector3.Zero, new Vector2(topRowEndX, topRowEndY));
+            topVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopLeft, Vector3.Zero, new Vector2(topRowEndX, topRowStartY));
+            topVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpTopRight, Vector3.Zero, new Vector2(topRowStartX, topRowStartY));
+            topVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomLeft, Vector3.Zero, new Vector2(topRowEndX, topRowEndY));
+            topVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomRight, Vector3.Zero, new Vector2(topRowStartX, topRowEndY));
 
             return topVertices;
         }
@@ -123,10 +273,10 @@ namespace Isomites.IsomiteEngine.Block
             float northRowStartY = (northRow * textureOffset) + bleedingFix;
             float northRowEndY = ((northRow + 1) * textureOffset) - bleedingFix;
 
-            northVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomLeft, Vector3.Zero, new Vector2(northRowStartX, northRowStartY));
-            northVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomRight, Vector3.Zero, new Vector2(northRowEndX, northRowStartY));
-            northVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomLeft, Vector3.Zero, new Vector2(northRowStartX, northRowEndY));
-            northVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomRight, Vector3.Zero, new Vector2(northRowEndX, northRowEndY));
+            northVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopLeft, Vector3.Zero, new Vector2(northRowStartX, northRowStartY));
+            northVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpTopRight, Vector3.Zero, new Vector2(northRowEndX, northRowStartY));
+            northVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownTopLeft, Vector3.Zero, new Vector2(northRowStartX, northRowEndY));
+            northVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownTopRight, Vector3.Zero, new Vector2(northRowEndX, northRowEndY));
 
             return northVertices;
         }
@@ -143,10 +293,10 @@ namespace Isomites.IsomiteEngine.Block
             float eastRowStartY = (eastRow * textureOffset) + bleedingFix;
             float eastRowEndY = ((eastRow + 1) * textureOffset) - bleedingFix;
 
-            eastVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopRight, Vector3.Zero, new Vector2(eastRowEndX, eastRowStartY));
-            eastVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomRight, Vector3.Zero, new Vector2(eastRowStartX, eastRowStartY));
-            eastVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomRight, Vector3.Zero, new Vector2(eastRowStartX, eastRowEndY));
-            eastVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownTopRight, Vector3.Zero, new Vector2(eastRowEndX, eastRowEndY));
+            eastVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopRight, Vector3.Zero, new Vector2(eastRowStartX, eastRowStartY));
+            eastVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomRight, Vector3.Zero, new Vector2(eastRowEndX, eastRowStartY));
+            eastVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomRight, Vector3.Zero, new Vector2(eastRowEndX, eastRowEndY));
+            eastVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownTopRight, Vector3.Zero, new Vector2(eastRowStartX, eastRowEndY));
 
             return eastVertices;
         }
@@ -163,10 +313,10 @@ namespace Isomites.IsomiteEngine.Block
             float southRowStartY = (southRow * textureOffset) + bleedingFix;
             float southRowEndY = ((southRow + 1) * textureOffset) - bleedingFix;
 
-            southVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopLeft, Vector3.Zero, new Vector2(southRowStartX, southRowStartY));
-            southVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpTopRight, Vector3.Zero, new Vector2(southRowEndX, southRowStartY));
-            southVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownTopLeft, Vector3.Zero, new Vector2(southRowStartX, southRowEndY));
-            southVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownTopRight, Vector3.Zero, new Vector2(southRowEndX, southRowEndY));
+            southVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomLeft, Vector3.Zero, new Vector2(southRowEndX, southRowStartY));
+            southVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomRight, Vector3.Zero, new Vector2(southRowStartX, southRowStartY));
+            southVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomLeft, Vector3.Zero, new Vector2(southRowEndX, southRowEndY));
+            southVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomRight, Vector3.Zero, new Vector2(southRowStartX, southRowEndY));
 
             return southVertices;
         }
@@ -183,25 +333,194 @@ namespace Isomites.IsomiteEngine.Block
             float westRowStartY = (westRow * textureOffset) + bleedingFix;
             float westRowEndY = ((westRow + 1) * textureOffset) - bleedingFix;
 
-            westVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopLeft, Vector3.Zero, new Vector2(westRowStartX, westRowStartY));
-            westVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomLeft, Vector3.Zero, new Vector2(westRowEndX, westRowStartY));
-            westVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomLeft, Vector3.Zero, new Vector2(westRowEndX, westRowEndY));
-            westVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownTopLeft, Vector3.Zero, new Vector2(westRowStartX, westRowEndY));
+            westVertices[0] = new VertexPositionNormalTexture(ImBlockVertices.UpTopLeft, Vector3.Zero, new Vector2(westRowEndX, westRowStartY));
+            westVertices[1] = new VertexPositionNormalTexture(ImBlockVertices.UpBottomLeft, Vector3.Zero, new Vector2(westRowStartX, westRowStartY));
+            westVertices[2] = new VertexPositionNormalTexture(ImBlockVertices.DownBottomLeft, Vector3.Zero, new Vector2(westRowStartX, westRowEndY));
+            westVertices[3] = new VertexPositionNormalTexture(ImBlockVertices.DownTopLeft, Vector3.Zero, new Vector2(westRowEndX, westRowEndY));
 
             return westVertices;
         }
 
-        public static VertexPositionNormalTexture[] TranslateVerticesToWorldLocation(
-            VertexPositionNormalTexture[] verticesIn, Vector3 worldGridLocation)
+        public void Merge(ImBlockVertexData vertexData)
         {
-            VertexPositionNormalTexture[] verticesOut = new VertexPositionNormalTexture[verticesIn.Count()];
-            for (int currentVertex = 0; currentVertex < verticesIn.Count(); currentVertex++)
+            // prepare verts
+            List<VertexPositionNormalTexture> upVertices = new List<VertexPositionNormalTexture>();
+            List<VertexPositionNormalTexture> downVertices = new List<VertexPositionNormalTexture>();
+            List<VertexPositionNormalTexture> northVertices = new List<VertexPositionNormalTexture>();
+            List<VertexPositionNormalTexture> eastVertices = new List<VertexPositionNormalTexture>();
+            List<VertexPositionNormalTexture> southVertices = new List<VertexPositionNormalTexture>();
+            List<VertexPositionNormalTexture> westVertices = new List<VertexPositionNormalTexture>();
+
+            // merge verts
+            upVertices.AddRange(UpVertices);
+            downVertices.AddRange(DownVertices);
+            northVertices.AddRange(NorthVertices);
+            eastVertices.AddRange(EastVertices);
+            southVertices.AddRange(SouthVertices);
+            westVertices.AddRange(WestVertices);
+            upVertices.AddRange(vertexData.UpVertices);
+            downVertices.AddRange(vertexData.DownVertices);
+            northVertices.AddRange(vertexData.NorthVertices);
+            eastVertices.AddRange(vertexData.EastVertices);
+            southVertices.AddRange(vertexData.SouthVertices);
+            westVertices.AddRange(vertexData.WestVertices);
+
+            //prepare indices
+            List<ushort> upIndices = new List<ushort>();
+            List<ushort> downIndices = new List<ushort>();
+            List<ushort> northIndices = new List<ushort>();
+            List<ushort> eastIndices = new List<ushort>();
+            List<ushort> southIndices = new List<ushort>();
+            List<ushort> westIndices = new List<ushort>();
+
+            // merge indices
+            ushort upOffset = (ushort)UpVertices.Length;
+            ushort downOffset = (ushort) DownVertices.Length;
+            ushort northOffset = (ushort)NorthVertices.Length;
+            ushort eastOffset = (ushort)EastVertices.Length;
+            ushort southOffset = (ushort)SouthVertices.Length;
+            ushort westOffset = (ushort)WestVertices.Length;
+
+            foreach (ushort index in UpIndices)
             {
-                verticesOut[currentVertex] = new VertexPositionNormalTexture(new Vector3(verticesIn[currentVertex].Position.X + ((ImBlockVertices.CubeSize.X) * worldGridLocation.X), verticesIn[currentVertex].Position.Y + ((ImBlockVertices.CubeSize.Y) * worldGridLocation.Y), verticesIn[currentVertex].Position.Z + ((ImBlockVertices.CubeSize.Z) * worldGridLocation.Z)),
-                         verticesIn[currentVertex].Normal, verticesIn[currentVertex].TextureCoordinate);
+                upIndices.Add(index);
+            }
+            foreach (ushort index in vertexData.UpIndices)
+            {
+                upIndices.Add((ushort)(index + upOffset));
+            }
+            foreach (ushort index in DownIndices)
+            {
+                downIndices.Add(index);
+            }
+            foreach (ushort index in vertexData.DownIndices)
+            {
+                downIndices.Add((ushort)(index + downOffset));
+            }
+            foreach (ushort index in NorthIndices)
+            {
+                northIndices.Add(index);
+            }
+            foreach (ushort index in vertexData.NorthIndices)
+            {
+                northIndices.Add((ushort)(index + northOffset));
+            }
+            foreach (ushort index in EastIndices)
+            {
+                eastIndices.Add(index);
+            }
+            foreach (ushort index in vertexData.EastIndices)
+            {
+                eastIndices.Add((ushort)(index + eastOffset));
+            }
+            foreach (ushort index in SouthIndices)
+            {
+                southIndices.Add(index);
+            }
+            foreach (ushort index in vertexData.SouthIndices)
+            {
+                southIndices.Add((ushort)(index + southOffset));
+            }
+            foreach (ushort index in WestIndices)
+            {
+                westIndices.Add(index);
+            }
+            foreach (ushort index in vertexData.WestIndices)
+            {
+                westIndices.Add((ushort)(index + westOffset));
             }
 
-            return verticesOut;
+            // set to object
+            UpVertices = upVertices.ToArray();
+            DownVertices = downVertices.ToArray();
+            NorthVertices = northVertices.ToArray();
+            EastVertices = eastVertices.ToArray();
+            SouthVertices = southVertices.ToArray();
+            WestVertices = westVertices.ToArray();
+            UpIndices = upIndices.ToArray();
+            DownIndices = downIndices.ToArray();
+            NorthIndices = northIndices.ToArray();
+            EastIndices = eastIndices.ToArray();
+            SouthIndices = southIndices.ToArray();
+            WestIndices = westIndices.ToArray();
+        }
+
+        public VertexPositionNormalTexture[] GetAllVertsTranslated(Vector3 worldGridLocation)
+        {
+            int totalCount = UpVertices.Length + DownVertices.Length + NorthVertices.Length + EastVertices.Length +
+                             WestVertices.Length + SouthVertices.Length;
+
+            VertexPositionNormalTexture[] toReturn = new VertexPositionNormalTexture[totalCount];
+            int index = 0;
+
+            foreach (var vert in ImVertexHelper.TranslateVerticesToWorldLocation(UpVertices, worldGridLocation))
+            {
+                toReturn[index++] = vert;
+            }
+            foreach (var vert in ImVertexHelper.TranslateVerticesToWorldLocation(DownVertices, worldGridLocation))
+            {
+                toReturn[index++] = vert;
+            }
+            foreach (var vert in ImVertexHelper.TranslateVerticesToWorldLocation(NorthVertices, worldGridLocation))
+            {
+                toReturn[index++] = vert;
+            }
+            foreach (var vert in ImVertexHelper.TranslateVerticesToWorldLocation(EastVertices, worldGridLocation))
+            {
+                toReturn[index++] = vert;
+            }
+            foreach (var vert in ImVertexHelper.TranslateVerticesToWorldLocation(SouthVertices, worldGridLocation))
+            {
+                toReturn[index++] = vert;
+            }
+            foreach (var vert in ImVertexHelper.TranslateVerticesToWorldLocation(WestVertices, worldGridLocation))
+            {
+                toReturn[index++] = vert;
+            }
+
+            return toReturn;
+        }
+
+        public short[] GetAllIndices()
+        {
+            int totalCount = UpIndices.Length + DownIndices.Length + NorthIndices.Length + EastIndices.Length +
+                             WestIndices.Length + SouthIndices.Length;
+
+            short[] toReturn = new short[totalCount];
+
+            short index = 0;
+            short offset = 0;
+            foreach (var vert in UpIndices)
+            {
+                toReturn[index++] = (short)(vert + offset);
+            }
+            offset += (short)UpVertices.Length;
+            foreach (var vert in DownIndices)
+            {
+                toReturn[index++] = (short)(vert + offset);
+            }
+            offset += (short)DownVertices.Length;
+            foreach (var vert in NorthIndices)
+            {
+                toReturn[index++] = (short)(vert + offset);
+            }
+            offset += (short)NorthVertices.Length;
+            foreach (var vert in EastIndices)
+            {
+                toReturn[index++] = (short)(vert + offset);
+            }
+            offset += (short)EastVertices.Length;
+            foreach (var vert in SouthIndices)
+            {
+                toReturn[index++] = (short)(vert + offset);
+            }
+            offset += (short)SouthVertices.Length;
+            foreach (var vert in WestIndices)
+            {
+                toReturn[index++] = (short)(vert + offset);
+            }
+
+            return toReturn;
         }
 
     }

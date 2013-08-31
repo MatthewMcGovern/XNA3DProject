@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\IsomitesAtlas.xnb</Output>
-      <Time>2013-08-23T22:55:17.5922709+01:00</Time>
+      <Time>2013-08-29T19:11:12.9180853+01:00</Time>
     </Item>
     <Item>
       <Source>blockWorld.fx</Source>
@@ -17,7 +17,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\blockWorld.xnb</Output>
-      <Time>2013-08-24T09:16:28.6059786+01:00</Time>
+      <Time>2013-08-30T19:28:20.7488232+01:00</Time>
     </Item>
     <Item>
       <Source>Models\HighLight.fbx</Source>
@@ -155,6 +155,15 @@
       <Options>None</Options>
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\cubr_0.xnb</Output>
       <Time>2013-08-12T18:30:12.8403058+01:00</Time>
+    </Item>
+    <Item>
+      <Source>Fonts\debugFont.spritefont</Source>
+      <Name>Fonts\debugFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Fonts\debugFont.xnb</Output>
+      <Time>2013-08-28T18:49:47.491783+01:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

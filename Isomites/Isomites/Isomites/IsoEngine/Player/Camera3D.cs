@@ -189,9 +189,14 @@ namespace Isomites.IsomiteEngine.Player
 
         private void AddToCameraPosition(Vector3 vectorToAdd)
         {
+            float movespeed = _moveSpeed;
+            if (InputHelper.IsKeyDown(Keys.LeftControl))
+            {
+                movespeed *= 0.1f;
+            }
             Matrix cameraRotation = Matrix.CreateRotationX(_updownRot) * Matrix.CreateRotationY(_leftrightRot);
             Vector3 rotatedVector = Vector3.Transform(vectorToAdd, cameraRotation);
-            _cameraPosition += _moveSpeed * rotatedVector;
+            _cameraPosition += movespeed * rotatedVector;
             UpdateViewMatrix();
         }
 

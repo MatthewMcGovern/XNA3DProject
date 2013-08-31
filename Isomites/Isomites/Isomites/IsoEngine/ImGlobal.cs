@@ -23,8 +23,8 @@ namespace Isomites.IsoEngine
 
         public static class WorldSegmentsSize
         {
-            public static int X = 1;
-            public static int Z = 1;
+            public static int X = 2;
+            public static int Z = 2;
         }
 
         public static class SegmentSize

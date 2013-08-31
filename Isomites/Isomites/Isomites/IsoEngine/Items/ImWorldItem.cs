@@ -58,7 +58,7 @@ namespace Isomites.IsoEngine.Items
 
             foreach (Vector3 filledSpace in ItemType.OccupiedSpace)
             {
-                ParentSegment.ParentSegmentManager.SetLocationPassable(new ImSegmentLocation(filledSpace + WorldGridLocation));
+                ParentSegment.ParentSegmentManager.ClearItemsObstacleFlag(new ImSegmentLocation(filledSpace + WorldGridLocation));
             }
         }
 

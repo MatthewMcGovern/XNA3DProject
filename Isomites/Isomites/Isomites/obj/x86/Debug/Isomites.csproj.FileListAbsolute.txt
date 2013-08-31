@@ -14,3 +14,4 @@ E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\De
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Models\Item\Tree.xnb
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\tree_0.xnb
 E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\cubr_0.xnb
+E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Fonts\debugFont.xnb

@@ -23,6 +23,7 @@ namespace Isomites.IsomiteEngine.Items
         public ImRenderBasic RenderBasic;
         public int SubIndex;
         public List<Vector3> OccupiedSpace;
+        public bool MustBePlacedOnFloor;
 
     }
 
@@ -40,6 +41,7 @@ namespace Isomites.IsomiteEngine.Items
             Tree.OccupiedSpace.Add(new Vector3(0, 1, 0));
             Tree.OccupiedSpace.Add(new Vector3(0, 2, 0));
             Tree.OccupiedSpace.Add(new Vector3(0, 3, 0));
+            Tree.MustBePlacedOnFloor = true;
         }
 
     }

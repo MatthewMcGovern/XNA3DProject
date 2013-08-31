@@ -38,42 +38,42 @@ namespace Isomites.IsomiteEngine.Block
 
         public static ushort[] SouthIndices =
             {
-                0,
-                1,
-                2,
-                2,
-                1,
                 3,
+                1,
+                2,
+                2,
+                1,
+                0
             };
 
- public static ushort[] NorthIndices = 
-            {
-                0,
-                2,
-                1,
-                2,
-                3,
-                1
-            };
+        public static ushort[] NorthIndices = 
+                {
+                    1,
+                    3,
+                    2,
+                    1,
+                    2,
+                    0
+                };
 
- public static ushort[] EastIndices =
-            {
-                0,
-                1,
-                2,
-                2,
-                3,
-                0  
-            };
+        public static ushort[] EastIndices =
+                {
+                    0,
+                    1,
+                    2,
+                    2,
+                    3,
+                    0  
+                };
 
-  public static ushort[] WestIndices =
-            {
-                1,
-                0,
-                2,
-                2,
-                0,
-                3
-            };
-    }
+        public static ushort[] WestIndices =
+                {
+                    1,
+                    0,
+                    2,
+                    2,
+                    0,
+                    3
+                };
+        }
 }

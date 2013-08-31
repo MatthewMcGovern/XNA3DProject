@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Isomites.IsoEngine;
+using Isomites.IsoEngine.Debug;
+using Isomites.IsoEngine.Editor;
 using Isomites.IsoEngine.World;
 using Isomites.IsomiteEngine.Items;
 using Isomites.IsomiteEngine.Player;
@@ -24,8 +26,13 @@ namespace Isomites
         SpriteBatch spriteBatch;
 
         // GAME STUFF
+        private FrameRateCounter _frameRateCounter;
         private ImSegmentManager _world;
+        private ImEditor _editor;
         private Camera3D _camera3D;
+        private SpriteFont _debugFont;
+
+        private ImGameWorld _gameWorld;
 
         public Game1()
         {
@@ -54,6 +61,8 @@ namespace Isomites
             ImGlobal.Init();
             // TODO: Add your initialization logic here
 
+            _frameRateCounter = new FrameRateCounter();
+
             base.Initialize();
         }
 
@@ -66,14 +75,24 @@ namespace Isomites
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _gameWorld = new ImGameWorld(GraphicsDevice);
+            _gameWorld.Load(Content);
+
             // TODO: use this.Content to load your game content here
             // GAME STUFF
             Effect modelEffect = Content.Load<Effect>("modelEffect");
-            ImItemTypes.Init(Content, modelEffect);
-            _camera3D = new Camera3D(GraphicsDevice);
-            _world = new ImSegmentManager(GraphicsDevice, Content.Load<Effect>("blockWorld"), Content.Load<Texture2D>("IsomitesAtlas"));
-            _world.LoadContent(Content, modelEffect);
             
+            _camera3D = new Camera3D(GraphicsDevice);
+            // Content.Load<Effect>("blockWorld"), Content.Load<Texture2D>("IsomitesAtlas")
+            _world = new ImSegmentManager(GraphicsDevice);
+            _world.LoadContent(Content, modelEffect);
+
+            //_editor = new ImEditor(_world);
+            //_editor.LoadContent(Content, modelEffect);
+
+            _debugFont = Content.Load<SpriteFont>("Fonts/debugFont");
+            DebugLog.Init(_debugFont);
+
         }
 
         /// <summary>
@@ -98,13 +117,27 @@ namespace Isomites
 
             // TODO: Add your update logic here
             InputHelper.Update(gameTime);
-            _camera3D.Update(gameTime);
+           // _camera3D.Update(gameTime);
 
-            _world.Update(gameTime);
+           // _world.Update(gameTime);
+            //_editor.Update();
+            _gameWorld.Update(gameTime);
+
+
+            if (InputHelper.IsNewKeyPress(Keys.F5))
+            {
+                IsFixedTimeStep = !IsFixedTimeStep;
+                graphics.SynchronizeWithVerticalRetrace = !graphics.SynchronizeWithVerticalRetrace;
+                graphics.ApplyChanges();
+            }
+
+            
+            _frameRateCounter.Update(gameTime);
+            DebugLog.Update();
+
             // HACK: camera kept resetting movement as mouse is being forced to centre of screen by Camera3D
             // Update again because it needs to set CurrentState to LastState again
             InputHelper.Update(gameTime);
-
             base.Update(gameTime);
         }
 
@@ -123,9 +156,16 @@ namespace Isomites
             rs.FillMode = FillMode.Solid;
             GraphicsDevice.RasterizerState = rs;
 
-            _world.Draw(_camera3D);
-            
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+            _gameWorld.Draw();
+
+           // _world.Draw(_camera3D);
+           // _editor.Draw(GraphicsDevice, _camera3D);
+            
+            _frameRateCounter.Draw(spriteBatch, _debugFont);
+            DebugLog.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }
