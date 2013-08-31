@@ -165,6 +165,43 @@
       <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Fonts\debugFont.xnb</Output>
       <Time>2013-08-28T18:49:47.491783+01:00</Time>
     </Item>
+    <Item>
+      <Source>Models\AI\Man.fbx</Source>
+      <Name>Models\AI\Man</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Models\AI\Man.xnb</Output>
+      <Time>2013-08-31T10:09:16.1776979+01:00</Time>
+      <Dependency>
+        <Key>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\obj\x86\Debug\Models\AI\Man_0.xml</Key>
+        <Value>2013-08-31T10:11:43.1651051+01:00</Value>
+      </Dependency>
+      <Request>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Models\AI\man_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>Models\AI\Man.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\obj\x86\Debug\Models\AI\Man_0.xml</Output>
+      <Time>2013-08-31T10:09:16.1776979+01:00</Time>
+    </Item>
+    <Item>
+      <Source>Models\AI\man.png</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Framework:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+        <Data Key="PremultiplyAlpha" Type="bool">true</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Users\Dev\Documents\GitHub\XNA3DProject\Isomites\Isomites\Isomites\bin\x86\Debug\Content\Models\AI\man_0.xnb</Output>
+      <Time>2013-08-31T10:41:49.9994501+01:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{87EADE6C-BE61-42FD-BA8A-9BDDBFB8BC67}</ContentProjectGUID>

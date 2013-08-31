@@ -72,7 +72,8 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IsoEngine\AI\BaseAI.cs" />
+    <Compile Include="IsoEngine\World\AI\ImAiManager.cs" />
+    <Compile Include="IsoEngine\World\AI\ImBaseAI.cs" />
     <Compile Include="IsoEngine\Block\ImBlockIndices.cs" />
     <Compile Include="IsoEngine\Block\ImBlockRampIndices.cs" />
     <Compile Include="IsoEngine\Block\ImBlockVertices.cs" />
@@ -85,10 +86,12 @@
     <Compile Include="IsoEngine\Debug\FrameRateCounter.cs" />
     <Compile Include="IsoEngine\DrawModule.cs" />
     <Compile Include="IsoEngine\Block\ImBlockMask.cs" />
-    <Compile Include="IsoEngine\Editor\ImEditor.cs" />
+    <Compile Include="IsoEngine\World\AI\ImAIModels.cs" />
+    <Compile Include="IsoEngine\World\Editor\ImEditor.cs" />
     <Compile Include="IsoEngine\World\ImGameWorld.cs" />
     <Compile Include="IsoEngine\World\ImDirection.cs" />
     <Compile Include="IsoEngine\ImGlobal.cs" />
+    <Compile Include="IsoEngine\World\ImRenderDirection.cs" />
     <Compile Include="IsoEngine\World\Segments\ImRenderSegment.cs" />
     <Compile Include="IsoEngine\World\Segments\ImSegment.cs" />
     <Compile Include="IsoEngine\World\Segments\ImSegmentManager.cs" />

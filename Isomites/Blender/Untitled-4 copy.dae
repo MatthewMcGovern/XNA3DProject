@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>Dev</author>
+      <authoring_tool>Adobe Photoshop CS 6.0</authoring_tool>
+      <comments>Photoshop Build Version - Version 13.0 x64</comments>
+    </contributor>
+    <created>2013-08-31T08:57:00Z</created>
+    <modified>2013-08-31T08:57:00Z</modified>
+    <unit meter="1" name="meter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_lights>
+    <light id="Infinite_Light_2" name="Infinite_Light_1">
+      <technique_common>
+        <directional>
+          <color>1 1 1</color>
+        </directional>
+      </technique_common>
+      <extra>
+        <technique profile="MAX3D">
+          <aspect_ratio>1</aspect_ratio>
+          <overshoot>1</overshoot>
+          <decay_type>0</decay_type>
+          <decay_start>10</decay_start>
+          <use_near_attenuation>1</use_near_attenuation>
+          <use_far_attenuation>1</use_far_attenuation>
+          <near_attenuation_start>1</near_attenuation_start>
+          <near_attenuation_end>2</near_attenuation_end>
+          <far_attenuation_start>5</far_attenuation_start>
+          <far_attenuation_end>10</far_attenuation_end>
+        </technique>
+        <technique profile="FCOLLADA">
+          <constant_attenuation>1</constant_attenuation>
+          <linear_attenuation>0</linear_attenuation>
+          <quadratic_attenuation>0</quadratic_attenuation>
+          <falloff_angle>5</falloff_angle>
+          <falloff_exponent>1</falloff_exponent>
+          <intensity>0</intensity>
+          <outer_cone>5</outer_cone>
+        </technique>
+      </extra>
+    </light>
+    <light id="Image_Based_Light_2" name="Image_Based_Light_1">
+      <technique_common>
+        <directional>
+          <color>1 1 1</color>
+        </directional>
+      </technique_common>
+      <extra>
+        <technique profile="FCOLLADA">
+          <constant_attenuation>1</constant_attenuation>
+          <linear_attenuation>0</linear_attenuation>
+          <quadratic_attenuation>0</quadratic_attenuation>
+          <falloff_angle>5</falloff_angle>
+          <falloff_exponent>1</falloff_exponent>
+          <intensity>1</intensity>
+          <outer_cone>5</outer_cone>
+        </technique>
+      </extra>
+      <extra type="adobe_light_type">
+        <technique profile="ADOBE">
+          <type>
+            <imageBased>1</imageBased>
+          </type>
+        </technique>
+      </extra>
+    </light>
+    <light id="global_ambient_light-object" name="global_ambient_light">
+      <technique_common>
+        <ambient>
+          <color>1 1 1</color>
+        </ambient>
+      </technique_common>
+      <extra>
+        <technique profile="FCOLLADA">
+          <intensity>1</intensity>
+        </technique>
+      </extra>
+    </light>
+  </library_lights>
+  <library_images>
+    <image id="Material_-_Default_Texture.psd" name="Material_-_Default_Texture.psd">
+      <init_from>./Material%20-%20Default%20Texture.psd</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kPSDFile</dgnode_type>
+        </technique>
+      </extra>
+    </image>
+    <image id="Material_NONE_-_Default_Texture.psd" name="Material_NONE_-_Default_Texture.psd">
+      <init_from>./Material_NONE%20-%20Default%20Texture.psd</init_from>
+      <extra>
+        <technique profile="MAYA">
+          <dgnode_type>kPSDFile</dgnode_type>
+        </technique>
+      </extra>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="Material" name="Material">
+      <instance_effect url="#Material-fx"/>
+    </material>
+    <material id="Material_NONE" name="Material_NONE">
+      <instance_effect url="#Material_NONE-fx"/>
+    </material>
+    <material id="Ground_Plane_Material" name="Ground_Plane_Material">
+      <instance_effect url="#Ground_Plane_Material-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="Material-fx" name="Material">
+      <profile_COMMON>
+        <newparam sid="Material_-_Default_Texture_psd-surface">
+          <surface type="2D">
+            <init_from>Material_-_Default_Texture.psd</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="Material_-_Default_Texture_psd-sampler">
+          <sampler2D>
+            <source>Material_-_Default_Texture_psd-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="Material_-_Default_Texture_psd-sampler" texcoord="UVSET0">
+                <extra>
+                  <technique profile="MAX3D">
+                    <amount>1</amount>
+                  </technique>
+                </extra>
+                <extra type="texture_offset">
+                  <technique profile="ADOBE">
+                    <offsets>
+                      <offsetu>0</offsetu>
+                      <offsetv>0</offsetv>
+                    </offsets>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <specular>
+              <color>0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float>0.698268</float>
+            </shininess>
+            <reflective>
+              <color>1 1 1 1</color>
+            </reflective>
+            <reflectivity>
+              <float>0</float>
+            </reflectivity>
+            <transparent opaque="A_ONE">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+            <index_of_refraction>
+              <float>1</float>
+            </index_of_refraction>
+          </phong>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+        <extra type="material_overlay">
+          <technique profile="ADOBE">
+            <colors>
+              <diffuse_color>0.64 0.64 0.64</diffuse_color>
+              <specular_color>0.5 0.5 0.5</specular_color>
+              <reflectivity_factor>0</reflectivity_factor>
+              <shininess>0.698268</shininess>
+              <roughness>0</roughness>
+            </colors>
+          </technique>
+        </extra>
+      </profile_COMMON>
+      <extra>
+        <technique profile="MAX3D">
+          <faceted>0</faceted>
+          <double_sided>1</double_sided>
+          <wireframe>0</wireframe>
+          <face_map>0</face_map>
+        </technique>
+      </extra>
+    </effect>
+    <effect id="Material_NONE-fx" name="Material_NONE">
+      <profile_COMMON>
+        <newparam sid="Material_NONE_-_Default_Texture_psd-surface">
+          <surface type="2D">
+            <init_from>Material_NONE_-_Default_Texture.psd</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="Material_NONE_-_Default_Texture_psd-sampler">
+          <sampler2D>
+            <source>Material_NONE_-_Default_Texture_psd-surface</source>
+            <wrap_s>WRAP</wrap_s>
+            <wrap_t>WRAP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <texture texture="Material_NONE_-_Default_Texture_psd-sampler" texcoord="UVSET0">
+                <extra>
+                  <technique profile="MAX3D">
+                    <amount>1</amount>
+                  </technique>
+                </extra>
+                <extra type="texture_offset">
+                  <technique profile="ADOBE">
+                    <offsets>
+                      <offsetu>0</offsetu>
+                      <offsetv>0</offsetv>
+                    </offsets>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <specular>
+              <color>0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float>0.698268</float>
+            </shininess>
+            <reflective>
+              <color>1 1 1 1</color>
+            </reflective>
+            <reflectivity>
+              <float>0</float>
+            </reflectivity>
+            <transparent opaque="A_ONE">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+            <index_of_refraction>
+              <float>1</float>
+            </index_of_refraction>
+          </phong>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+        <extra type="material_overlay">
+          <technique profile="ADOBE">
+            <colors>
+              <diffuse_color>0.64 0.64 0.64</diffuse_color>
+              <specular_color>0.5 0.5 0.5</specular_color>
+              <reflectivity_factor>0</reflectivity_factor>
+              <shininess>0.698268</shininess>
+              <roughness>0</roughness>
+            </colors>
+          </technique>
+        </extra>
+      </profile_COMMON>
+      <extra>
+        <technique profile="MAX3D">
+          <faceted>0</faceted>
+          <double_sided>1</double_sided>
+          <wireframe>0</wireframe>
+          <face_map>0</face_map>
+        </technique>
+      </extra>
+    </effect>
+    <effect id="Ground_Plane_Material-fx" name="Ground_Plane_Material">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>1 1 1 1</color>
+            </ambient>
+            <diffuse>
+              <color>0 0 0 1</color>
+            </diffuse>
+            <specular>
+              <color>1 1 1 1</color>
+            </specular>
+            <shininess>
+              <float>0.2</float>
+            </shininess>
+            <reflective>
+              <color>1 1 1 1</color>
+            </reflective>
+            <reflectivity>
+              <float>0</float>
+            </reflectivity>
+            <transparent opaque="A_ONE">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>0.6</float>
+            </transparency>
+            <index_of_refraction>
+              <float>1</float>
+            </index_of_refraction>
+          </phong>
+          <extra>
+            <technique profile="FCOLLADA"/>
+          </extra>
+        </technique>
+        <extra type="material_overlay">
+          <technique profile="ADOBE">
+            <colors>
+              <diffuse_color>0 0 0</diffuse_color>
+              <specular_color>1 1 1</specular_color>
+              <reflectivity_factor>0</reflectivity_factor>
+              <shininess>0.2</shininess>
+              <roughness>0</roughness>
+            </colors>
+          </technique>
+        </extra>
+      </profile_COMMON>
+      <extra>
+        <technique profile="MAX3D">
+          <faceted>0</faceted>
+          <double_sided>1</double_sided>
+          <wireframe>0</wireframe>
+          <face_map>0</face_map>
+        </technique>
+      </extra>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="objMesh1" name="objMesh">
+      <mesh>
+        <source id="objMesh1-positions">
+          <float_array id="objMesh1-positions-array" count="405">116.595 365.585 -44.2616 125.518 374.509 1.57848 141.509 319.745 1.57848 125.518 319.745 -53.1851 116.595 365.585 47.4186 125.518 319.745 56.3421 116.595 273.905 47.4186 125.518 264.981 1.57848 116.595 273.905 -44.2616 0 319.745 1.57848 15.9911 319.745 -53.1851 24.9146 273.905 -44.2616 15.9911 264.981 1.57848 70.7547 319.745 -69.1762 125.518 319.745 -53.1851 116.595 273.905 -44.2616 70.7547 264.981 -53.1851 70.7547 319.745 72.3332 15.9911 319.745 56.3421 24.9146 273.905 47.4186 70.7547 264.981 56.3421 70.7547 248.99 1.57848 70.7547 264.981 -53.1851 116.595 273.905 -44.2616 125.518 264.981 1.57848 70.7547 390.5 1.57848 70.7547 374.509 -53.1851 24.9146 365.585 -44.2616 15.9911 374.509 1.57848 15.9911 319.745 56.3421 24.9146 273.905 47.4186 24.9146 365.585 47.4186 15.9911 374.509 1.57848 24.9146 365.585 -44.2616 15.9911 319.745 -53.1851 24.9146 273.905 -44.2616 24.9146 365.585 -44.2616 70.7547 374.509 -53.1851 116.595 365.585 -44.2616 125.518 319.745 56.3421 116.595 273.905 47.4186 116.595 365.585 47.4186 70.7547 374.509 56.3421 24.9146 365.585 47.4186 70.7547 264.981 56.3421 116.595 273.905 47.4186 24.9146 273.905 47.4186 15.9911 264.981 1.57848 24.9146 273.905 -44.2616 70.7547 374.509 56.3421 24.9146 365.585 47.4186 116.595 365.585 47.4186 125.518 374.509 1.57848 116.595 365.585 -44.2616 14.8059 206.354 0.637507 23.7295 188.05 -45.2026 23.7295 0 -45.2026 69.5695 206.354 -54.1266 115.41 188.05 -45.2026 115.41 0 -45.2026 124.334 206.354 0.637507 115.41 188.05 46.4776 115.41 0 46.4776 69.5695 206.354 55.4011 23.7295 188.05 46.4776 23.7295 0 46.4776 23.7295 0 46.4776 23.7295 0 -45.2026 115.41 0 -45.2026 115.41 0 46.4776 69.5695 239.154 0.637507 69.5695 206.354 -54.1266 23.7295 188.05 -45.2026 14.8059 206.354 0.637507 23.7295 188.05 46.4776 23.7295 0 46.4776 23.7295 188.05 -45.2026 23.7295 0 -45.2026 115.41 188.05 -45.2026 115.41 0 -45.2026 115.41 188.05 46.4776 115.41 0 46.4776 69.5695 206.354 55.4011 23.7295 188.05 46.4776 115.41 188.05 46.4776 124.334 206.354 0.637507 115.41 188.05 -45.2026 52.2601 104.733 93.3334 52.2601 104.733 63.9955 52.2601 75.3951 63.9955 52.2601 75.3951 93.3334 52.2601 104.733 63.9955 81.5975 104.733 63.9955 81.5975 75.3951 63.9955 52.2601 75.3951 63.9955 81.5975 104.733 63.9955 81.5975 104.733 93.3334 81.5975 75.3951 93.3334 81.5975 75.3951 63.9955 81.5975 104.733 93.3334 52.2601 104.733 93.3334 52.2601 75.3951 93.3334 81.5975 75.3951 93.3334 52.2601 75.3951 93.3334 52.2601 75.3951 63.9955 81.5975 75.3951 63.9955 81.5975 75.3951 93.3334 81.5975 104.733 93.3334 81.5975 104.733 63.9955 52.2601 104.733 63.9955 52.2601 104.733 93.3334 52.2601 109.267 -63.996 52.2601 109.267 -93.3334 52.2601 79.9294 -93.3334 52.2601 79.9294 -63.996 52.2601 109.267 -93.3334 81.5975 109.267 -93.3334 81.5975 79.9294 -93.3334 52.2601 79.9294 -93.3334 81.5975 109.267 -93.3334 81.5975 109.267 -63.996 81.5975 79.9294 -63.996 81.5975 79.9294 -93.3334 81.5975 109.267 -63.996 52.2601 109.267 -63.996 52.2601 79.9294 -63.996 81.5975 79.9294 -63.996 52.2601 79.9294 -63.996 52.2601 79.9294 -93.3334 81.5975 79.9294 -93.3334 81.5975 79.9294 -63.996 81.5975 109.267 -63.996 81.5975 109.267 -93.3334 52.2601 109.267 -93.3334 52.2601 109.267 -63.996</float_array>
+          <technique_common>
+            <accessor source="#objMesh1-positions-array" count="135" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="objMesh1-normals">
+          <float_array id="objMesh1-normals-array" count="405">0.566946 0.590133 -0.57473 0.707108 0.707106 0 0.999999 -0.000907 -0.000905 0.703319 -0.00101 -0.710873 0.587508 0.579788 0.564517 0.710873 -0.00101 0.703319 0.583941 -0.566488 0.581467 0.707107 -0.707107 0 0.570619 -0.573107 -0.588169 -0.999999 -0.000907 0.000905 -0.710873 -0.00101 -0.703319 -0.575612 -0.583288 -0.573103 -0.703319 -0.710873 0.001009 -0.000905 -0.000907 -0.999999 0.703319 -0.00101 -0.710873 0.570619 -0.573107 -0.588169 0.002544 -0.710871 -0.703317 0.000905 -0.000907 0.999999 -0.703319 -0.00101 0.710873 -0.585703 -0.573128 0.573128 -0.00154 -0.707106 0.707106 0.000905 -0.999999 0.000905 0.002544 -0.710871 -0.703317 0.570619 -0.573107 -0.588169 0.707107 -0.707107 0 -0.000905 0.999999 0.000905 -0.003539 0.707101 -0.707103 -0.572302 0.579857 -0.579859 -0.710874 0.703318 0.001009 -0.703319 -0.00101 0.710873 -0.585703 -0.573128 0.573128 -0.575612 0.573101 0.583288 -0.710874 0.703318 0.001009 -0.572302 0.579857 -0.579859 -0.710873 -0.00101 -0.703319 -0.575612 -0.583288 -0.573103 -0.572302 0.579857 -0.579859 -0.003539 0.707101 -0.707103 0.566946 0.590133 -0.57473 0.710873 -0.00101 0.703319 0.583941 -0.566488 0.581467 0.587508 0.579788 0.564517 0.002544 0.703316 0.710872 -0.575612 0.573101 0.583288 -0.00154 -0.707106 0.707106 0.583941 -0.566488 0.581467 -0.585703 -0.573128 0.573128 -0.703319 -0.710873 0.001009 -0.575612 -0.583288 -0.573103 0.002544 0.703316 0.710872 -0.575612 0.573101 0.583288 0.587508 0.579788 0.564517 0.707108 0.707106 0 0.566946 0.590133 -0.57473 -0.930574 0.366089 -0.003124 -0.654891 0.325705 -0.681934 -0.666631 -0.333483 -0.666627 0.000299 0.376557 -0.926393 0.663869 0.344328 -0.663865 0.666631 -0.333483 -0.666628 0.926393 0.376558 -0.000301 0.681937 0.325707 0.654887 0.666629 -0.333483 0.66663 0.003123 0.36609 0.930574 -0.671272 0.314306 0.671272 -0.666629 -0.333483 0.666629 -0.666629 -0.333483 0.666629 -0.666631 -0.333483 -0.666627 0.666631 -0.333483 -0.666628 0.666629 -0.333483 0.66663 0.004468 0.99998 -0.004469 0.000299 0.376557 -0.926393 -0.654891 0.325705 -0.681934 -0.930574 0.366089 -0.003124 -0.671272 0.314306 0.671272 -0.666629 -0.333483 0.666629 -0.654891 0.325705 -0.681934 -0.666631 -0.333483 -0.666627 0.663869 0.344328 -0.663865 0.666631 -0.333483 -0.666628 0.681937 0.325707 0.654887 0.666629 -0.333483 0.66663 0.003123 0.36609 0.930574 -0.671272 0.314306 0.671272 0.681937 0.325707 0.654887 0.926393 0.376558 -0.000301 0.663869 0.344328 -0.663865 -0.57735 0.57735 0.57735 -0.57735 0.57735 -0.57735 -0.57735 -0.57735 -0.57735 -0.57735 -0.57735 0.57735 -0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 -0.57735 -0.57735 -0.57735 -0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 -0.57735 0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 -0.57735 -0.57735 0.57735 -0.57735 -0.57735 -0.57735 0.57735 -0.57735 -0.57735 0.57735 -0.57735 0.57735 0.57735 0.57735 0.57735 0.57735 0.57735 -0.57735 -0.57735 0.57735 -0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 -0.57735 -0.57735 -0.57735 -0.57735 -0.57735 -0.57735 0.57735 -0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 -0.57735 -0.57735 -0.57735 -0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 -0.57735 0.57735 0.57735 0.57735 -0.57735 0.57735 0.57735 -0.57735 -0.57735 0.57735 0.57735 -0.57735 0.57735 -0.57735 -0.57735 0.57735 -0.57735 -0.57735 -0.57735 0.57735 -0.57735 -0.57735 0.57735 -0.57735 0.57735 0.57735 0.57735 0.57735 0.57735 0.57735 -0.57735 -0.57735 0.57735 -0.57735 -0.57735 0.57735 0.57735</float_array>
+          <technique_common>
+            <accessor source="#objMesh1-normals-array" count="135" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="objMesh1-texcoords">
+          <float_array id="objMesh1-texcoords-array" count="270">0.66909 0.546863 0.480088 0.57401 0.456641 0.347866 0.72939 0.350601 0.34044 0.519312 0.283771 0.355128 0.323779 0.174141 0.48145 0.092582 0.699257 0.131277 0.725512 0.771915 0.70395 0.659046 0.802031 0.659229 0.838512 0.750158 0.499839 0.771852 0.521729 0.659046 0.61273 0.695635 0.612839 0.793609 0.274163 0.771915 0.252601 0.659046 0.350683 0.659229 0.387164 0.750158 0.274326 0.546208 0.2526 0.43337 0.350591 0.433571 0.387164 0.524482 0.725677 0.546208 0.747403 0.659046 0.649412 0.658845 0.612839 0.567934 0.747402 0.884721 0.838403 0.848132 0.649503 0.884503 0.612839 0.793609 0.613131 0.6956 0.478277 0.884721 0.576359 0.884538 0.387458 0.848167 0.387167 0.750158 0.42383 0.659264 0.296053 0.884721 0.387054 0.848132 0.198154 0.884503 0.161491 0.793609 0.161783 0.6956 0.296052 0.659046 0.386963 0.622473 0.19806 0.658845 0.161488 0.567934 0.161689 0.469942 0.703951 0.43337 0.61304 0.469942 0.801943 0.433571 0.838515 0.524482 0.838314 0.622473 0.484678 0.43337 0.388374 0.395166 0.387164 0.00059 0.096068 0.43337 0 0.394576 0.001211 0 0.67826 0.43337 0.581956 0.395166 0.580746 0.00059 0.289649 0 0.385953 0.038204 0.387164 0.43278 0.967289 0.43278 0.774917 0.43337 0.774327 0.240999 0.966699 0.240408 0.500001 0.546208 0.521727 0.43337 0.612639 0.469942 0.612839 0.567934 0.580746 0.394576 0.579535 0 0.192371 0.395166 0.193582 0.00059 0.774327 0.394576 0.773117 0 0.193582 0.038794 0.194792 0.43337 0.478276 0.659046 0.576267 0.658845 0.387364 0.622473 0.387164 0.524482 0.423736 0.433571 0.038182 0.618613 0.037994 0.557054 0.099552 0.556866 0.09974 0.618424 0.038182 0.803856 0.037994 0.742297 0.099552 0.742108 0.09974 0.803667 0.099929 0.742109 0.09974 0.68055 0.161299 0.680361 0.161487 0.74192 0.038182 0.680361 0.037994 0.618802 0.099552 0.618613 0.09974 0.680172 0.099929 0.495118 0.09974 0.433559 0.161299 0.43337 0.161488 0.494929 0.037993 0.494929 0.038182 0.43337 0.09974 0.433559 0.099552 0.495118 0.09974 0.68055 0.099552 0.742108 0.037994 0.74192 0.038182 0.680361 0.099929 0.680361 0.09974 0.618802 0.161299 0.618613 0.161487 0.680172 0.099929 0.803856 0.09974 0.742297 0.161299 0.742109 0.161487 0.803667 0.099929 0.618613 0.09974 0.557054 0.161299 0.556866 0.161487 0.618424 0.099929 0.556866 0.09974 0.495307 0.161299 0.495118 0.161488 0.556677 0.037993 0.556677 0.038182 0.495118 0.09974 0.495307 0.099552 0.556866</float_array>
+          <technique_common>
+            <accessor source="#objMesh1-texcoords-array" count="135" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="objMesh1-vertices">
+          <input semantic="POSITION" source="#objMesh1-positions"/>
+          <input semantic="NORMAL" source="#objMesh1-normals"/>
+          <input semantic="TEXCOORD" source="#objMesh1-texcoords"/>
+        </vertices>
+        <polylist material="Material" count="4">
+          <input semantic="VERTEX" source="#objMesh1-vertices" offset="0"/>
+          <vcount>4 4 4 4</vcount>
+          <p>0 1 2 3 1 4 5 2 2 5 6 7 3 2 7 8</p>
+        </polylist>
+        <polylist material="Material_NONE" count="49">
+          <input semantic="VERTEX" source="#objMesh1-vertices" offset="0"/>
+          <vcount>4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 3 3 3 3 4 4 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4</vcount>
+          <p>9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 9 12 30 31 32 9 29 32 33 10 9 34 13 16 35 36 37 13 34 37 38 14 13 39 17 20 40 41 42 17 39 42 43 18 17 44 21 24 45 46 47 21 44 47 48 22 21 49 25 28 50 51 52 25 49 52 53 26 25 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 54 75 75 54 56 76 57 77 77 57 59 78 60 79 79 60 62 80 63 81 81 63 65 82 70 73 83 84 85 70 82 85 86 71 70 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134</p>
+        </polylist>
+      </mesh>
+    </geometry>
+    <geometry id="Ground_Plane1" name="Ground_Plane">
+      <mesh>
+        <source id="Ground_Plane1-positions">
+          <float_array id="Ground_Plane1-positions-array" count="12">5222.65 0 -5151.9 -5081.14 0 5151.9 5222.65 0 5151.9 -5081.14 0 -5151.9</float_array>
+          <technique_common>
+            <accessor source="#Ground_Plane1-positions-array" count="4" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Ground_Plane1-normals">
+          <float_array id="Ground_Plane1-normals-array" count="12">0 1 0 0 1 0 0 1 0 0 1 0</float_array>
+          <technique_common>
+            <accessor source="#Ground_Plane1-normals-array" count="4" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Ground_Plane1-texcoords">
+          <float_array id="Ground_Plane1-texcoords-array" count="8">1 0 0 1 1 1 0 0</float_array>
+          <technique_common>
+            <accessor source="#Ground_Plane1-texcoords-array" count="4" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Ground_Plane1-vertices">
+          <input semantic="POSITION" source="#Ground_Plane1-positions"/>
+          <input semantic="NORMAL" source="#Ground_Plane1-normals"/>
+          <input semantic="TEXCOORD" source="#Ground_Plane1-texcoords"/>
+        </vertices>
+        <triangles material="Ground_Plane_Material" count="2">
+          <input semantic="VERTEX" source="#Ground_Plane1-vertices" offset="0"/>
+          <p>0 1 2 0 3 1</p>
+        </triangles>
+      </mesh>
+      <extra type="photoshop_ground_plane">
+        <technique profile="ADOBE">
+          <GroundPlaneCheck>
+            <is_ground_Plane>1</is_ground_Plane>
+          </GroundPlaneCheck>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="DefaultScene">
+      <node id="Infinite_Light_1" name="Infinite_Light_1" type="NODE">
+        <lookat>0 0 0 -0.074445 -0.59336 -0.801487 0 1 0</lookat>
+        <instance_light url="#Infinite_Light_2"/>
+        <extra type="pivot_use">
+          <technique profile="ADOBE">
+            <use_pivot>
+              <needPivot>0</needPivot>
+            </use_pivot>
+          </technique>
+        </extra>
+      </node>
+      <node id="Image_Based_Light_1" name="Image_Based_Light_1" type="NODE">
+        <instance_light url="#Image_Based_Light_2"/>
+        <extra type="pivot_use">
+          <technique profile="ADOBE">
+            <use_pivot>
+              <needPivot>0</needPivot>
+            </use_pivot>
+          </technique>
+        </extra>
+      </node>
+      <node id="objMesh" name="objMesh" type="NODE">
+        <matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#objMesh1">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Material" target="#Material"/>
+              <instance_material symbol="Material_NONE" target="#Material_NONE"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra type="pivot_use">
+          <technique profile="ADOBE">
+            <use_pivot>
+              <needPivot>0</needPivot>
+            </use_pivot>
+          </technique>
+        </extra>
+      </node>
+      <node id="Ground_Plane" name="Ground_Plane" type="NODE">
+        <matrix>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#Ground_Plane1">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Ground_Plane_Material" target="#Ground_Plane_Material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra type="pivot_use">
+          <technique profile="ADOBE">
+            <use_pivot>
+              <needPivot>0</needPivot>
+            </use_pivot>
+          </technique>
+        </extra>
+      </node>
+      <node id="global_ambient_light" name="global_ambient_light" type="NODE">
+        <instance_light url="#global_ambient_light-object"/>
+      </node>
+      <extra type="render_settings">
+        <technique profile="ADOBE">
+          <faces>
+            <render_faces>1</render_faces>
+            <face_style>4</face_style>
+            <face_color>1 1 1</face_color>
+            <texture_type>0</texture_type>
+            <anti_alias_quality>1</anti_alias_quality>
+            <show_reflections>1</show_reflections>
+            <show_refractions>1</show_refractions>
+            <show_shadows>1</show_shadows>
+            <remove_backfaces>0</remove_backfaces>
+          </faces>
+          <edges>
+            <render_edges>0</render_edges>
+            <line_style>1</line_style>
+            <line_color>0 0 0</line_color>
+            <line_width>1</line_width>
+            <crease_value>0</crease_value>
+            <remove_backface_lines>1</remove_backface_lines>
+            <remove_hidden_lines>1</remove_hidden_lines>
+          </edges>
+          <vertices>
+            <render_vertices>0</render_vertices>
+            <vertex_style>1</vertex_style>
+            <vertex_color>0 0 0</vertex_color>
+            <vertex_radius>1</vertex_radius>
+            <remove_backface_vertices>1</remove_backface_vertices>
+            <remove_hidden_vertices>1</remove_hidden_vertices>
+          </vertices>
+          <volumes>
+            <render_volume>0</render_volume>
+            <volume_style>2097152</volume_style>
+            <transfer_function0/>
+            <transfer_function1/>
+            <transfer_function2/>
+            <transfer_function3/>
+            <gradient_enhancement>1</gradient_enhancement>
+            <opacity_scale>1</opacity_scale>
+          </volumes>
+          <stereo>
+            <render_stereo>0</render_stereo>
+            <stereo_style>16384</stereo_style>
+            <stereo_offset>5</stereo_offset>
+            <stereo_line_spacing>40</stereo_line_spacing>
+          </stereo>
+          <internal>
+            <projection>0</projection>
+            <blend_unlit>0</blend_unlit>
+          </internal>
+        </technique>
+      </extra>
+      <extra type="background_image_type">
+        <technique profile="ADOBE">
+          <type>
+            <image_type>0</image_type>
+          </type>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#DefaultScene"/>
+  </scene>
+</COLLADA>

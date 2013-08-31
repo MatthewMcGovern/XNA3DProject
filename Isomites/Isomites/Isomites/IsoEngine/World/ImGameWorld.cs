@@ -4,7 +4,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Isomites.IsoEngine.AI;
 using Isomites.IsoEngine.Editor;
+using Isomites.IsoEngine.World.AI;
 using Isomites.IsomiteEngine.Items;
 using Isomites.IsomiteEngine.Player;
 using Microsoft.Xna.Framework;
@@ -25,11 +27,14 @@ namespace Isomites.IsoEngine.World
     {
         private ImSegmentManager _segmentManager;
         private ImEditor _editor;
+        private ImAIManager _aiManager;
+
         private Effect _blockWorldEffect;
         private Effect _modelEffect;
         public GraphicsDevice Device;
         private Camera3D _camera;
         private Texture2D _blockAtlas;
+
 
         public ImGameWorld(GraphicsDevice device)
         {
@@ -49,6 +54,11 @@ namespace Isomites.IsoEngine.World
             _editor = new ImEditor(_segmentManager);
 
             _editor.LoadContent(content, _modelEffect);
+
+            ImAIModels.LoadAll(content, _modelEffect);
+            _aiManager = new ImAIManager(_segmentManager);
+          
+            
         }
 
 
@@ -57,6 +67,7 @@ namespace Isomites.IsoEngine.World
             _camera.Update(gameTime);
             _segmentManager.Update(gameTime);
             _editor.Update();
+            _aiManager.Update(gameTime);
         }
 
         public void Draw()
@@ -85,6 +96,7 @@ namespace Isomites.IsoEngine.World
 
             _segmentManager.DrawItems(_camera);
             _editor.DrawItems(_camera);
+            _aiManager.Draw(_camera);
         }
     }
 }

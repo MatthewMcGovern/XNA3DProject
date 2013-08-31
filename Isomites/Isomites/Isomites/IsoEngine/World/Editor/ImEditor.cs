@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using Isomites.IsoEngine.Block;
+using Isomites.IsoEngine.Debug;
 using Isomites.IsoEngine.Items;
 using Isomites.IsoEngine.World;
 using Isomites.IsomiteEngine;
@@ -98,7 +99,7 @@ namespace Isomites.IsoEngine.Editor
             bool changed = false;
 
             // SHIFT 
-            if (InputHelper.IsKeyDown(Keys.LeftShift))
+            if (InputHelper.IsKeyDown(Keys.LeftShift) || InputHelper.IsKeyDown(Keys.RightShift))
             {
                 if (InputHelper.IsNewKeyPress(Keys.Right))
                 {
@@ -239,7 +240,6 @@ namespace Isomites.IsoEngine.Editor
             Vector3 newPosition = _keyboardCursor.WorldLocation;
             if (InputHelper.IsNewKeyPress(Keys.NumPad3))
             {
-
                 newPosition += ImDirection.East;
             }
             if (InputHelper.IsNewKeyPress(Keys.NumPad1))
@@ -269,19 +269,59 @@ namespace Isomites.IsoEngine.Editor
                 if (newPosition != _keyboardCursor.WorldLocation)
                 {
                     // check for an object?
-                    int segmentX = (int)Math.Floor((double)newPosition.X / ImGlobal.SegmentSize.X);
-                    int segmentZ = (int)Math.Floor((double)newPosition.Z / ImGlobal.SegmentSize.Z);
+                    int segmentX = (int) Math.Floor((double) newPosition.X/ImGlobal.SegmentSize.X);
+                    int segmentZ = (int) Math.Floor((double) newPosition.Z/ImGlobal.SegmentSize.Z);
 
                     //_ItemsUnderCursor = ParentSegmentManager.Segments[segmentX, segmentZ].Items.FindItemsAt(newPosition);
                 }
 
                 _keyboardCursor = new ImSegmentLocation(newPosition);
+                if (InputHelper.IsNewKeyPress(Keys.Delete))
+                {
+                    ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, ImBlockHelper.BlockMasks.Air);
+                }
+
                 if (InputHelper.IsNewKeyPress(Keys.Insert))
                 {
-                    // ugh this needs to look at block mask under target.
-                    // needs to merge ramps if they're the same direction but diff orientation.
-                    ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, _activeBlockMask);
+                    ImBlockMask maskAtCursor = ParentSegmentManager.GetBlockMaskAt(_keyboardCursor);
+                    switch (_selectedType)
+                    {
+                        case ImEditorType.Blocks:
+                            ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, _activeBlockMask);
+                            break;
+                        case ImEditorType.BottomRamps:
+                            if (ImBlockHelper.HasTopRamp(maskAtCursor) &&
+                                ImBlockHelper.GetRampDirection(maskAtCursor) ==
+                                _rampDirection)
+                            {
+                                ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, maskAtCursor | _activeBlockMask);
+                            }
+                            else
+                            {
+                                ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, _activeBlockMask);
+                            }
+                            break;
+                        case ImEditorType.TopRamps:
+                            if (ImBlockHelper.HasBottomRamp(maskAtCursor) &&
+                                ImBlockHelper.GetRampDirection(maskAtCursor) ==
+                                _rampDirection)
+                            {
+                                ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, maskAtCursor | _activeBlockMask);
+                            }
+                            else
+                            {
+                                ParentSegmentManager.SetBlockMaskAt(_keyboardCursor, _activeBlockMask);
+                            }
+                            break;
+                        default:
+                            _previewData = new ImBlockVertexData();
+                            break;
+                    }
                 }
+            }
+            else
+            {
+                DebugLog.Log("Can't move World Cursor to (" + newPosition.X + ", " + newPosition.Y + ", " + newPosition.Z + ") - Out of bounds", DebugMessageType.Warning);
             }
         }
 
@@ -320,14 +360,61 @@ namespace Isomites.IsoEngine.Editor
 
         public void DrawItems(Camera3D camera)
         {
-            // this needs to check that ramps can fit on top of the other ramp
-            if (ParentSegmentManager.IsLocationObstructed(_keyboardCursor))
+            ImBlockMask maskAtCursor = ParentSegmentManager.GetBlockMaskAt(_keyboardCursor);
+
+            switch (_selectedType)
             {
-                _blockHighlightBlocked.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
-            }
-            else
-            {
-                _blockHighlight.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                case ImEditorType.Blocks:
+                    if (ParentSegmentManager.IsLocationObstructed(_keyboardCursor))
+                    {
+                        _blockHighlightBlocked.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                    }
+                    else
+                    {
+                        _blockHighlight.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                    }
+                    break;
+                case ImEditorType.BottomRamps:
+                    if (ImBlockHelper.HasTopRamp(maskAtCursor) &&
+                        ImBlockHelper.GetRampDirection(maskAtCursor) ==
+                        _rampDirection)
+                    {
+                        _blockHighlight.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                    }
+                    else
+                    {
+                        if (ParentSegmentManager.IsLocationObstructed(_keyboardCursor))
+                        {
+                            _blockHighlightBlocked.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                        }
+                        else
+                        {
+                            _blockHighlight.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                        }
+                    }
+                    break;
+                case ImEditorType.TopRamps:
+                    if (ImBlockHelper.HasBottomRamp(maskAtCursor) &&
+                        ImBlockHelper.GetRampDirection(maskAtCursor) ==
+                        _rampDirection)
+                    {
+                        _blockHighlight.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                    }
+                    else
+                    {
+                        if (ParentSegmentManager.IsLocationObstructed(_keyboardCursor))
+                        {
+                            _blockHighlightBlocked.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                        }
+                        else
+                        {
+                            _blockHighlight.Draw(ParentSegmentManager.Device, camera, _keyboardCursor.WorldLocation, Vector3.Zero, 0f, new Vector3(1, 1, 1));
+                        }
+                    }
+                    break;
+                default:
+                    _previewData = new ImBlockVertexData();
+                    break;
             }
         }
 

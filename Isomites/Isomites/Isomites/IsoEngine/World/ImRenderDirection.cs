@@ -1,13 +1,10 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="BaseAI.cs" company="Microsoft">
+// <copyright file="ImRenderDirection.cs" company="Microsoft">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Isomites.IsomiteEngine;
-using Microsoft.Xna.Framework;
-
-namespace Isomites.IsoEngine.AI
+namespace Isomites.IsoEngine.World
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +14,12 @@ namespace Isomites.IsoEngine.AI
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class BaseAI
+    public static class ImRenderDirection
     {
-        public Vector3 WorldPosition;
-        private ImRenderBasic _baseRenderBasic;
+        public static float North = 4.71238898f;
+        public static float East = 0f;
+        public static float South = 1.57079633f;
+        public static float West = 3.14159265f;
+
     }
 }

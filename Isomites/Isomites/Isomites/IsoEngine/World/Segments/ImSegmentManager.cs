@@ -280,23 +280,6 @@ namespace Isomites.IsoEngine.World
         // UPDATES
         public void Update(GameTime gameTime)
         {
-            HandleHighlight();
-
-            if (InputHelper.IsNewKeyPress(Keys.Delete))
-            {
-                foreach (ImWorldItem item in _ItemsUnderCursor)
-                {
-                    item.Remove();
-                }
-
-                SetBlockMaskAt(new ImSegmentLocation(_highlightPosition), ImBlockHelper.BlockMasks.Air);
-            }
-
-            if (InputHelper.IsNewKeyPress(Keys.Home))
-            {
-                AddItemAtWorldPosition(_highlightPosition);
-            }
-
             for (int x = 0; x < Segments.GetLength(0); x++)
             {
                 for (int z = 0; z < Segments.GetLength(1); z++)
@@ -306,65 +289,9 @@ namespace Isomites.IsoEngine.World
             }
         }
 
-        public void HandleHighlight()
-        {
-            Vector3 newPosition = _highlightPosition;
-            if (InputHelper.IsNewKeyPress(Keys.NumPad3))
-            {
+        
 
-                newPosition += ImDirection.East;
-            }
-            if (InputHelper.IsNewKeyPress(Keys.NumPad1))
-            {
-                newPosition += ImDirection.North;
-            }
-            if (InputHelper.IsNewKeyPress(Keys.NumPad7))
-            {
-                newPosition += ImDirection.West;
-            }
-            if (InputHelper.IsNewKeyPress(Keys.NumPad9))
-            {
-                newPosition += ImDirection.South;
-            }
-            if (InputHelper.IsNewKeyPress(Keys.Add))
-            {
-                newPosition += ImDirection.Up;
-            }
-            if (InputHelper.IsNewKeyPress(Keys.Subtract))
-            {
-                newPosition += ImDirection.Down;
-            }
-
-            // Following is for valid block ranges only.
-            if (GetBlockMaskAt(new ImSegmentLocation(newPosition)) != ImBlockHelper.BlockMasks.Null)
-            {
-                if (newPosition != _highlightPosition)
-                {
-                    // check for an object?
-                    int segmentX = (int)Math.Floor((double)newPosition.X / ImGlobal.SegmentSize.X);
-                    int segmentZ = (int)Math.Floor((double)newPosition.Z / ImGlobal.SegmentSize.Z);
-
-                    _ItemsUnderCursor = Segments[segmentX, segmentZ].Items.FindItemsAt(newPosition);
-                }
-
-                _highlightPosition = newPosition;
-                if (InputHelper.IsNewKeyPress(Keys.Insert))
-                {
-                    SetBlockMaskAt(new ImSegmentLocation(_highlightPosition), ImBlockHelper.BlockMasks.Soil);
-                }
-
-                if (IsLocationObstructed(new ImSegmentLocation(_highlightPosition)))
-                {
-                    _highlightPositionIsObstacle = true;
-                }
-                else
-                {
-                    _highlightPositionIsObstacle = false;
-                }
-            }
-
-            
-        }
+           
 
         // DRAWING
         public void DrawBlocks()
